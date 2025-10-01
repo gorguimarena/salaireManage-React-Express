@@ -1,0 +1,7 @@
+interface IEmployeeService {
+
+}
+
+interface IEmployeeController {
+  
+}

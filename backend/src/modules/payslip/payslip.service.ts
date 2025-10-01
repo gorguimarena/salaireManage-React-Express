@@ -1,0 +1,65 @@
+import prisma from "../../config/database.js";
+
+export class PayslipService {
+  static async list(companyId: string, userRole?: string) {
+    const whereCondition: any = {
+      payRun: { companyId }
+    };
+
+    // For CASHIER, only show payslips from APPROVED payruns
+    if (userRole === 'CASHIER') {
+      whereCondition.payRun = {
+        companyId,
+        status: 'APPROVED'
+      };
+    }
+
+    return prisma.payslip.findMany({
+      where: whereCondition,
+      include: {
+        employee: true,
+        payRun: true,
+        payments: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
+  static async getById(companyId: string, id: string) {
+    return prisma.payslip.findUnique({
+      where: { id },
+      include: {
+        employee: true,
+        payRun: true,
+        payments: true,
+      },
+    });
+  }
+
+  static async create(companyId: string, data: any) {
+    return prisma.payslip.create({
+      data,
+      include: {
+        employee: true,
+        payRun: true,
+      },
+    });
+  }
+
+  static async update(companyId: string, id: string, data: any) {
+    return prisma.payslip.update({
+      where: { id },
+      data,
+      include: {
+        employee: true,
+        payRun: true,
+      },
+    });
+  }
+
+  static async delete(companyId: string, id: string) {
+    return prisma.payslip.delete({
+      where: { id },
+    });
+  }
+}

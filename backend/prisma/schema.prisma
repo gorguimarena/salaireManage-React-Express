@@ -1,0 +1,195 @@
+// Single database schema for multi-tenant application
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleType {
+  SUPER_ADMIN
+  ADMIN
+  CASHIER
+}
+
+enum ContractType {
+  DAILY
+  HOURLY
+  FIXED
+  FEE
+}
+
+enum PayRunType {
+  MONTHLY
+  WEEKLY
+  DAILY
+}
+
+enum PayRunStatus {
+  DRAFT
+  APPROVED
+  CLOSED
+}
+
+enum PayslipStatus {
+  DRAFT
+  APPROVED
+  PAID
+  PARTIAL
+  PENDING
+}
+
+enum PaymentMode {
+  CASH
+  BANK_TRANSFER
+  ORANGE_MONEY
+  WAVE
+  OTHER
+}
+
+model Company {
+  id             String     @id @default(uuid())
+  name           String
+  logoUrl        String?
+  address        String?
+  currency       String     @default("Fcfa")
+  primaryColor   String     @default("#1E40AF")
+  secondaryColor String     @default("#2563EB")
+
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  users          User[]
+  employees      Employee[]
+  payRuns        PayRun[]
+}
+
+model Role {
+  id     String   @id @default(uuid())
+  name   RoleType @unique @default(ADMIN)
+
+  users  User[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  companyId    String?
+  company      Company? @relation(fields: [companyId], references: [id])
+
+  fullName     String
+  email        String   @unique
+  passwordHash String
+  isActive     Boolean  @default(true)
+
+  roleId       String
+  role         Role     @relation(fields: [roleId], references: [id])
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Employee {
+  id           String   @id @default(uuid())
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id])
+
+  fullName     String
+  position     String?
+  contractType ContractType
+  salaryOrRate Decimal  @db.Decimal(14, 2)
+  bankDetails  String?
+  active       Boolean  @default(true)
+  email        String?
+  phone        String?
+  hireDate     DateTime?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  payslips      Payslip[]
+  payments      Payment[]
+  workSchedules WorkSchedule[]
+}
+
+model PayRun {
+  id          String       @id @default(uuid())
+  companyId   String
+  company     Company      @relation(fields: [companyId], references: [id])
+
+  periodStart DateTime
+  periodEnd   DateTime
+  type        PayRunType
+  status      PayRunStatus @default(DRAFT)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  payslips    Payslip[]
+}
+
+model Payslip {
+  id         String   @id @default(uuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+
+  payRunId   String
+  payRun     PayRun   @relation(fields: [payRunId], references: [id])
+
+  @@unique([employeeId, payRunId])
+
+  gross      Decimal       @default(0) @db.Decimal(14, 2)
+  deductions Decimal       @default(0) @db.Decimal(14, 2)
+  netPay     Decimal       @default(0) @db.Decimal(14, 2)
+  daysWorked Int?
+  status     PayslipStatus @default(DRAFT)
+  lockedAt   DateTime?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  payments   Payment[]
+}
+
+model Payment {
+  id         String   @id @default(uuid())
+  payslipId  String
+  payslip    Payslip  @relation(fields: [payslipId], references: [id])
+
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+
+  amount     Decimal     @db.Decimal(14, 2)
+  mode       PaymentMode
+  note       String?
+  receiptUrl String?
+
+  createdAt DateTime @default(now())
+}
+
+model WorkSchedule {
+  id         String   @id @default(uuid())
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+
+  startDate   DateTime
+  endDate     DateTime
+  type        ContractType
+  hoursPerDay Int?
+
+  attendances Attendance[]
+}
+
+model Attendance {
+  id             String       @id @default(uuid())
+  workScheduleId String
+  workSchedule   WorkSchedule @relation(fields: [workScheduleId], references: [id])
+
+  date        DateTime
+  workedHours Int?
+  validated   Boolean  @default(false)
+}

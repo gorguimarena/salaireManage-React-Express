@@ -1,0 +1,60 @@
+// authDb/schema.prisma
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../../src/generated/auth"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("AUTH_DATABASE_URL") // base centrale
+}
+
+enum RoleType {
+  SUPER_ADMIN
+  ADMIN
+  CASHIER
+}
+
+model Role {
+  id   String   @id @default(uuid())
+  name RoleType @unique @default(ADMIN)
+  User User[]
+}
+
+model Company {
+  id             String  @id @default(uuid())
+  name           String
+  logoUrl        String?
+  address        String?
+  currency       String  @default("Fcfa")
+  primaryColor   String  @default("#1E40AF")
+  secondaryColor String  @default("#2563EB")
+
+  dbHost     String
+  dbPort     Int    @default(5432)
+  dbName     String
+  dbUser     String
+  dbPassword String
+  dbDriver   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  companyId    String?
+  company      Company? @relation(fields: [companyId], references: [id])
+  fullName     String
+  email        String   @unique
+  passwordHash String
+  roleId       String
+  isActive     Boolean  @default(true)
+  role         Role     @relation(fields: [roleId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
