@@ -1,5 +1,5 @@
 export declare class PayslipService {
-    static list(companyId: string): Promise<({
+    static list(companyId: string, userRole?: string): Promise<({
         employee: {
             contractType: import("../../generated/index.js").$Enums.ContractType;
             fullName: string;

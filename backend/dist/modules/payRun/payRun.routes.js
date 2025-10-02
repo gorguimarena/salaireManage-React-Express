@@ -9,6 +9,7 @@ router.get("/", authorize("ADMIN", "CASHIER", "SUPER_ADMIN"), PayRunController.l
 router.post("/", authorize("ADMIN", "SUPER_ADMIN"), PayRunController.create);
 router.get("/:id", authorize("ADMIN", "SUPER_ADMIN"), PayRunController.getById);
 router.put("/:id", authorize("ADMIN", "SUPER_ADMIN"), PayRunController.update);
+router.put("/:id/approve", authorize("ADMIN", "SUPER_ADMIN"), PayRunController.approve);
 router.delete("/:id", authorize("ADMIN", "SUPER_ADMIN"), PayRunController.delete);
 router.post("/:id/generate-payslips", authorize("ADMIN", "SUPER_ADMIN"), PayRunController.generatePayslips);
 export default router;

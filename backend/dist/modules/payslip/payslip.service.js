@@ -1,10 +1,18 @@
 import prisma from "../../config/database.js";
 export class PayslipService {
-    static async list(companyId) {
+    static async list(companyId, userRole) {
+        const whereCondition = {
+            payRun: { companyId }
+        };
+        // For CASHIER, only show payslips from APPROVED payruns
+        if (userRole === 'CASHIER') {
+            whereCondition.payRun = {
+                companyId,
+                status: 'APPROVED'
+            };
+        }
         return prisma.payslip.findMany({
-            where: {
-                payRun: { companyId }
-            },
+            where: whereCondition,
             include: {
                 employee: true,
                 payRun: true,

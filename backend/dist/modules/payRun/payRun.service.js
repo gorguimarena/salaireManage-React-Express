@@ -9,6 +9,7 @@ export class PayRunService {
                     periodStart: new Date(data.periodStart),
                     periodEnd: new Date(data.periodEnd),
                     type: data.type,
+                    status: "DRAFT", // Set default status as DRAFT
                     companyId,
                 },
             });
@@ -108,6 +109,15 @@ export class PayRunService {
             data,
             include: { payslips: true },
         });
+    }
+    static async approve(companyId, payRunId) {
+        // First, change status to APPROVED
+        await prisma.payRun.update({
+            where: { id: payRunId, companyId },
+            data: { status: "APPROVED" },
+        });
+        // Then generate payslips
+        return await PayRunService.generatePayslips(companyId, payRunId);
     }
     static async delete(companyId, payRunId) {
         return prisma.payRun.delete({

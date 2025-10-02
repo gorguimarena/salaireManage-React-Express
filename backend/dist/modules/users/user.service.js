@@ -41,10 +41,10 @@ export class UserService {
             },
         });
         if (!user)
-            throw new AppError("Invalid credentials", 401);
+            throw new AppError("Utilisateur non trouvé", 401);
         const isPasswordValid = await comparePassword(data.password, user.passwordHash);
         if (!isPasswordValid)
-            throw new AppError("Invalid credentials", 401);
+            throw new AppError("Mot de passe incorrect", 401);
         // Générer token
         const token = generateToken({
             userId: user.id,

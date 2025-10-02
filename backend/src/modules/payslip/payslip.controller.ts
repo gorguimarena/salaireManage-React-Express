@@ -16,7 +16,8 @@ export class PayslipController {
       if (!companyId) {
         return res.json([]);
       }
-      const payslips = await PayslipService.list(companyId);
+      const userRole = (req as any).user.role;
+      const payslips = await PayslipService.list(companyId, userRole);
       res.json(payslips);
     } catch (error: any) {
       // If company DB doesn't exist yet, return empty array

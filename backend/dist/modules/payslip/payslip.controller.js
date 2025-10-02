@@ -13,7 +13,8 @@ export class PayslipController {
             if (!companyId) {
                 return res.json([]);
             }
-            const payslips = await PayslipService.list(companyId);
+            const userRole = req.user.role;
+            const payslips = await PayslipService.list(companyId, userRole);
             res.json(payslips);
         }
         catch (error) {

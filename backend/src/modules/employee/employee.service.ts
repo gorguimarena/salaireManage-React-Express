@@ -14,8 +14,12 @@ export type CreateEmployeAndWorkSchedule = {
 export class EmployeeService {
   static async create(companyId: string, data: CreateEmployeAndWorkSchedule) {
     return prisma.$transaction(async (tx) => {
+      const employeeData: any = { ...data.employee };
+      if (employeeData.hireDate) {
+        employeeData.hireDate = new Date(employeeData.hireDate);
+      }
       const employee = await tx.employee.create({
-        data: { ...data.employee, companyId },
+        data: { ...employeeData, companyId },
       });
 
       if (

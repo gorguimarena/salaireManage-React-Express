@@ -3,8 +3,12 @@ import { AppError } from "../../utils/AppError.js";
 export class EmployeeService {
     static async create(companyId, data) {
         return prisma.$transaction(async (tx) => {
+            const employeeData = { ...data.employee };
+            if (employeeData.hireDate) {
+                employeeData.hireDate = new Date(employeeData.hireDate);
+            }
             const employee = await tx.employee.create({
-                data: { ...data.employee, companyId },
+                data: { ...employeeData, companyId },
             });
             if (data.workSchedule &&
                 (data.employee.contractType === "DAILY" ||

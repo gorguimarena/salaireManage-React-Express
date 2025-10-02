@@ -32,6 +32,17 @@ export class PayRunController {
             throw error;
         }
     }
+    static async approve(req, res) {
+        try {
+            const companyId = PayRunController.getCompanyId(req);
+            const payRunId = req.params.id;
+            const result = await PayRunService.approve(companyId, payRunId);
+            res.status(200).json(result);
+        }
+        catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    }
     static async generatePayslips(req, res) {
         try {
             const companyId = PayRunController.getCompanyId(req);

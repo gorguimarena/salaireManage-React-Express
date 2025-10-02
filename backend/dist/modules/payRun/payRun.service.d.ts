@@ -85,6 +85,9 @@ export declare class PayRunService {
         periodEnd: Date;
         status: import("../../generated/index.js").$Enums.PayRunStatus;
     }>;
+    static approve(companyId: string, payRunId: string): Promise<{
+        message: string;
+    }>;
     static delete(companyId: string, payRunId: string): Promise<{
         type: import("../../generated/index.js").$Enums.PayRunType;
         id: string;

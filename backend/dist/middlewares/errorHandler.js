@@ -1,6 +1,11 @@
 import { AppError } from "../utils/AppError.js";
 import { logger } from "../utils/logger.js";
 import { env } from "../config/env.js";
+import jwt from "jsonwebtoken";
+const { JsonWebTokenError, TokenExpiredError } = jwt;
+import { Prisma } from "@prisma/client";
+import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime/library";
+import { ZodError } from "zod";
 export const errorHandler = (error, req, res, next) => {
     let statusCode = 500;
     let message = "Internal server error";
@@ -22,10 +27,10 @@ export const errorHandler = (error, req, res, next) => {
         //   statusCode = 400
         //   message = "Validation error"
         //   details = error.errors.map((err) => ({
-        //     field: err.path.join("."),
+        //     field: err.path.join("."),  // array → string
         //     message: err.message,
-        //   }))
-        // } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        //   }));
+        // } else if (error instanceof PrismaClientKnownRequestError) {
         //   switch (error.code) {
         //     case "P2002":
         //       statusCode = 409
@@ -47,19 +52,22 @@ export const errorHandler = (error, req, res, next) => {
         //         details = error.message
         //       }
         //   }
-        // } else if (error instanceof Prisma.PrismaClientValidationError) {
-        //   statusCode = 400
-        //   message = "Invalid data provided"
-        //   if (env.NODE_ENV === "development") {
-        //     details = error.message
-        //   }
-        // } else if (error instanceof JsonWebTokenError) {
+        // } else if (error instanceof PrismaClientValidationError) {
+        statusCode = 401;
+        message = "Invalid data provided";
+        if (env.NODE_ENV === "development") {
+            details = error.message;
+        }
+    }
+    else if (error instanceof JsonWebTokenError) {
         statusCode = 401;
         message = "Invalid token";
-        // } else if (error instanceof TokenExpiredError) {
-        //   statusCode = 401
-        //   message = "Token expired"
-        // } else if (error.name === "CastError") {
+    }
+    else if (error instanceof TokenExpiredError) {
+        statusCode = 401;
+        message = "Token expired";
+    }
+    else if (error.name === "CastError") {
         statusCode = 400;
         message = "Invalid ID format";
     }
