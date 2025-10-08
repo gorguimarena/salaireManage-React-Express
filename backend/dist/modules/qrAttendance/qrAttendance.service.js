@@ -1,11 +1,22 @@
 import QRCode from 'qrcode';
 import crypto from 'crypto';
-import { setRedisVal, getRedisVal, deleteRedisVal } from '../../config/redis.js';
 import { AppError } from '../../utils/AppError.js';
 import prisma from '../../config/database.js';
 export class QRAttendanceService {
     static QR_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
     static QR_KEY_PREFIX = 'qr_attendance:';
+    static qrCodeStorage = new Map();
+    /**
+     * Clean up expired QR codes from memory
+     */
+    static cleanupExpiredQRCodes() {
+        const now = Date.now();
+        for (const [key, entry] of this.qrCodeStorage.entries()) {
+            if (now > entry.expiresAt) {
+                this.qrCodeStorage.delete(key);
+            }
+        }
+    }
     /**
      * Generate a QR code for an employee
      * The QR code contains userId, timestamp, and a hash for security
@@ -19,9 +30,13 @@ export class QRAttendanceService {
             timestamp,
             hash
         };
-        // Store in Redis with expiration
+        // Store in memory with expiration
         const redisKey = `${this.QR_KEY_PREFIX}${userId}`;
-        await setRedisVal(redisKey, JSON.stringify(qrData), this.QR_EXPIRY_TIME / 1000);
+        const expiresAt = Date.now() + this.QR_EXPIRY_TIME;
+        this.qrCodeStorage.set(redisKey, {
+            data: JSON.stringify(qrData),
+            expiresAt
+        });
         // Generate QR code as data URL
         const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(qrData), {
             errorCorrectionLevel: 'M',
@@ -130,9 +145,16 @@ export class QRAttendanceService {
             if (hash !== expectedHash) {
                 return { isValid: false, error: 'Invalid QR code' };
             }
-            // Check if QR code exists in Redis (not already used)
+            // Clean up expired QR codes
+            this.cleanupExpiredQRCodes();
+            // Check if QR code exists in memory (not already used)
             const redisKey = `${this.QR_KEY_PREFIX}${userId}`;
-            const storedData = await getRedisVal(redisKey);
+            const storedEntry = this.qrCodeStorage.get(redisKey);
+            // Check if expired
+            if (!storedEntry || Date.now() > storedEntry.expiresAt) {
+                return { isValid: false, error: 'QR code not found or already used' };
+            }
+            const storedData = storedEntry.data;
             if (!storedData) {
                 return { isValid: false, error: 'QR code not found or already used' };
             }
@@ -141,8 +163,8 @@ export class QRAttendanceService {
             if (storedQRData.userId !== userId || storedQRData.timestamp !== timestamp || storedQRData.hash !== hash) {
                 return { isValid: false, error: 'QR code data mismatch' };
             }
-            // Remove the QR code from Redis (one-time use)
-            await deleteRedisVal(redisKey);
+            // Remove the QR code from memory (one-time use)
+            this.qrCodeStorage.delete(redisKey);
             // Create attendance record
             const attendanceId = await this.createAttendanceRecord(userId, scannedByUserId);
             return { isValid: true, userId, attendanceId };
@@ -156,18 +178,20 @@ export class QRAttendanceService {
      * Get current QR code for a user (if exists and not expired)
      */
     static async getCurrentQRCode(userId) {
+        // Clean up expired QR codes
+        this.cleanupExpiredQRCodes();
         const redisKey = `${this.QR_KEY_PREFIX}${userId}`;
-        const storedData = await getRedisVal(redisKey);
-        if (!storedData) {
+        const storedEntry = this.qrCodeStorage.get(redisKey);
+        if (!storedEntry) {
             return null;
         }
-        const qrData = JSON.parse(storedData);
         // Check if expired
         const now = Date.now();
-        if (now - qrData.timestamp > this.QR_EXPIRY_TIME) {
-            await deleteRedisVal(redisKey);
+        if (now > storedEntry.expiresAt) {
+            this.qrCodeStorage.delete(redisKey);
             return null;
         }
+        const qrData = JSON.parse(storedEntry.data);
         // Generate QR code
         const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(qrData), {
             errorCorrectionLevel: 'M',

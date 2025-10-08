@@ -6,6 +6,11 @@ export interface QRCodeData {
 export declare class QRAttendanceService {
     private static readonly QR_EXPIRY_TIME;
     private static readonly QR_KEY_PREFIX;
+    private static readonly qrCodeStorage;
+    /**
+     * Clean up expired QR codes from memory
+     */
+    private static cleanupExpiredQRCodes;
     /**
      * Generate a QR code for an employee
      * The QR code contains userId, timestamp, and a hash for security
