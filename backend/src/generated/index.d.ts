@@ -29,11 +29,6 @@ export type Role = $Result.DefaultSelection<Prisma.$RolePayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
- * Model Employee
- * 
- */
-export type Employee = $Result.DefaultSelection<Prisma.$EmployeePayload>
-/**
  * Model PayRun
  * 
  */
@@ -58,6 +53,16 @@ export type WorkSchedule = $Result.DefaultSelection<Prisma.$WorkSchedulePayload>
  * 
  */
 export type Attendance = $Result.DefaultSelection<Prisma.$AttendancePayload>
+/**
+ * Model Loan
+ * 
+ */
+export type Loan = $Result.DefaultSelection<Prisma.$LoanPayload>
+/**
+ * Model SuperAdminPermission
+ * 
+ */
+export type SuperAdminPermission = $Result.DefaultSelection<Prisma.$SuperAdminPermissionPayload>
 
 /**
  * Enums
@@ -66,7 +71,8 @@ export namespace $Enums {
   export const RoleType: {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',
-  CASHIER: 'CASHIER'
+  CASHIER: 'CASHIER',
+  VIGILE: 'VIGILE'
 };
 
 export type RoleType = (typeof RoleType)[keyof typeof RoleType]
@@ -121,6 +127,15 @@ export const PaymentMode: {
 
 export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]
 
+
+export const LoanStatus: {
+  ACTIVE: 'ACTIVE',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+};
+
+export type LoanStatus = (typeof LoanStatus)[keyof typeof LoanStatus]
+
 }
 
 export type RoleType = $Enums.RoleType
@@ -146,6 +161,10 @@ export const PayslipStatus: typeof $Enums.PayslipStatus
 export type PaymentMode = $Enums.PaymentMode
 
 export const PaymentMode: typeof $Enums.PaymentMode
+
+export type LoanStatus = $Enums.LoanStatus
+
+export const LoanStatus: typeof $Enums.LoanStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -296,16 +315,6 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.employee`: Exposes CRUD operations for the **Employee** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Employees
-    * const employees = await prisma.employee.findMany()
-    * ```
-    */
-  get employee(): Prisma.EmployeeDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.payRun`: Exposes CRUD operations for the **PayRun** model.
     * Example usage:
     * ```ts
@@ -354,6 +363,26 @@ export class PrismaClient<
     * ```
     */
   get attendance(): Prisma.AttendanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loan`: Exposes CRUD operations for the **Loan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Loans
+    * const loans = await prisma.loan.findMany()
+    * ```
+    */
+  get loan(): Prisma.LoanDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.superAdminPermission`: Exposes CRUD operations for the **SuperAdminPermission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SuperAdminPermissions
+    * const superAdminPermissions = await prisma.superAdminPermission.findMany()
+    * ```
+    */
+  get superAdminPermission(): Prisma.SuperAdminPermissionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -797,12 +826,13 @@ export namespace Prisma {
     Company: 'Company',
     Role: 'Role',
     User: 'User',
-    Employee: 'Employee',
     PayRun: 'PayRun',
     Payslip: 'Payslip',
     Payment: 'Payment',
     WorkSchedule: 'WorkSchedule',
-    Attendance: 'Attendance'
+    Attendance: 'Attendance',
+    Loan: 'Loan',
+    SuperAdminPermission: 'SuperAdminPermission'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -821,7 +851,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "company" | "role" | "user" | "employee" | "payRun" | "payslip" | "payment" | "workSchedule" | "attendance"
+      modelProps: "company" | "role" | "user" | "payRun" | "payslip" | "payment" | "workSchedule" | "attendance" | "loan" | "superAdminPermission"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1020,72 +1050,6 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
-          }
-        }
-      }
-      Employee: {
-        payload: Prisma.$EmployeePayload<ExtArgs>
-        fields: Prisma.EmployeeFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.EmployeeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.EmployeeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
-          }
-          findFirst: {
-            args: Prisma.EmployeeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.EmployeeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
-          }
-          findMany: {
-            args: Prisma.EmployeeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
-          }
-          create: {
-            args: Prisma.EmployeeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
-          }
-          createMany: {
-            args: Prisma.EmployeeCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.EmployeeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
-          }
-          update: {
-            args: Prisma.EmployeeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
-          }
-          deleteMany: {
-            args: Prisma.EmployeeDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.EmployeeUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.EmployeeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
-          }
-          aggregate: {
-            args: Prisma.EmployeeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateEmployee>
-          }
-          groupBy: {
-            args: Prisma.EmployeeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<EmployeeGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.EmployeeCountArgs<ExtArgs>
-            result: $Utils.Optional<EmployeeCountAggregateOutputType> | number
           }
         }
       }
@@ -1419,6 +1383,138 @@ export namespace Prisma {
           }
         }
       }
+      Loan: {
+        payload: Prisma.$LoanPayload<ExtArgs>
+        fields: Prisma.LoanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload>
+          }
+          findFirst: {
+            args: Prisma.LoanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload>
+          }
+          findMany: {
+            args: Prisma.LoanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload>[]
+          }
+          create: {
+            args: Prisma.LoanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload>
+          }
+          createMany: {
+            args: Prisma.LoanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.LoanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload>
+          }
+          update: {
+            args: Prisma.LoanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LoanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoanPayload>
+          }
+          aggregate: {
+            args: Prisma.LoanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoan>
+          }
+          groupBy: {
+            args: Prisma.LoanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LoanCountArgs<ExtArgs>
+            result: $Utils.Optional<LoanCountAggregateOutputType> | number
+          }
+        }
+      }
+      SuperAdminPermission: {
+        payload: Prisma.$SuperAdminPermissionPayload<ExtArgs>
+        fields: Prisma.SuperAdminPermissionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SuperAdminPermissionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SuperAdminPermissionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload>
+          }
+          findFirst: {
+            args: Prisma.SuperAdminPermissionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SuperAdminPermissionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload>
+          }
+          findMany: {
+            args: Prisma.SuperAdminPermissionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload>[]
+          }
+          create: {
+            args: Prisma.SuperAdminPermissionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload>
+          }
+          createMany: {
+            args: Prisma.SuperAdminPermissionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.SuperAdminPermissionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload>
+          }
+          update: {
+            args: Prisma.SuperAdminPermissionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SuperAdminPermissionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SuperAdminPermissionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SuperAdminPermissionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SuperAdminPermissionPayload>
+          }
+          aggregate: {
+            args: Prisma.SuperAdminPermissionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSuperAdminPermission>
+          }
+          groupBy: {
+            args: Prisma.SuperAdminPermissionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SuperAdminPermissionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SuperAdminPermissionCountArgs<ExtArgs>
+            result: $Utils.Optional<SuperAdminPermissionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1518,12 +1614,13 @@ export namespace Prisma {
     company?: CompanyOmit
     role?: RoleOmit
     user?: UserOmit
-    employee?: EmployeeOmit
     payRun?: PayRunOmit
     payslip?: PayslipOmit
     payment?: PaymentOmit
     workSchedule?: WorkScheduleOmit
     attendance?: AttendanceOmit
+    loan?: LoanOmit
+    superAdminPermission?: SuperAdminPermissionOmit
   }
 
   /* Types for Logging */
@@ -1605,14 +1702,14 @@ export namespace Prisma {
 
   export type CompanyCountOutputType = {
     users: number
-    employees: number
     payRuns: number
+    superAdminPermissions: number
   }
 
   export type CompanyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | CompanyCountOutputTypeCountUsersArgs
-    employees?: boolean | CompanyCountOutputTypeCountEmployeesArgs
     payRuns?: boolean | CompanyCountOutputTypeCountPayRunsArgs
+    superAdminPermissions?: boolean | CompanyCountOutputTypeCountSuperAdminPermissionsArgs
   }
 
   // Custom InputTypes
@@ -1636,15 +1733,15 @@ export namespace Prisma {
   /**
    * CompanyCountOutputType without action
    */
-  export type CompanyCountOutputTypeCountEmployeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EmployeeWhereInput
+  export type CompanyCountOutputTypeCountPayRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PayRunWhereInput
   }
 
   /**
    * CompanyCountOutputType without action
    */
-  export type CompanyCountOutputTypeCountPayRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PayRunWhereInput
+  export type CompanyCountOutputTypeCountSuperAdminPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SuperAdminPermissionWhereInput
   }
 
 
@@ -1680,51 +1777,69 @@ export namespace Prisma {
 
 
   /**
-   * Count Type EmployeeCountOutputType
+   * Count Type UserCountOutputType
    */
 
-  export type EmployeeCountOutputType = {
+  export type UserCountOutputType = {
     payslips: number
     payments: number
     workSchedules: number
+    loans: number
+    grantedPermissions: number
   }
 
-  export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    payslips?: boolean | EmployeeCountOutputTypeCountPayslipsArgs
-    payments?: boolean | EmployeeCountOutputTypeCountPaymentsArgs
-    workSchedules?: boolean | EmployeeCountOutputTypeCountWorkSchedulesArgs
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payslips?: boolean | UserCountOutputTypeCountPayslipsArgs
+    payments?: boolean | UserCountOutputTypeCountPaymentsArgs
+    workSchedules?: boolean | UserCountOutputTypeCountWorkSchedulesArgs
+    loans?: boolean | UserCountOutputTypeCountLoansArgs
+    grantedPermissions?: boolean | UserCountOutputTypeCountGrantedPermissionsArgs
   }
 
   // Custom InputTypes
   /**
-   * EmployeeCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type EmployeeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the EmployeeCountOutputType
+     * Select specific fields to fetch from the UserCountOutputType
      */
-    select?: EmployeeCountOutputTypeSelect<ExtArgs> | null
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * EmployeeCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountPayslipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountPayslipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PayslipWhereInput
   }
 
   /**
-   * EmployeeCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PaymentWhereInput
   }
 
   /**
-   * EmployeeCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type EmployeeCountOutputTypeCountWorkSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountWorkSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WorkScheduleWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLoansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoanWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountGrantedPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SuperAdminPermissionWhereInput
   }
 
 
@@ -1831,8 +1946,20 @@ export namespace Prisma {
 
   export type AggregateCompany = {
     _count: CompanyCountAggregateOutputType | null
+    _avg: CompanyAvgAggregateOutputType | null
+    _sum: CompanySumAggregateOutputType | null
     _min: CompanyMinAggregateOutputType | null
     _max: CompanyMaxAggregateOutputType | null
+  }
+
+  export type CompanyAvgAggregateOutputType = {
+    fixedSalaryDeductionRate: Decimal | null
+    workDaysPerMonth: number | null
+  }
+
+  export type CompanySumAggregateOutputType = {
+    fixedSalaryDeductionRate: Decimal | null
+    workDaysPerMonth: number | null
   }
 
   export type CompanyMinAggregateOutputType = {
@@ -1843,6 +1970,8 @@ export namespace Prisma {
     currency: string | null
     primaryColor: string | null
     secondaryColor: string | null
+    fixedSalaryDeductionRate: Decimal | null
+    workDaysPerMonth: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1855,6 +1984,8 @@ export namespace Prisma {
     currency: string | null
     primaryColor: string | null
     secondaryColor: string | null
+    fixedSalaryDeductionRate: Decimal | null
+    workDaysPerMonth: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1867,11 +1998,23 @@ export namespace Prisma {
     currency: number
     primaryColor: number
     secondaryColor: number
+    fixedSalaryDeductionRate: number
+    workDaysPerMonth: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type CompanyAvgAggregateInputType = {
+    fixedSalaryDeductionRate?: true
+    workDaysPerMonth?: true
+  }
+
+  export type CompanySumAggregateInputType = {
+    fixedSalaryDeductionRate?: true
+    workDaysPerMonth?: true
+  }
 
   export type CompanyMinAggregateInputType = {
     id?: true
@@ -1881,6 +2024,8 @@ export namespace Prisma {
     currency?: true
     primaryColor?: true
     secondaryColor?: true
+    fixedSalaryDeductionRate?: true
+    workDaysPerMonth?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1893,6 +2038,8 @@ export namespace Prisma {
     currency?: true
     primaryColor?: true
     secondaryColor?: true
+    fixedSalaryDeductionRate?: true
+    workDaysPerMonth?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1905,6 +2052,8 @@ export namespace Prisma {
     currency?: true
     primaryColor?: true
     secondaryColor?: true
+    fixedSalaryDeductionRate?: true
+    workDaysPerMonth?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1948,6 +2097,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: CompanyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CompanySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: CompanyMinAggregateInputType
@@ -1978,6 +2139,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: CompanyCountAggregateInputType | true
+    _avg?: CompanyAvgAggregateInputType
+    _sum?: CompanySumAggregateInputType
     _min?: CompanyMinAggregateInputType
     _max?: CompanyMaxAggregateInputType
   }
@@ -1990,9 +2153,13 @@ export namespace Prisma {
     currency: string
     primaryColor: string
     secondaryColor: string
+    fixedSalaryDeductionRate: Decimal | null
+    workDaysPerMonth: number | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
+    _avg: CompanyAvgAggregateOutputType | null
+    _sum: CompanySumAggregateOutputType | null
     _min: CompanyMinAggregateOutputType | null
     _max: CompanyMaxAggregateOutputType | null
   }
@@ -2019,11 +2186,13 @@ export namespace Prisma {
     currency?: boolean
     primaryColor?: boolean
     secondaryColor?: boolean
+    fixedSalaryDeductionRate?: boolean
+    workDaysPerMonth?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
-    employees?: boolean | Company$employeesArgs<ExtArgs>
     payRuns?: boolean | Company$payRunsArgs<ExtArgs>
+    superAdminPermissions?: boolean | Company$superAdminPermissionsArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["company"]>
 
@@ -2037,15 +2206,17 @@ export namespace Prisma {
     currency?: boolean
     primaryColor?: boolean
     secondaryColor?: boolean
+    fixedSalaryDeductionRate?: boolean
+    workDaysPerMonth?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "logoUrl" | "address" | "currency" | "primaryColor" | "secondaryColor" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "logoUrl" | "address" | "currency" | "primaryColor" | "secondaryColor" | "fixedSalaryDeductionRate" | "workDaysPerMonth" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
-    employees?: boolean | Company$employeesArgs<ExtArgs>
     payRuns?: boolean | Company$payRunsArgs<ExtArgs>
+    superAdminPermissions?: boolean | Company$superAdminPermissionsArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2053,8 +2224,8 @@ export namespace Prisma {
     name: "Company"
     objects: {
       users: Prisma.$UserPayload<ExtArgs>[]
-      employees: Prisma.$EmployeePayload<ExtArgs>[]
       payRuns: Prisma.$PayRunPayload<ExtArgs>[]
+      superAdminPermissions: Prisma.$SuperAdminPermissionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2064,6 +2235,8 @@ export namespace Prisma {
       currency: string
       primaryColor: string
       secondaryColor: string
+      fixedSalaryDeductionRate: Prisma.Decimal | null
+      workDaysPerMonth: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -2407,8 +2580,8 @@ export namespace Prisma {
   export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends Company$usersArgs<ExtArgs> = {}>(args?: Subset<T, Company$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    employees<T extends Company$employeesArgs<ExtArgs> = {}>(args?: Subset<T, Company$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payRuns<T extends Company$payRunsArgs<ExtArgs> = {}>(args?: Subset<T, Company$payRunsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    superAdminPermissions<T extends Company$superAdminPermissionsArgs<ExtArgs> = {}>(args?: Subset<T, Company$superAdminPermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2445,6 +2618,8 @@ export namespace Prisma {
     readonly currency: FieldRef<"Company", 'String'>
     readonly primaryColor: FieldRef<"Company", 'String'>
     readonly secondaryColor: FieldRef<"Company", 'String'>
+    readonly fixedSalaryDeductionRate: FieldRef<"Company", 'Decimal'>
+    readonly workDaysPerMonth: FieldRef<"Company", 'Int'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -2814,30 +2989,6 @@ export namespace Prisma {
   }
 
   /**
-   * Company.employees
-   */
-  export type Company$employeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    where?: EmployeeWhereInput
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
-    cursor?: EmployeeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
-  }
-
-  /**
    * Company.payRuns
    */
   export type Company$payRunsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2859,6 +3010,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PayRunScalarFieldEnum | PayRunScalarFieldEnum[]
+  }
+
+  /**
+   * Company.superAdminPermissions
+   */
+  export type Company$superAdminPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    where?: SuperAdminPermissionWhereInput
+    orderBy?: SuperAdminPermissionOrderByWithRelationInput | SuperAdminPermissionOrderByWithRelationInput[]
+    cursor?: SuperAdminPermissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SuperAdminPermissionScalarFieldEnum | SuperAdminPermissionScalarFieldEnum[]
   }
 
   /**
@@ -3808,8 +3983,18 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    salaryOrRate: Decimal | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    salaryOrRate: Decimal | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -3820,6 +4005,14 @@ export namespace Prisma {
     passwordHash: string | null
     isActive: boolean | null
     roleId: string | null
+    position: string | null
+    contractType: $Enums.ContractType | null
+    salaryOrRate: Decimal | null
+    bankDetails: string | null
+    active: boolean | null
+    phone: string | null
+    hireDate: Date | null
+    canValidateFully: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3832,6 +4025,14 @@ export namespace Prisma {
     passwordHash: string | null
     isActive: boolean | null
     roleId: string | null
+    position: string | null
+    contractType: $Enums.ContractType | null
+    salaryOrRate: Decimal | null
+    bankDetails: string | null
+    active: boolean | null
+    phone: string | null
+    hireDate: Date | null
+    canValidateFully: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3844,11 +4045,27 @@ export namespace Prisma {
     passwordHash: number
     isActive: number
     roleId: number
+    position: number
+    contractType: number
+    salaryOrRate: number
+    bankDetails: number
+    active: number
+    phone: number
+    hireDate: number
+    canValidateFully: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    salaryOrRate?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    salaryOrRate?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -3858,6 +4075,14 @@ export namespace Prisma {
     passwordHash?: true
     isActive?: true
     roleId?: true
+    position?: true
+    contractType?: true
+    salaryOrRate?: true
+    bankDetails?: true
+    active?: true
+    phone?: true
+    hireDate?: true
+    canValidateFully?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3870,6 +4095,14 @@ export namespace Prisma {
     passwordHash?: true
     isActive?: true
     roleId?: true
+    position?: true
+    contractType?: true
+    salaryOrRate?: true
+    bankDetails?: true
+    active?: true
+    phone?: true
+    hireDate?: true
+    canValidateFully?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3882,6 +4115,14 @@ export namespace Prisma {
     passwordHash?: true
     isActive?: true
     roleId?: true
+    position?: true
+    contractType?: true
+    salaryOrRate?: true
+    bankDetails?: true
+    active?: true
+    phone?: true
+    hireDate?: true
+    canValidateFully?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3925,6 +4166,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -3955,6 +4208,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -3967,9 +4222,19 @@ export namespace Prisma {
     passwordHash: string
     isActive: boolean
     roleId: string
+    position: string | null
+    contractType: $Enums.ContractType | null
+    salaryOrRate: Decimal | null
+    bankDetails: string | null
+    active: boolean | null
+    phone: string | null
+    hireDate: Date | null
+    canValidateFully: boolean
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -3996,10 +4261,24 @@ export namespace Prisma {
     passwordHash?: boolean
     isActive?: boolean
     roleId?: boolean
+    position?: boolean
+    contractType?: boolean
+    salaryOrRate?: boolean
+    bankDetails?: boolean
+    active?: boolean
+    phone?: boolean
+    hireDate?: boolean
+    canValidateFully?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     company?: boolean | User$companyArgs<ExtArgs>
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    payslips?: boolean | User$payslipsArgs<ExtArgs>
+    payments?: boolean | User$paymentsArgs<ExtArgs>
+    workSchedules?: boolean | User$workSchedulesArgs<ExtArgs>
+    loans?: boolean | User$loansArgs<ExtArgs>
+    grantedPermissions?: boolean | User$grantedPermissionsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
 
@@ -4012,14 +4291,28 @@ export namespace Prisma {
     passwordHash?: boolean
     isActive?: boolean
     roleId?: boolean
+    position?: boolean
+    contractType?: boolean
+    salaryOrRate?: boolean
+    bankDetails?: boolean
+    active?: boolean
+    phone?: boolean
+    hireDate?: boolean
+    canValidateFully?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyId" | "fullName" | "email" | "passwordHash" | "isActive" | "roleId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyId" | "fullName" | "email" | "passwordHash" | "isActive" | "roleId" | "position" | "contractType" | "salaryOrRate" | "bankDetails" | "active" | "phone" | "hireDate" | "canValidateFully" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | User$companyArgs<ExtArgs>
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    payslips?: boolean | User$payslipsArgs<ExtArgs>
+    payments?: boolean | User$paymentsArgs<ExtArgs>
+    workSchedules?: boolean | User$workSchedulesArgs<ExtArgs>
+    loans?: boolean | User$loansArgs<ExtArgs>
+    grantedPermissions?: boolean | User$grantedPermissionsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4027,6 +4320,11 @@ export namespace Prisma {
     objects: {
       company: Prisma.$CompanyPayload<ExtArgs> | null
       role: Prisma.$RolePayload<ExtArgs>
+      payslips: Prisma.$PayslipPayload<ExtArgs>[]
+      payments: Prisma.$PaymentPayload<ExtArgs>[]
+      workSchedules: Prisma.$WorkSchedulePayload<ExtArgs>[]
+      loans: Prisma.$LoanPayload<ExtArgs>[]
+      grantedPermissions: Prisma.$SuperAdminPermissionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4036,6 +4334,14 @@ export namespace Prisma {
       passwordHash: string
       isActive: boolean
       roleId: string
+      position: string | null
+      contractType: $Enums.ContractType | null
+      salaryOrRate: Prisma.Decimal | null
+      bankDetails: string | null
+      active: boolean | null
+      phone: string | null
+      hireDate: Date | null
+      canValidateFully: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -4380,6 +4686,11 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     company<T extends User$companyArgs<ExtArgs> = {}>(args?: Subset<T, User$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     role<T extends RoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoleDefaultArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    payslips<T extends User$payslipsArgs<ExtArgs> = {}>(args?: Subset<T, User$payslipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayslipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    payments<T extends User$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workSchedules<T extends User$workSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, User$workSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    loans<T extends User$loansArgs<ExtArgs> = {}>(args?: Subset<T, User$loansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    grantedPermissions<T extends User$grantedPermissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$grantedPermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4416,6 +4727,14 @@ export namespace Prisma {
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly roleId: FieldRef<"User", 'String'>
+    readonly position: FieldRef<"User", 'String'>
+    readonly contractType: FieldRef<"User", 'ContractType'>
+    readonly salaryOrRate: FieldRef<"User", 'Decimal'>
+    readonly bankDetails: FieldRef<"User", 'String'>
+    readonly active: FieldRef<"User", 'Boolean'>
+    readonly phone: FieldRef<"User", 'String'>
+    readonly hireDate: FieldRef<"User", 'DateTime'>
+    readonly canValidateFully: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -4780,1074 +5099,9 @@ export namespace Prisma {
   }
 
   /**
-   * User without action
+   * User.payslips
    */
-  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Employee
-   */
-
-  export type AggregateEmployee = {
-    _count: EmployeeCountAggregateOutputType | null
-    _avg: EmployeeAvgAggregateOutputType | null
-    _sum: EmployeeSumAggregateOutputType | null
-    _min: EmployeeMinAggregateOutputType | null
-    _max: EmployeeMaxAggregateOutputType | null
-  }
-
-  export type EmployeeAvgAggregateOutputType = {
-    salaryOrRate: Decimal | null
-  }
-
-  export type EmployeeSumAggregateOutputType = {
-    salaryOrRate: Decimal | null
-  }
-
-  export type EmployeeMinAggregateOutputType = {
-    id: string | null
-    companyId: string | null
-    fullName: string | null
-    position: string | null
-    contractType: $Enums.ContractType | null
-    salaryOrRate: Decimal | null
-    bankDetails: string | null
-    active: boolean | null
-    email: string | null
-    phone: string | null
-    hireDate: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type EmployeeMaxAggregateOutputType = {
-    id: string | null
-    companyId: string | null
-    fullName: string | null
-    position: string | null
-    contractType: $Enums.ContractType | null
-    salaryOrRate: Decimal | null
-    bankDetails: string | null
-    active: boolean | null
-    email: string | null
-    phone: string | null
-    hireDate: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type EmployeeCountAggregateOutputType = {
-    id: number
-    companyId: number
-    fullName: number
-    position: number
-    contractType: number
-    salaryOrRate: number
-    bankDetails: number
-    active: number
-    email: number
-    phone: number
-    hireDate: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type EmployeeAvgAggregateInputType = {
-    salaryOrRate?: true
-  }
-
-  export type EmployeeSumAggregateInputType = {
-    salaryOrRate?: true
-  }
-
-  export type EmployeeMinAggregateInputType = {
-    id?: true
-    companyId?: true
-    fullName?: true
-    position?: true
-    contractType?: true
-    salaryOrRate?: true
-    bankDetails?: true
-    active?: true
-    email?: true
-    phone?: true
-    hireDate?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type EmployeeMaxAggregateInputType = {
-    id?: true
-    companyId?: true
-    fullName?: true
-    position?: true
-    contractType?: true
-    salaryOrRate?: true
-    bankDetails?: true
-    active?: true
-    email?: true
-    phone?: true
-    hireDate?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type EmployeeCountAggregateInputType = {
-    id?: true
-    companyId?: true
-    fullName?: true
-    position?: true
-    contractType?: true
-    salaryOrRate?: true
-    bankDetails?: true
-    active?: true
-    email?: true
-    phone?: true
-    hireDate?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type EmployeeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Employee to aggregate.
-     */
-    where?: EmployeeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Employees to fetch.
-     */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: EmployeeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Employees from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Employees.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Employees
-    **/
-    _count?: true | EmployeeCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: EmployeeAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: EmployeeSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: EmployeeMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: EmployeeMaxAggregateInputType
-  }
-
-  export type GetEmployeeAggregateType<T extends EmployeeAggregateArgs> = {
-        [P in keyof T & keyof AggregateEmployee]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateEmployee[P]>
-      : GetScalarType<T[P], AggregateEmployee[P]>
-  }
-
-
-
-
-  export type EmployeeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EmployeeWhereInput
-    orderBy?: EmployeeOrderByWithAggregationInput | EmployeeOrderByWithAggregationInput[]
-    by: EmployeeScalarFieldEnum[] | EmployeeScalarFieldEnum
-    having?: EmployeeScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: EmployeeCountAggregateInputType | true
-    _avg?: EmployeeAvgAggregateInputType
-    _sum?: EmployeeSumAggregateInputType
-    _min?: EmployeeMinAggregateInputType
-    _max?: EmployeeMaxAggregateInputType
-  }
-
-  export type EmployeeGroupByOutputType = {
-    id: string
-    companyId: string
-    fullName: string
-    position: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal
-    bankDetails: string | null
-    active: boolean
-    email: string | null
-    phone: string | null
-    hireDate: Date | null
-    createdAt: Date
-    updatedAt: Date
-    _count: EmployeeCountAggregateOutputType | null
-    _avg: EmployeeAvgAggregateOutputType | null
-    _sum: EmployeeSumAggregateOutputType | null
-    _min: EmployeeMinAggregateOutputType | null
-    _max: EmployeeMaxAggregateOutputType | null
-  }
-
-  type GetEmployeeGroupByPayload<T extends EmployeeGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<EmployeeGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof EmployeeGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
-            : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type EmployeeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    companyId?: boolean
-    fullName?: boolean
-    position?: boolean
-    contractType?: boolean
-    salaryOrRate?: boolean
-    bankDetails?: boolean
-    active?: boolean
-    email?: boolean
-    phone?: boolean
-    hireDate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    company?: boolean | CompanyDefaultArgs<ExtArgs>
-    payslips?: boolean | Employee$payslipsArgs<ExtArgs>
-    payments?: boolean | Employee$paymentsArgs<ExtArgs>
-    workSchedules?: boolean | Employee$workSchedulesArgs<ExtArgs>
-    _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["employee"]>
-
-
-
-  export type EmployeeSelectScalar = {
-    id?: boolean
-    companyId?: boolean
-    fullName?: boolean
-    position?: boolean
-    contractType?: boolean
-    salaryOrRate?: boolean
-    bankDetails?: boolean
-    active?: boolean
-    email?: boolean
-    phone?: boolean
-    hireDate?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyId" | "fullName" | "position" | "contractType" | "salaryOrRate" | "bankDetails" | "active" | "email" | "phone" | "hireDate" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
-  export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    company?: boolean | CompanyDefaultArgs<ExtArgs>
-    payslips?: boolean | Employee$payslipsArgs<ExtArgs>
-    payments?: boolean | Employee$paymentsArgs<ExtArgs>
-    workSchedules?: boolean | Employee$workSchedulesArgs<ExtArgs>
-    _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
-  }
-
-  export type $EmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Employee"
-    objects: {
-      company: Prisma.$CompanyPayload<ExtArgs>
-      payslips: Prisma.$PayslipPayload<ExtArgs>[]
-      payments: Prisma.$PaymentPayload<ExtArgs>[]
-      workSchedules: Prisma.$WorkSchedulePayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      companyId: string
-      fullName: string
-      position: string | null
-      contractType: $Enums.ContractType
-      salaryOrRate: Prisma.Decimal
-      bankDetails: string | null
-      active: boolean
-      email: string | null
-      phone: string | null
-      hireDate: Date | null
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["employee"]>
-    composites: {}
-  }
-
-  type EmployeeGetPayload<S extends boolean | null | undefined | EmployeeDefaultArgs> = $Result.GetResult<Prisma.$EmployeePayload, S>
-
-  type EmployeeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<EmployeeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: EmployeeCountAggregateInputType | true
-    }
-
-  export interface EmployeeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Employee'], meta: { name: 'Employee' } }
-    /**
-     * Find zero or one Employee that matches the filter.
-     * @param {EmployeeFindUniqueArgs} args - Arguments to find a Employee
-     * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends EmployeeFindUniqueArgs>(args: SelectSubset<T, EmployeeFindUniqueArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Employee that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {EmployeeFindUniqueOrThrowArgs} args - Arguments to find a Employee
-     * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends EmployeeFindUniqueOrThrowArgs>(args: SelectSubset<T, EmployeeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Employee that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeFindFirstArgs} args - Arguments to find a Employee
-     * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends EmployeeFindFirstArgs>(args?: SelectSubset<T, EmployeeFindFirstArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Employee that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeFindFirstOrThrowArgs} args - Arguments to find a Employee
-     * @example
-     * // Get one Employee
-     * const employee = await prisma.employee.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends EmployeeFindFirstOrThrowArgs>(args?: SelectSubset<T, EmployeeFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Employees that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Employees
-     * const employees = await prisma.employee.findMany()
-     * 
-     * // Get first 10 Employees
-     * const employees = await prisma.employee.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const employeeWithIdOnly = await prisma.employee.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends EmployeeFindManyArgs>(args?: SelectSubset<T, EmployeeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Employee.
-     * @param {EmployeeCreateArgs} args - Arguments to create a Employee.
-     * @example
-     * // Create one Employee
-     * const Employee = await prisma.employee.create({
-     *   data: {
-     *     // ... data to create a Employee
-     *   }
-     * })
-     * 
-     */
-    create<T extends EmployeeCreateArgs>(args: SelectSubset<T, EmployeeCreateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Employees.
-     * @param {EmployeeCreateManyArgs} args - Arguments to create many Employees.
-     * @example
-     * // Create many Employees
-     * const employee = await prisma.employee.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends EmployeeCreateManyArgs>(args?: SelectSubset<T, EmployeeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Employee.
-     * @param {EmployeeDeleteArgs} args - Arguments to delete one Employee.
-     * @example
-     * // Delete one Employee
-     * const Employee = await prisma.employee.delete({
-     *   where: {
-     *     // ... filter to delete one Employee
-     *   }
-     * })
-     * 
-     */
-    delete<T extends EmployeeDeleteArgs>(args: SelectSubset<T, EmployeeDeleteArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Employee.
-     * @param {EmployeeUpdateArgs} args - Arguments to update one Employee.
-     * @example
-     * // Update one Employee
-     * const employee = await prisma.employee.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends EmployeeUpdateArgs>(args: SelectSubset<T, EmployeeUpdateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Employees.
-     * @param {EmployeeDeleteManyArgs} args - Arguments to filter Employees to delete.
-     * @example
-     * // Delete a few Employees
-     * const { count } = await prisma.employee.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends EmployeeDeleteManyArgs>(args?: SelectSubset<T, EmployeeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Employees.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Employees
-     * const employee = await prisma.employee.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends EmployeeUpdateManyArgs>(args: SelectSubset<T, EmployeeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Employee.
-     * @param {EmployeeUpsertArgs} args - Arguments to update or create a Employee.
-     * @example
-     * // Update or create a Employee
-     * const employee = await prisma.employee.upsert({
-     *   create: {
-     *     // ... data to create a Employee
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Employee we want to update
-     *   }
-     * })
-     */
-    upsert<T extends EmployeeUpsertArgs>(args: SelectSubset<T, EmployeeUpsertArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Employees.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeCountArgs} args - Arguments to filter Employees to count.
-     * @example
-     * // Count the number of Employees
-     * const count = await prisma.employee.count({
-     *   where: {
-     *     // ... the filter for the Employees we want to count
-     *   }
-     * })
-    **/
-    count<T extends EmployeeCountArgs>(
-      args?: Subset<T, EmployeeCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], EmployeeCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Employee.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends EmployeeAggregateArgs>(args: Subset<T, EmployeeAggregateArgs>): Prisma.PrismaPromise<GetEmployeeAggregateType<T>>
-
-    /**
-     * Group by Employee.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {EmployeeGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends EmployeeGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: EmployeeGroupByArgs['orderBy'] }
-        : { orderBy?: EmployeeGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, EmployeeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmployeeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Employee model
-   */
-  readonly fields: EmployeeFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Employee.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    payslips<T extends Employee$payslipsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$payslipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayslipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    payments<T extends Employee$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    workSchedules<T extends Employee$workSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, Employee$workSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Employee model
-   */
-  interface EmployeeFieldRefs {
-    readonly id: FieldRef<"Employee", 'String'>
-    readonly companyId: FieldRef<"Employee", 'String'>
-    readonly fullName: FieldRef<"Employee", 'String'>
-    readonly position: FieldRef<"Employee", 'String'>
-    readonly contractType: FieldRef<"Employee", 'ContractType'>
-    readonly salaryOrRate: FieldRef<"Employee", 'Decimal'>
-    readonly bankDetails: FieldRef<"Employee", 'String'>
-    readonly active: FieldRef<"Employee", 'Boolean'>
-    readonly email: FieldRef<"Employee", 'String'>
-    readonly phone: FieldRef<"Employee", 'String'>
-    readonly hireDate: FieldRef<"Employee", 'DateTime'>
-    readonly createdAt: FieldRef<"Employee", 'DateTime'>
-    readonly updatedAt: FieldRef<"Employee", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Employee findUnique
-   */
-  export type EmployeeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * Filter, which Employee to fetch.
-     */
-    where: EmployeeWhereUniqueInput
-  }
-
-  /**
-   * Employee findUniqueOrThrow
-   */
-  export type EmployeeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * Filter, which Employee to fetch.
-     */
-    where: EmployeeWhereUniqueInput
-  }
-
-  /**
-   * Employee findFirst
-   */
-  export type EmployeeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * Filter, which Employee to fetch.
-     */
-    where?: EmployeeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Employees to fetch.
-     */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Employees.
-     */
-    cursor?: EmployeeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Employees from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Employees.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Employees.
-     */
-    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
-  }
-
-  /**
-   * Employee findFirstOrThrow
-   */
-  export type EmployeeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * Filter, which Employee to fetch.
-     */
-    where?: EmployeeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Employees to fetch.
-     */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Employees.
-     */
-    cursor?: EmployeeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Employees from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Employees.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Employees.
-     */
-    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
-  }
-
-  /**
-   * Employee findMany
-   */
-  export type EmployeeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * Filter, which Employees to fetch.
-     */
-    where?: EmployeeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Employees to fetch.
-     */
-    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Employees.
-     */
-    cursor?: EmployeeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Employees from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Employees.
-     */
-    skip?: number
-    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
-  }
-
-  /**
-   * Employee create
-   */
-  export type EmployeeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Employee.
-     */
-    data: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
-  }
-
-  /**
-   * Employee createMany
-   */
-  export type EmployeeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Employees.
-     */
-    data: EmployeeCreateManyInput | EmployeeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Employee update
-   */
-  export type EmployeeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Employee.
-     */
-    data: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
-    /**
-     * Choose, which Employee to update.
-     */
-    where: EmployeeWhereUniqueInput
-  }
-
-  /**
-   * Employee updateMany
-   */
-  export type EmployeeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Employees.
-     */
-    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyInput>
-    /**
-     * Filter which Employees to update
-     */
-    where?: EmployeeWhereInput
-    /**
-     * Limit how many Employees to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Employee upsert
-   */
-  export type EmployeeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Employee to update in case it exists.
-     */
-    where: EmployeeWhereUniqueInput
-    /**
-     * In case the Employee found by the `where` argument doesn't exist, create a new Employee with this data.
-     */
-    create: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
-    /**
-     * In case the Employee was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
-  }
-
-  /**
-   * Employee delete
-   */
-  export type EmployeeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Employee
-     */
-    select?: EmployeeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Employee
-     */
-    omit?: EmployeeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmployeeInclude<ExtArgs> | null
-    /**
-     * Filter which Employee to delete.
-     */
-    where: EmployeeWhereUniqueInput
-  }
-
-  /**
-   * Employee deleteMany
-   */
-  export type EmployeeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Employees to delete
-     */
-    where?: EmployeeWhereInput
-    /**
-     * Limit how many Employees to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Employee.payslips
-   */
-  export type Employee$payslipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$payslipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Payslip
      */
@@ -5869,9 +5123,9 @@ export namespace Prisma {
   }
 
   /**
-   * Employee.payments
+   * User.payments
    */
-  export type Employee$paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Payment
      */
@@ -5893,9 +5147,9 @@ export namespace Prisma {
   }
 
   /**
-   * Employee.workSchedules
+   * User.workSchedules
    */
-  export type Employee$workSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$workSchedulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the WorkSchedule
      */
@@ -5917,21 +5171,69 @@ export namespace Prisma {
   }
 
   /**
-   * Employee without action
+   * User.loans
    */
-  export type EmployeeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$loansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Employee
+     * Select specific fields to fetch from the Loan
      */
-    select?: EmployeeSelect<ExtArgs> | null
+    select?: LoanSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Employee
+     * Omit specific fields from the Loan
      */
-    omit?: EmployeeOmit<ExtArgs> | null
+    omit?: LoanOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: EmployeeInclude<ExtArgs> | null
+    include?: LoanInclude<ExtArgs> | null
+    where?: LoanWhereInput
+    orderBy?: LoanOrderByWithRelationInput | LoanOrderByWithRelationInput[]
+    cursor?: LoanWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LoanScalarFieldEnum | LoanScalarFieldEnum[]
+  }
+
+  /**
+   * User.grantedPermissions
+   */
+  export type User$grantedPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    where?: SuperAdminPermissionWhereInput
+    orderBy?: SuperAdminPermissionOrderByWithRelationInput | SuperAdminPermissionOrderByWithRelationInput[]
+    cursor?: SuperAdminPermissionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SuperAdminPermissionScalarFieldEnum | SuperAdminPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * User without action
+   */
+  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -7185,7 +6487,7 @@ export namespace Prisma {
     lockedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    employee?: boolean | UserDefaultArgs<ExtArgs>
     payRun?: boolean | PayRunDefaultArgs<ExtArgs>
     payments?: boolean | Payslip$paymentsArgs<ExtArgs>
     _count?: boolean | PayslipCountOutputTypeDefaultArgs<ExtArgs>
@@ -7209,7 +6511,7 @@ export namespace Prisma {
 
   export type PayslipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "payRunId" | "gross" | "deductions" | "netPay" | "daysWorked" | "status" | "lockedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["payslip"]>
   export type PayslipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    employee?: boolean | UserDefaultArgs<ExtArgs>
     payRun?: boolean | PayRunDefaultArgs<ExtArgs>
     payments?: boolean | Payslip$paymentsArgs<ExtArgs>
     _count?: boolean | PayslipCountOutputTypeDefaultArgs<ExtArgs>
@@ -7218,7 +6520,7 @@ export namespace Prisma {
   export type $PayslipPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Payslip"
     objects: {
-      employee: Prisma.$EmployeePayload<ExtArgs>
+      employee: Prisma.$UserPayload<ExtArgs>
       payRun: Prisma.$PayRunPayload<ExtArgs>
       payments: Prisma.$PaymentPayload<ExtArgs>[]
     }
@@ -7574,7 +6876,7 @@ export namespace Prisma {
    */
   export interface Prisma__PayslipClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    employee<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     payRun<T extends PayRunDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PayRunDefaultArgs<ExtArgs>>): Prisma__PayRunClient<$Result.GetResult<Prisma.$PayRunPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     payments<T extends Payslip$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Payslip$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -8225,7 +7527,7 @@ export namespace Prisma {
     receiptUrl?: boolean
     createdAt?: boolean
     payslip?: boolean | PayslipDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    employee?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
 
@@ -8244,14 +7546,14 @@ export namespace Prisma {
   export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "payslipId" | "employeeId" | "amount" | "mode" | "note" | "receiptUrl" | "createdAt", ExtArgs["result"]["payment"]>
   export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     payslip?: boolean | PayslipDefaultArgs<ExtArgs>
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    employee?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $PaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Payment"
     objects: {
       payslip: Prisma.$PayslipPayload<ExtArgs>
-      employee: Prisma.$EmployeePayload<ExtArgs>
+      employee: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8603,7 +7905,7 @@ export namespace Prisma {
   export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     payslip<T extends PayslipDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PayslipDefaultArgs<ExtArgs>>): Prisma__PayslipClient<$Result.GetResult<Prisma.$PayslipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    employee<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9208,7 +8510,7 @@ export namespace Prisma {
     endDate?: boolean
     type?: boolean
     hoursPerDay?: boolean
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    employee?: boolean | UserDefaultArgs<ExtArgs>
     attendances?: boolean | WorkSchedule$attendancesArgs<ExtArgs>
     _count?: boolean | WorkScheduleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["workSchedule"]>
@@ -9226,7 +8528,7 @@ export namespace Prisma {
 
   export type WorkScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "startDate" | "endDate" | "type" | "hoursPerDay", ExtArgs["result"]["workSchedule"]>
   export type WorkScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    employee?: boolean | EmployeeDefaultArgs<ExtArgs>
+    employee?: boolean | UserDefaultArgs<ExtArgs>
     attendances?: boolean | WorkSchedule$attendancesArgs<ExtArgs>
     _count?: boolean | WorkScheduleCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -9234,7 +8536,7 @@ export namespace Prisma {
   export type $WorkSchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WorkSchedule"
     objects: {
-      employee: Prisma.$EmployeePayload<ExtArgs>
+      employee: Prisma.$UserPayload<ExtArgs>
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -9584,7 +8886,7 @@ export namespace Prisma {
    */
   export interface Prisma__WorkScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    employee<T extends EmployeeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmployeeDefaultArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    employee<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     attendances<T extends WorkSchedule$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, WorkSchedule$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10032,6 +9334,8 @@ export namespace Prisma {
     date: Date | null
     workedHours: number | null
     validated: boolean | null
+    validatedBy: string | null
+    validatedAt: Date | null
   }
 
   export type AttendanceMaxAggregateOutputType = {
@@ -10040,6 +9344,8 @@ export namespace Prisma {
     date: Date | null
     workedHours: number | null
     validated: boolean | null
+    validatedBy: string | null
+    validatedAt: Date | null
   }
 
   export type AttendanceCountAggregateOutputType = {
@@ -10048,6 +9354,8 @@ export namespace Prisma {
     date: number
     workedHours: number
     validated: number
+    validatedBy: number
+    validatedAt: number
     _all: number
   }
 
@@ -10066,6 +9374,8 @@ export namespace Prisma {
     date?: true
     workedHours?: true
     validated?: true
+    validatedBy?: true
+    validatedAt?: true
   }
 
   export type AttendanceMaxAggregateInputType = {
@@ -10074,6 +9384,8 @@ export namespace Prisma {
     date?: true
     workedHours?: true
     validated?: true
+    validatedBy?: true
+    validatedAt?: true
   }
 
   export type AttendanceCountAggregateInputType = {
@@ -10082,6 +9394,8 @@ export namespace Prisma {
     date?: true
     workedHours?: true
     validated?: true
+    validatedBy?: true
+    validatedAt?: true
     _all?: true
   }
 
@@ -10177,6 +9491,8 @@ export namespace Prisma {
     date: Date
     workedHours: number | null
     validated: boolean
+    validatedBy: string | null
+    validatedAt: Date | null
     _count: AttendanceCountAggregateOutputType | null
     _avg: AttendanceAvgAggregateOutputType | null
     _sum: AttendanceSumAggregateOutputType | null
@@ -10204,6 +9520,8 @@ export namespace Prisma {
     date?: boolean
     workedHours?: boolean
     validated?: boolean
+    validatedBy?: boolean
+    validatedAt?: boolean
     workSchedule?: boolean | WorkScheduleDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attendance"]>
 
@@ -10215,9 +9533,11 @@ export namespace Prisma {
     date?: boolean
     workedHours?: boolean
     validated?: boolean
+    validatedBy?: boolean
+    validatedAt?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workScheduleId" | "date" | "workedHours" | "validated", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workScheduleId" | "date" | "workedHours" | "validated" | "validatedBy" | "validatedAt", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     workSchedule?: boolean | WorkScheduleDefaultArgs<ExtArgs>
   }
@@ -10233,6 +9553,8 @@ export namespace Prisma {
       date: Date
       workedHours: number | null
       validated: boolean
+      validatedBy: string | null
+      validatedAt: Date | null
     }, ExtArgs["result"]["attendance"]>
     composites: {}
   }
@@ -10608,6 +9930,8 @@ export namespace Prisma {
     readonly date: FieldRef<"Attendance", 'DateTime'>
     readonly workedHours: FieldRef<"Attendance", 'Int'>
     readonly validated: FieldRef<"Attendance", 'Boolean'>
+    readonly validatedBy: FieldRef<"Attendance", 'String'>
+    readonly validatedAt: FieldRef<"Attendance", 'DateTime'>
   }
     
 
@@ -10970,6 +10294,2024 @@ export namespace Prisma {
 
 
   /**
+   * Model Loan
+   */
+
+  export type AggregateLoan = {
+    _count: LoanCountAggregateOutputType | null
+    _avg: LoanAvgAggregateOutputType | null
+    _sum: LoanSumAggregateOutputType | null
+    _min: LoanMinAggregateOutputType | null
+    _max: LoanMaxAggregateOutputType | null
+  }
+
+  export type LoanAvgAggregateOutputType = {
+    amount: Decimal | null
+    remainingAmount: Decimal | null
+    monthlyDeduction: Decimal | null
+    progress: Decimal | null
+  }
+
+  export type LoanSumAggregateOutputType = {
+    amount: Decimal | null
+    remainingAmount: Decimal | null
+    monthlyDeduction: Decimal | null
+    progress: Decimal | null
+  }
+
+  export type LoanMinAggregateOutputType = {
+    id: string | null
+    employeeId: string | null
+    amount: Decimal | null
+    remainingAmount: Decimal | null
+    monthlyDeduction: Decimal | null
+    progress: Decimal | null
+    description: string | null
+    startDate: Date | null
+    endDate: Date | null
+    status: $Enums.LoanStatus | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LoanMaxAggregateOutputType = {
+    id: string | null
+    employeeId: string | null
+    amount: Decimal | null
+    remainingAmount: Decimal | null
+    monthlyDeduction: Decimal | null
+    progress: Decimal | null
+    description: string | null
+    startDate: Date | null
+    endDate: Date | null
+    status: $Enums.LoanStatus | null
+    createdBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LoanCountAggregateOutputType = {
+    id: number
+    employeeId: number
+    amount: number
+    remainingAmount: number
+    monthlyDeduction: number
+    progress: number
+    description: number
+    startDate: number
+    endDate: number
+    status: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LoanAvgAggregateInputType = {
+    amount?: true
+    remainingAmount?: true
+    monthlyDeduction?: true
+    progress?: true
+  }
+
+  export type LoanSumAggregateInputType = {
+    amount?: true
+    remainingAmount?: true
+    monthlyDeduction?: true
+    progress?: true
+  }
+
+  export type LoanMinAggregateInputType = {
+    id?: true
+    employeeId?: true
+    amount?: true
+    remainingAmount?: true
+    monthlyDeduction?: true
+    progress?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    status?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LoanMaxAggregateInputType = {
+    id?: true
+    employeeId?: true
+    amount?: true
+    remainingAmount?: true
+    monthlyDeduction?: true
+    progress?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    status?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LoanCountAggregateInputType = {
+    id?: true
+    employeeId?: true
+    amount?: true
+    remainingAmount?: true
+    monthlyDeduction?: true
+    progress?: true
+    description?: true
+    startDate?: true
+    endDate?: true
+    status?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LoanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Loan to aggregate.
+     */
+    where?: LoanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Loans to fetch.
+     */
+    orderBy?: LoanOrderByWithRelationInput | LoanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Loans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Loans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Loans
+    **/
+    _count?: true | LoanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoanAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoanSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoanMaxAggregateInputType
+  }
+
+  export type GetLoanAggregateType<T extends LoanAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoan[P]>
+      : GetScalarType<T[P], AggregateLoan[P]>
+  }
+
+
+
+
+  export type LoanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoanWhereInput
+    orderBy?: LoanOrderByWithAggregationInput | LoanOrderByWithAggregationInput[]
+    by: LoanScalarFieldEnum[] | LoanScalarFieldEnum
+    having?: LoanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoanCountAggregateInputType | true
+    _avg?: LoanAvgAggregateInputType
+    _sum?: LoanSumAggregateInputType
+    _min?: LoanMinAggregateInputType
+    _max?: LoanMaxAggregateInputType
+  }
+
+  export type LoanGroupByOutputType = {
+    id: string
+    employeeId: string
+    amount: Decimal
+    remainingAmount: Decimal
+    monthlyDeduction: Decimal
+    progress: Decimal
+    description: string | null
+    startDate: Date
+    endDate: Date | null
+    status: $Enums.LoanStatus
+    createdBy: string
+    createdAt: Date
+    updatedAt: Date
+    _count: LoanCountAggregateOutputType | null
+    _avg: LoanAvgAggregateOutputType | null
+    _sum: LoanSumAggregateOutputType | null
+    _min: LoanMinAggregateOutputType | null
+    _max: LoanMaxAggregateOutputType | null
+  }
+
+  type GetLoanGroupByPayload<T extends LoanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoanGroupByOutputType[P]>
+            : GetScalarType<T[P], LoanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    employeeId?: boolean
+    amount?: boolean
+    remainingAmount?: boolean
+    monthlyDeduction?: boolean
+    progress?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    status?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    employee?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loan"]>
+
+
+
+  export type LoanSelectScalar = {
+    id?: boolean
+    employeeId?: boolean
+    amount?: boolean
+    remainingAmount?: boolean
+    monthlyDeduction?: boolean
+    progress?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    status?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LoanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "amount" | "remainingAmount" | "monthlyDeduction" | "progress" | "description" | "startDate" | "endDate" | "status" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["loan"]>
+  export type LoanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    employee?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $LoanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Loan"
+    objects: {
+      employee: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      employeeId: string
+      amount: Prisma.Decimal
+      remainingAmount: Prisma.Decimal
+      monthlyDeduction: Prisma.Decimal
+      progress: Prisma.Decimal
+      description: string | null
+      startDate: Date
+      endDate: Date | null
+      status: $Enums.LoanStatus
+      createdBy: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["loan"]>
+    composites: {}
+  }
+
+  type LoanGetPayload<S extends boolean | null | undefined | LoanDefaultArgs> = $Result.GetResult<Prisma.$LoanPayload, S>
+
+  type LoanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoanCountAggregateInputType | true
+    }
+
+  export interface LoanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Loan'], meta: { name: 'Loan' } }
+    /**
+     * Find zero or one Loan that matches the filter.
+     * @param {LoanFindUniqueArgs} args - Arguments to find a Loan
+     * @example
+     * // Get one Loan
+     * const loan = await prisma.loan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoanFindUniqueArgs>(args: SelectSubset<T, LoanFindUniqueArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Loan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoanFindUniqueOrThrowArgs} args - Arguments to find a Loan
+     * @example
+     * // Get one Loan
+     * const loan = await prisma.loan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoanFindUniqueOrThrowArgs>(args: SelectSubset<T, LoanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Loan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoanFindFirstArgs} args - Arguments to find a Loan
+     * @example
+     * // Get one Loan
+     * const loan = await prisma.loan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoanFindFirstArgs>(args?: SelectSubset<T, LoanFindFirstArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Loan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoanFindFirstOrThrowArgs} args - Arguments to find a Loan
+     * @example
+     * // Get one Loan
+     * const loan = await prisma.loan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoanFindFirstOrThrowArgs>(args?: SelectSubset<T, LoanFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Loans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Loans
+     * const loans = await prisma.loan.findMany()
+     * 
+     * // Get first 10 Loans
+     * const loans = await prisma.loan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loanWithIdOnly = await prisma.loan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoanFindManyArgs>(args?: SelectSubset<T, LoanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Loan.
+     * @param {LoanCreateArgs} args - Arguments to create a Loan.
+     * @example
+     * // Create one Loan
+     * const Loan = await prisma.loan.create({
+     *   data: {
+     *     // ... data to create a Loan
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoanCreateArgs>(args: SelectSubset<T, LoanCreateArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Loans.
+     * @param {LoanCreateManyArgs} args - Arguments to create many Loans.
+     * @example
+     * // Create many Loans
+     * const loan = await prisma.loan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoanCreateManyArgs>(args?: SelectSubset<T, LoanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Loan.
+     * @param {LoanDeleteArgs} args - Arguments to delete one Loan.
+     * @example
+     * // Delete one Loan
+     * const Loan = await prisma.loan.delete({
+     *   where: {
+     *     // ... filter to delete one Loan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoanDeleteArgs>(args: SelectSubset<T, LoanDeleteArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Loan.
+     * @param {LoanUpdateArgs} args - Arguments to update one Loan.
+     * @example
+     * // Update one Loan
+     * const loan = await prisma.loan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoanUpdateArgs>(args: SelectSubset<T, LoanUpdateArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Loans.
+     * @param {LoanDeleteManyArgs} args - Arguments to filter Loans to delete.
+     * @example
+     * // Delete a few Loans
+     * const { count } = await prisma.loan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoanDeleteManyArgs>(args?: SelectSubset<T, LoanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Loans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Loans
+     * const loan = await prisma.loan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoanUpdateManyArgs>(args: SelectSubset<T, LoanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Loan.
+     * @param {LoanUpsertArgs} args - Arguments to update or create a Loan.
+     * @example
+     * // Update or create a Loan
+     * const loan = await prisma.loan.upsert({
+     *   create: {
+     *     // ... data to create a Loan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Loan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoanUpsertArgs>(args: SelectSubset<T, LoanUpsertArgs<ExtArgs>>): Prisma__LoanClient<$Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Loans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoanCountArgs} args - Arguments to filter Loans to count.
+     * @example
+     * // Count the number of Loans
+     * const count = await prisma.loan.count({
+     *   where: {
+     *     // ... the filter for the Loans we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoanCountArgs>(
+      args?: Subset<T, LoanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Loan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoanAggregateArgs>(args: Subset<T, LoanAggregateArgs>): Prisma.PrismaPromise<GetLoanAggregateType<T>>
+
+    /**
+     * Group by Loan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoanGroupByArgs['orderBy'] }
+        : { orderBy?: LoanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Loan model
+   */
+  readonly fields: LoanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Loan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    employee<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Loan model
+   */
+  interface LoanFieldRefs {
+    readonly id: FieldRef<"Loan", 'String'>
+    readonly employeeId: FieldRef<"Loan", 'String'>
+    readonly amount: FieldRef<"Loan", 'Decimal'>
+    readonly remainingAmount: FieldRef<"Loan", 'Decimal'>
+    readonly monthlyDeduction: FieldRef<"Loan", 'Decimal'>
+    readonly progress: FieldRef<"Loan", 'Decimal'>
+    readonly description: FieldRef<"Loan", 'String'>
+    readonly startDate: FieldRef<"Loan", 'DateTime'>
+    readonly endDate: FieldRef<"Loan", 'DateTime'>
+    readonly status: FieldRef<"Loan", 'LoanStatus'>
+    readonly createdBy: FieldRef<"Loan", 'String'>
+    readonly createdAt: FieldRef<"Loan", 'DateTime'>
+    readonly updatedAt: FieldRef<"Loan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Loan findUnique
+   */
+  export type LoanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * Filter, which Loan to fetch.
+     */
+    where: LoanWhereUniqueInput
+  }
+
+  /**
+   * Loan findUniqueOrThrow
+   */
+  export type LoanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * Filter, which Loan to fetch.
+     */
+    where: LoanWhereUniqueInput
+  }
+
+  /**
+   * Loan findFirst
+   */
+  export type LoanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * Filter, which Loan to fetch.
+     */
+    where?: LoanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Loans to fetch.
+     */
+    orderBy?: LoanOrderByWithRelationInput | LoanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Loans.
+     */
+    cursor?: LoanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Loans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Loans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Loans.
+     */
+    distinct?: LoanScalarFieldEnum | LoanScalarFieldEnum[]
+  }
+
+  /**
+   * Loan findFirstOrThrow
+   */
+  export type LoanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * Filter, which Loan to fetch.
+     */
+    where?: LoanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Loans to fetch.
+     */
+    orderBy?: LoanOrderByWithRelationInput | LoanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Loans.
+     */
+    cursor?: LoanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Loans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Loans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Loans.
+     */
+    distinct?: LoanScalarFieldEnum | LoanScalarFieldEnum[]
+  }
+
+  /**
+   * Loan findMany
+   */
+  export type LoanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * Filter, which Loans to fetch.
+     */
+    where?: LoanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Loans to fetch.
+     */
+    orderBy?: LoanOrderByWithRelationInput | LoanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Loans.
+     */
+    cursor?: LoanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Loans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Loans.
+     */
+    skip?: number
+    distinct?: LoanScalarFieldEnum | LoanScalarFieldEnum[]
+  }
+
+  /**
+   * Loan create
+   */
+  export type LoanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Loan.
+     */
+    data: XOR<LoanCreateInput, LoanUncheckedCreateInput>
+  }
+
+  /**
+   * Loan createMany
+   */
+  export type LoanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Loans.
+     */
+    data: LoanCreateManyInput | LoanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Loan update
+   */
+  export type LoanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Loan.
+     */
+    data: XOR<LoanUpdateInput, LoanUncheckedUpdateInput>
+    /**
+     * Choose, which Loan to update.
+     */
+    where: LoanWhereUniqueInput
+  }
+
+  /**
+   * Loan updateMany
+   */
+  export type LoanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Loans.
+     */
+    data: XOR<LoanUpdateManyMutationInput, LoanUncheckedUpdateManyInput>
+    /**
+     * Filter which Loans to update
+     */
+    where?: LoanWhereInput
+    /**
+     * Limit how many Loans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Loan upsert
+   */
+  export type LoanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Loan to update in case it exists.
+     */
+    where: LoanWhereUniqueInput
+    /**
+     * In case the Loan found by the `where` argument doesn't exist, create a new Loan with this data.
+     */
+    create: XOR<LoanCreateInput, LoanUncheckedCreateInput>
+    /**
+     * In case the Loan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoanUpdateInput, LoanUncheckedUpdateInput>
+  }
+
+  /**
+   * Loan delete
+   */
+  export type LoanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+    /**
+     * Filter which Loan to delete.
+     */
+    where: LoanWhereUniqueInput
+  }
+
+  /**
+   * Loan deleteMany
+   */
+  export type LoanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Loans to delete
+     */
+    where?: LoanWhereInput
+    /**
+     * Limit how many Loans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Loan without action
+   */
+  export type LoanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Loan
+     */
+    select?: LoanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Loan
+     */
+    omit?: LoanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SuperAdminPermission
+   */
+
+  export type AggregateSuperAdminPermission = {
+    _count: SuperAdminPermissionCountAggregateOutputType | null
+    _min: SuperAdminPermissionMinAggregateOutputType | null
+    _max: SuperAdminPermissionMaxAggregateOutputType | null
+  }
+
+  export type SuperAdminPermissionMinAggregateOutputType = {
+    id: string | null
+    superAdminId: string | null
+    companyId: string | null
+    grantedBy: string | null
+    grantedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SuperAdminPermissionMaxAggregateOutputType = {
+    id: string | null
+    superAdminId: string | null
+    companyId: string | null
+    grantedBy: string | null
+    grantedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SuperAdminPermissionCountAggregateOutputType = {
+    id: number
+    superAdminId: number
+    companyId: number
+    grantedBy: number
+    grantedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SuperAdminPermissionMinAggregateInputType = {
+    id?: true
+    superAdminId?: true
+    companyId?: true
+    grantedBy?: true
+    grantedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SuperAdminPermissionMaxAggregateInputType = {
+    id?: true
+    superAdminId?: true
+    companyId?: true
+    grantedBy?: true
+    grantedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SuperAdminPermissionCountAggregateInputType = {
+    id?: true
+    superAdminId?: true
+    companyId?: true
+    grantedBy?: true
+    grantedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SuperAdminPermissionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SuperAdminPermission to aggregate.
+     */
+    where?: SuperAdminPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SuperAdminPermissions to fetch.
+     */
+    orderBy?: SuperAdminPermissionOrderByWithRelationInput | SuperAdminPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SuperAdminPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SuperAdminPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SuperAdminPermissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SuperAdminPermissions
+    **/
+    _count?: true | SuperAdminPermissionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SuperAdminPermissionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SuperAdminPermissionMaxAggregateInputType
+  }
+
+  export type GetSuperAdminPermissionAggregateType<T extends SuperAdminPermissionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSuperAdminPermission]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSuperAdminPermission[P]>
+      : GetScalarType<T[P], AggregateSuperAdminPermission[P]>
+  }
+
+
+
+
+  export type SuperAdminPermissionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SuperAdminPermissionWhereInput
+    orderBy?: SuperAdminPermissionOrderByWithAggregationInput | SuperAdminPermissionOrderByWithAggregationInput[]
+    by: SuperAdminPermissionScalarFieldEnum[] | SuperAdminPermissionScalarFieldEnum
+    having?: SuperAdminPermissionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SuperAdminPermissionCountAggregateInputType | true
+    _min?: SuperAdminPermissionMinAggregateInputType
+    _max?: SuperAdminPermissionMaxAggregateInputType
+  }
+
+  export type SuperAdminPermissionGroupByOutputType = {
+    id: string
+    superAdminId: string
+    companyId: string
+    grantedBy: string
+    grantedAt: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: SuperAdminPermissionCountAggregateOutputType | null
+    _min: SuperAdminPermissionMinAggregateOutputType | null
+    _max: SuperAdminPermissionMaxAggregateOutputType | null
+  }
+
+  type GetSuperAdminPermissionGroupByPayload<T extends SuperAdminPermissionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SuperAdminPermissionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SuperAdminPermissionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SuperAdminPermissionGroupByOutputType[P]>
+            : GetScalarType<T[P], SuperAdminPermissionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SuperAdminPermissionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    superAdminId?: boolean
+    companyId?: boolean
+    grantedBy?: boolean
+    grantedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    superAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["superAdminPermission"]>
+
+
+
+  export type SuperAdminPermissionSelectScalar = {
+    id?: boolean
+    superAdminId?: boolean
+    companyId?: boolean
+    grantedBy?: boolean
+    grantedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SuperAdminPermissionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "superAdminId" | "companyId" | "grantedBy" | "grantedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["superAdminPermission"]>
+  export type SuperAdminPermissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    superAdmin?: boolean | UserDefaultArgs<ExtArgs>
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+  }
+
+  export type $SuperAdminPermissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SuperAdminPermission"
+    objects: {
+      superAdmin: Prisma.$UserPayload<ExtArgs>
+      company: Prisma.$CompanyPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      superAdminId: string
+      companyId: string
+      grantedBy: string
+      grantedAt: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["superAdminPermission"]>
+    composites: {}
+  }
+
+  type SuperAdminPermissionGetPayload<S extends boolean | null | undefined | SuperAdminPermissionDefaultArgs> = $Result.GetResult<Prisma.$SuperAdminPermissionPayload, S>
+
+  type SuperAdminPermissionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SuperAdminPermissionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SuperAdminPermissionCountAggregateInputType | true
+    }
+
+  export interface SuperAdminPermissionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SuperAdminPermission'], meta: { name: 'SuperAdminPermission' } }
+    /**
+     * Find zero or one SuperAdminPermission that matches the filter.
+     * @param {SuperAdminPermissionFindUniqueArgs} args - Arguments to find a SuperAdminPermission
+     * @example
+     * // Get one SuperAdminPermission
+     * const superAdminPermission = await prisma.superAdminPermission.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SuperAdminPermissionFindUniqueArgs>(args: SelectSubset<T, SuperAdminPermissionFindUniqueArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SuperAdminPermission that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SuperAdminPermissionFindUniqueOrThrowArgs} args - Arguments to find a SuperAdminPermission
+     * @example
+     * // Get one SuperAdminPermission
+     * const superAdminPermission = await prisma.superAdminPermission.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SuperAdminPermissionFindUniqueOrThrowArgs>(args: SelectSubset<T, SuperAdminPermissionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SuperAdminPermission that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuperAdminPermissionFindFirstArgs} args - Arguments to find a SuperAdminPermission
+     * @example
+     * // Get one SuperAdminPermission
+     * const superAdminPermission = await prisma.superAdminPermission.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SuperAdminPermissionFindFirstArgs>(args?: SelectSubset<T, SuperAdminPermissionFindFirstArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SuperAdminPermission that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuperAdminPermissionFindFirstOrThrowArgs} args - Arguments to find a SuperAdminPermission
+     * @example
+     * // Get one SuperAdminPermission
+     * const superAdminPermission = await prisma.superAdminPermission.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SuperAdminPermissionFindFirstOrThrowArgs>(args?: SelectSubset<T, SuperAdminPermissionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SuperAdminPermissions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuperAdminPermissionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SuperAdminPermissions
+     * const superAdminPermissions = await prisma.superAdminPermission.findMany()
+     * 
+     * // Get first 10 SuperAdminPermissions
+     * const superAdminPermissions = await prisma.superAdminPermission.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const superAdminPermissionWithIdOnly = await prisma.superAdminPermission.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SuperAdminPermissionFindManyArgs>(args?: SelectSubset<T, SuperAdminPermissionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SuperAdminPermission.
+     * @param {SuperAdminPermissionCreateArgs} args - Arguments to create a SuperAdminPermission.
+     * @example
+     * // Create one SuperAdminPermission
+     * const SuperAdminPermission = await prisma.superAdminPermission.create({
+     *   data: {
+     *     // ... data to create a SuperAdminPermission
+     *   }
+     * })
+     * 
+     */
+    create<T extends SuperAdminPermissionCreateArgs>(args: SelectSubset<T, SuperAdminPermissionCreateArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SuperAdminPermissions.
+     * @param {SuperAdminPermissionCreateManyArgs} args - Arguments to create many SuperAdminPermissions.
+     * @example
+     * // Create many SuperAdminPermissions
+     * const superAdminPermission = await prisma.superAdminPermission.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SuperAdminPermissionCreateManyArgs>(args?: SelectSubset<T, SuperAdminPermissionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a SuperAdminPermission.
+     * @param {SuperAdminPermissionDeleteArgs} args - Arguments to delete one SuperAdminPermission.
+     * @example
+     * // Delete one SuperAdminPermission
+     * const SuperAdminPermission = await prisma.superAdminPermission.delete({
+     *   where: {
+     *     // ... filter to delete one SuperAdminPermission
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SuperAdminPermissionDeleteArgs>(args: SelectSubset<T, SuperAdminPermissionDeleteArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SuperAdminPermission.
+     * @param {SuperAdminPermissionUpdateArgs} args - Arguments to update one SuperAdminPermission.
+     * @example
+     * // Update one SuperAdminPermission
+     * const superAdminPermission = await prisma.superAdminPermission.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SuperAdminPermissionUpdateArgs>(args: SelectSubset<T, SuperAdminPermissionUpdateArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SuperAdminPermissions.
+     * @param {SuperAdminPermissionDeleteManyArgs} args - Arguments to filter SuperAdminPermissions to delete.
+     * @example
+     * // Delete a few SuperAdminPermissions
+     * const { count } = await prisma.superAdminPermission.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SuperAdminPermissionDeleteManyArgs>(args?: SelectSubset<T, SuperAdminPermissionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SuperAdminPermissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuperAdminPermissionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SuperAdminPermissions
+     * const superAdminPermission = await prisma.superAdminPermission.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SuperAdminPermissionUpdateManyArgs>(args: SelectSubset<T, SuperAdminPermissionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SuperAdminPermission.
+     * @param {SuperAdminPermissionUpsertArgs} args - Arguments to update or create a SuperAdminPermission.
+     * @example
+     * // Update or create a SuperAdminPermission
+     * const superAdminPermission = await prisma.superAdminPermission.upsert({
+     *   create: {
+     *     // ... data to create a SuperAdminPermission
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SuperAdminPermission we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SuperAdminPermissionUpsertArgs>(args: SelectSubset<T, SuperAdminPermissionUpsertArgs<ExtArgs>>): Prisma__SuperAdminPermissionClient<$Result.GetResult<Prisma.$SuperAdminPermissionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SuperAdminPermissions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuperAdminPermissionCountArgs} args - Arguments to filter SuperAdminPermissions to count.
+     * @example
+     * // Count the number of SuperAdminPermissions
+     * const count = await prisma.superAdminPermission.count({
+     *   where: {
+     *     // ... the filter for the SuperAdminPermissions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SuperAdminPermissionCountArgs>(
+      args?: Subset<T, SuperAdminPermissionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SuperAdminPermissionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SuperAdminPermission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuperAdminPermissionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SuperAdminPermissionAggregateArgs>(args: Subset<T, SuperAdminPermissionAggregateArgs>): Prisma.PrismaPromise<GetSuperAdminPermissionAggregateType<T>>
+
+    /**
+     * Group by SuperAdminPermission.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SuperAdminPermissionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SuperAdminPermissionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SuperAdminPermissionGroupByArgs['orderBy'] }
+        : { orderBy?: SuperAdminPermissionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SuperAdminPermissionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSuperAdminPermissionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SuperAdminPermission model
+   */
+  readonly fields: SuperAdminPermissionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SuperAdminPermission.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SuperAdminPermissionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    superAdmin<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SuperAdminPermission model
+   */
+  interface SuperAdminPermissionFieldRefs {
+    readonly id: FieldRef<"SuperAdminPermission", 'String'>
+    readonly superAdminId: FieldRef<"SuperAdminPermission", 'String'>
+    readonly companyId: FieldRef<"SuperAdminPermission", 'String'>
+    readonly grantedBy: FieldRef<"SuperAdminPermission", 'String'>
+    readonly grantedAt: FieldRef<"SuperAdminPermission", 'DateTime'>
+    readonly createdAt: FieldRef<"SuperAdminPermission", 'DateTime'>
+    readonly updatedAt: FieldRef<"SuperAdminPermission", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SuperAdminPermission findUnique
+   */
+  export type SuperAdminPermissionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SuperAdminPermission to fetch.
+     */
+    where: SuperAdminPermissionWhereUniqueInput
+  }
+
+  /**
+   * SuperAdminPermission findUniqueOrThrow
+   */
+  export type SuperAdminPermissionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SuperAdminPermission to fetch.
+     */
+    where: SuperAdminPermissionWhereUniqueInput
+  }
+
+  /**
+   * SuperAdminPermission findFirst
+   */
+  export type SuperAdminPermissionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SuperAdminPermission to fetch.
+     */
+    where?: SuperAdminPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SuperAdminPermissions to fetch.
+     */
+    orderBy?: SuperAdminPermissionOrderByWithRelationInput | SuperAdminPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SuperAdminPermissions.
+     */
+    cursor?: SuperAdminPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SuperAdminPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SuperAdminPermissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SuperAdminPermissions.
+     */
+    distinct?: SuperAdminPermissionScalarFieldEnum | SuperAdminPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * SuperAdminPermission findFirstOrThrow
+   */
+  export type SuperAdminPermissionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SuperAdminPermission to fetch.
+     */
+    where?: SuperAdminPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SuperAdminPermissions to fetch.
+     */
+    orderBy?: SuperAdminPermissionOrderByWithRelationInput | SuperAdminPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SuperAdminPermissions.
+     */
+    cursor?: SuperAdminPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SuperAdminPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SuperAdminPermissions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SuperAdminPermissions.
+     */
+    distinct?: SuperAdminPermissionScalarFieldEnum | SuperAdminPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * SuperAdminPermission findMany
+   */
+  export type SuperAdminPermissionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * Filter, which SuperAdminPermissions to fetch.
+     */
+    where?: SuperAdminPermissionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SuperAdminPermissions to fetch.
+     */
+    orderBy?: SuperAdminPermissionOrderByWithRelationInput | SuperAdminPermissionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SuperAdminPermissions.
+     */
+    cursor?: SuperAdminPermissionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SuperAdminPermissions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SuperAdminPermissions.
+     */
+    skip?: number
+    distinct?: SuperAdminPermissionScalarFieldEnum | SuperAdminPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * SuperAdminPermission create
+   */
+  export type SuperAdminPermissionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SuperAdminPermission.
+     */
+    data: XOR<SuperAdminPermissionCreateInput, SuperAdminPermissionUncheckedCreateInput>
+  }
+
+  /**
+   * SuperAdminPermission createMany
+   */
+  export type SuperAdminPermissionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SuperAdminPermissions.
+     */
+    data: SuperAdminPermissionCreateManyInput | SuperAdminPermissionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SuperAdminPermission update
+   */
+  export type SuperAdminPermissionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SuperAdminPermission.
+     */
+    data: XOR<SuperAdminPermissionUpdateInput, SuperAdminPermissionUncheckedUpdateInput>
+    /**
+     * Choose, which SuperAdminPermission to update.
+     */
+    where: SuperAdminPermissionWhereUniqueInput
+  }
+
+  /**
+   * SuperAdminPermission updateMany
+   */
+  export type SuperAdminPermissionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SuperAdminPermissions.
+     */
+    data: XOR<SuperAdminPermissionUpdateManyMutationInput, SuperAdminPermissionUncheckedUpdateManyInput>
+    /**
+     * Filter which SuperAdminPermissions to update
+     */
+    where?: SuperAdminPermissionWhereInput
+    /**
+     * Limit how many SuperAdminPermissions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SuperAdminPermission upsert
+   */
+  export type SuperAdminPermissionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SuperAdminPermission to update in case it exists.
+     */
+    where: SuperAdminPermissionWhereUniqueInput
+    /**
+     * In case the SuperAdminPermission found by the `where` argument doesn't exist, create a new SuperAdminPermission with this data.
+     */
+    create: XOR<SuperAdminPermissionCreateInput, SuperAdminPermissionUncheckedCreateInput>
+    /**
+     * In case the SuperAdminPermission was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SuperAdminPermissionUpdateInput, SuperAdminPermissionUncheckedUpdateInput>
+  }
+
+  /**
+   * SuperAdminPermission delete
+   */
+  export type SuperAdminPermissionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+    /**
+     * Filter which SuperAdminPermission to delete.
+     */
+    where: SuperAdminPermissionWhereUniqueInput
+  }
+
+  /**
+   * SuperAdminPermission deleteMany
+   */
+  export type SuperAdminPermissionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SuperAdminPermissions to delete
+     */
+    where?: SuperAdminPermissionWhereInput
+    /**
+     * Limit how many SuperAdminPermissions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SuperAdminPermission without action
+   */
+  export type SuperAdminPermissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdminPermission
+     */
+    select?: SuperAdminPermissionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdminPermission
+     */
+    omit?: SuperAdminPermissionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminPermissionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -10991,6 +12333,8 @@ export namespace Prisma {
     currency: 'currency',
     primaryColor: 'primaryColor',
     secondaryColor: 'secondaryColor',
+    fixedSalaryDeductionRate: 'fixedSalaryDeductionRate',
+    workDaysPerMonth: 'workDaysPerMonth',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11014,30 +12358,19 @@ export namespace Prisma {
     passwordHash: 'passwordHash',
     isActive: 'isActive',
     roleId: 'roleId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
-  export const EmployeeScalarFieldEnum: {
-    id: 'id',
-    companyId: 'companyId',
-    fullName: 'fullName',
     position: 'position',
     contractType: 'contractType',
     salaryOrRate: 'salaryOrRate',
     bankDetails: 'bankDetails',
     active: 'active',
-    email: 'email',
     phone: 'phone',
     hireDate: 'hireDate',
+    canValidateFully: 'canValidateFully',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
-  export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
   export const PayRunScalarFieldEnum: {
@@ -11102,10 +12435,44 @@ export namespace Prisma {
     workScheduleId: 'workScheduleId',
     date: 'date',
     workedHours: 'workedHours',
-    validated: 'validated'
+    validated: 'validated',
+    validatedBy: 'validatedBy',
+    validatedAt: 'validatedAt'
   };
 
   export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
+
+
+  export const LoanScalarFieldEnum: {
+    id: 'id',
+    employeeId: 'employeeId',
+    amount: 'amount',
+    remainingAmount: 'remainingAmount',
+    monthlyDeduction: 'monthlyDeduction',
+    progress: 'progress',
+    description: 'description',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    status: 'status',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LoanScalarFieldEnum = (typeof LoanScalarFieldEnum)[keyof typeof LoanScalarFieldEnum]
+
+
+  export const SuperAdminPermissionScalarFieldEnum: {
+    id: 'id',
+    superAdminId: 'superAdminId',
+    companyId: 'companyId',
+    grantedBy: 'grantedBy',
+    grantedAt: 'grantedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SuperAdminPermissionScalarFieldEnum = (typeof SuperAdminPermissionScalarFieldEnum)[keyof typeof SuperAdminPermissionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -11150,23 +12517,13 @@ export namespace Prisma {
     fullName: 'fullName',
     email: 'email',
     passwordHash: 'passwordHash',
-    roleId: 'roleId'
-  };
-
-  export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
-
-
-  export const EmployeeOrderByRelevanceFieldEnum: {
-    id: 'id',
-    companyId: 'companyId',
-    fullName: 'fullName',
+    roleId: 'roleId',
     position: 'position',
     bankDetails: 'bankDetails',
-    email: 'email',
     phone: 'phone'
   };
 
-  export type EmployeeOrderByRelevanceFieldEnum = (typeof EmployeeOrderByRelevanceFieldEnum)[keyof typeof EmployeeOrderByRelevanceFieldEnum]
+  export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
   export const PayRunOrderByRelevanceFieldEnum: {
@@ -11207,10 +12564,31 @@ export namespace Prisma {
 
   export const AttendanceOrderByRelevanceFieldEnum: {
     id: 'id',
-    workScheduleId: 'workScheduleId'
+    workScheduleId: 'workScheduleId',
+    validatedBy: 'validatedBy'
   };
 
   export type AttendanceOrderByRelevanceFieldEnum = (typeof AttendanceOrderByRelevanceFieldEnum)[keyof typeof AttendanceOrderByRelevanceFieldEnum]
+
+
+  export const LoanOrderByRelevanceFieldEnum: {
+    id: 'id',
+    employeeId: 'employeeId',
+    description: 'description',
+    createdBy: 'createdBy'
+  };
+
+  export type LoanOrderByRelevanceFieldEnum = (typeof LoanOrderByRelevanceFieldEnum)[keyof typeof LoanOrderByRelevanceFieldEnum]
+
+
+  export const SuperAdminPermissionOrderByRelevanceFieldEnum: {
+    id: 'id',
+    superAdminId: 'superAdminId',
+    companyId: 'companyId',
+    grantedBy: 'grantedBy'
+  };
+
+  export type SuperAdminPermissionOrderByRelevanceFieldEnum = (typeof SuperAdminPermissionOrderByRelevanceFieldEnum)[keyof typeof SuperAdminPermissionOrderByRelevanceFieldEnum]
 
 
   /**
@@ -11222,6 +12600,20 @@ export namespace Prisma {
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
@@ -11254,13 +12646,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
-   */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-  /**
    * Reference to a field of type 'PayRunType'
    */
   export type EnumPayRunTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PayRunType'>
@@ -11275,13 +12660,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
    * Reference to a field of type 'PayslipStatus'
    */
   export type EnumPayslipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PayslipStatus'>
@@ -11292,6 +12670,13 @@ export namespace Prisma {
    * Reference to a field of type 'PaymentMode'
    */
   export type EnumPaymentModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'LoanStatus'
+   */
+  export type EnumLoanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LoanStatus'>
     
 
 
@@ -11316,11 +12701,13 @@ export namespace Prisma {
     currency?: StringFilter<"Company"> | string
     primaryColor?: StringFilter<"Company"> | string
     secondaryColor?: StringFilter<"Company"> | string
+    fixedSalaryDeductionRate?: DecimalNullableFilter<"Company"> | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: IntNullableFilter<"Company"> | number | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
-    employees?: EmployeeListRelationFilter
     payRuns?: PayRunListRelationFilter
+    superAdminPermissions?: SuperAdminPermissionListRelationFilter
   }
 
   export type CompanyOrderByWithRelationInput = {
@@ -11331,11 +12718,13 @@ export namespace Prisma {
     currency?: SortOrder
     primaryColor?: SortOrder
     secondaryColor?: SortOrder
+    fixedSalaryDeductionRate?: SortOrderInput | SortOrder
+    workDaysPerMonth?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
-    employees?: EmployeeOrderByRelationAggregateInput
     payRuns?: PayRunOrderByRelationAggregateInput
+    superAdminPermissions?: SuperAdminPermissionOrderByRelationAggregateInput
     _relevance?: CompanyOrderByRelevanceInput
   }
 
@@ -11350,11 +12739,13 @@ export namespace Prisma {
     currency?: StringFilter<"Company"> | string
     primaryColor?: StringFilter<"Company"> | string
     secondaryColor?: StringFilter<"Company"> | string
+    fixedSalaryDeductionRate?: DecimalNullableFilter<"Company"> | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: IntNullableFilter<"Company"> | number | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
-    employees?: EmployeeListRelationFilter
     payRuns?: PayRunListRelationFilter
+    superAdminPermissions?: SuperAdminPermissionListRelationFilter
   }, "id">
 
   export type CompanyOrderByWithAggregationInput = {
@@ -11365,11 +12756,15 @@ export namespace Prisma {
     currency?: SortOrder
     primaryColor?: SortOrder
     secondaryColor?: SortOrder
+    fixedSalaryDeductionRate?: SortOrderInput | SortOrder
+    workDaysPerMonth?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
+    _avg?: CompanyAvgOrderByAggregateInput
     _max?: CompanyMaxOrderByAggregateInput
     _min?: CompanyMinOrderByAggregateInput
+    _sum?: CompanySumOrderByAggregateInput
   }
 
   export type CompanyScalarWhereWithAggregatesInput = {
@@ -11383,6 +12778,8 @@ export namespace Prisma {
     currency?: StringWithAggregatesFilter<"Company"> | string
     primaryColor?: StringWithAggregatesFilter<"Company"> | string
     secondaryColor?: StringWithAggregatesFilter<"Company"> | string
+    fixedSalaryDeductionRate?: DecimalNullableWithAggregatesFilter<"Company"> | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: IntNullableWithAggregatesFilter<"Company"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -11439,10 +12836,23 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     roleId?: StringFilter<"User"> | string
+    position?: StringNullableFilter<"User"> | string | null
+    contractType?: EnumContractTypeNullableFilter<"User"> | $Enums.ContractType | null
+    salaryOrRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: StringNullableFilter<"User"> | string | null
+    active?: BoolNullableFilter<"User"> | boolean | null
+    phone?: StringNullableFilter<"User"> | string | null
+    hireDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    canValidateFully?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+    payslips?: PayslipListRelationFilter
+    payments?: PaymentListRelationFilter
+    workSchedules?: WorkScheduleListRelationFilter
+    loans?: LoanListRelationFilter
+    grantedPermissions?: SuperAdminPermissionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11453,10 +12863,23 @@ export namespace Prisma {
     passwordHash?: SortOrder
     isActive?: SortOrder
     roleId?: SortOrder
+    position?: SortOrderInput | SortOrder
+    contractType?: SortOrderInput | SortOrder
+    salaryOrRate?: SortOrderInput | SortOrder
+    bankDetails?: SortOrderInput | SortOrder
+    active?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    hireDate?: SortOrderInput | SortOrder
+    canValidateFully?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     company?: CompanyOrderByWithRelationInput
     role?: RoleOrderByWithRelationInput
+    payslips?: PayslipOrderByRelationAggregateInput
+    payments?: PaymentOrderByRelationAggregateInput
+    workSchedules?: WorkScheduleOrderByRelationAggregateInput
+    loans?: LoanOrderByRelationAggregateInput
+    grantedPermissions?: SuperAdminPermissionOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -11471,10 +12894,23 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     roleId?: StringFilter<"User"> | string
+    position?: StringNullableFilter<"User"> | string | null
+    contractType?: EnumContractTypeNullableFilter<"User"> | $Enums.ContractType | null
+    salaryOrRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: StringNullableFilter<"User"> | string | null
+    active?: BoolNullableFilter<"User"> | boolean | null
+    phone?: StringNullableFilter<"User"> | string | null
+    hireDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    canValidateFully?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
+    payslips?: PayslipListRelationFilter
+    payments?: PaymentListRelationFilter
+    workSchedules?: WorkScheduleListRelationFilter
+    loans?: LoanListRelationFilter
+    grantedPermissions?: SuperAdminPermissionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -11485,11 +12921,21 @@ export namespace Prisma {
     passwordHash?: SortOrder
     isActive?: SortOrder
     roleId?: SortOrder
+    position?: SortOrderInput | SortOrder
+    contractType?: SortOrderInput | SortOrder
+    salaryOrRate?: SortOrderInput | SortOrder
+    bankDetails?: SortOrderInput | SortOrder
+    active?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    hireDate?: SortOrderInput | SortOrder
+    canValidateFully?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -11503,115 +12949,16 @@ export namespace Prisma {
     passwordHash?: StringWithAggregatesFilter<"User"> | string
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     roleId?: StringWithAggregatesFilter<"User"> | string
+    position?: StringNullableWithAggregatesFilter<"User"> | string | null
+    contractType?: EnumContractTypeNullableWithAggregatesFilter<"User"> | $Enums.ContractType | null
+    salaryOrRate?: DecimalNullableWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: StringNullableWithAggregatesFilter<"User"> | string | null
+    active?: BoolNullableWithAggregatesFilter<"User"> | boolean | null
+    phone?: StringNullableWithAggregatesFilter<"User"> | string | null
+    hireDate?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    canValidateFully?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-  }
-
-  export type EmployeeWhereInput = {
-    AND?: EmployeeWhereInput | EmployeeWhereInput[]
-    OR?: EmployeeWhereInput[]
-    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
-    id?: StringFilter<"Employee"> | string
-    companyId?: StringFilter<"Employee"> | string
-    fullName?: StringFilter<"Employee"> | string
-    position?: StringNullableFilter<"Employee"> | string | null
-    contractType?: EnumContractTypeFilter<"Employee"> | $Enums.ContractType
-    salaryOrRate?: DecimalFilter<"Employee"> | Decimal | DecimalJsLike | number | string
-    bankDetails?: StringNullableFilter<"Employee"> | string | null
-    active?: BoolFilter<"Employee"> | boolean
-    email?: StringNullableFilter<"Employee"> | string | null
-    phone?: StringNullableFilter<"Employee"> | string | null
-    hireDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
-    createdAt?: DateTimeFilter<"Employee"> | Date | string
-    updatedAt?: DateTimeFilter<"Employee"> | Date | string
-    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
-    payslips?: PayslipListRelationFilter
-    payments?: PaymentListRelationFilter
-    workSchedules?: WorkScheduleListRelationFilter
-  }
-
-  export type EmployeeOrderByWithRelationInput = {
-    id?: SortOrder
-    companyId?: SortOrder
-    fullName?: SortOrder
-    position?: SortOrderInput | SortOrder
-    contractType?: SortOrder
-    salaryOrRate?: SortOrder
-    bankDetails?: SortOrderInput | SortOrder
-    active?: SortOrder
-    email?: SortOrderInput | SortOrder
-    phone?: SortOrderInput | SortOrder
-    hireDate?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    company?: CompanyOrderByWithRelationInput
-    payslips?: PayslipOrderByRelationAggregateInput
-    payments?: PaymentOrderByRelationAggregateInput
-    workSchedules?: WorkScheduleOrderByRelationAggregateInput
-    _relevance?: EmployeeOrderByRelevanceInput
-  }
-
-  export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: EmployeeWhereInput | EmployeeWhereInput[]
-    OR?: EmployeeWhereInput[]
-    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
-    companyId?: StringFilter<"Employee"> | string
-    fullName?: StringFilter<"Employee"> | string
-    position?: StringNullableFilter<"Employee"> | string | null
-    contractType?: EnumContractTypeFilter<"Employee"> | $Enums.ContractType
-    salaryOrRate?: DecimalFilter<"Employee"> | Decimal | DecimalJsLike | number | string
-    bankDetails?: StringNullableFilter<"Employee"> | string | null
-    active?: BoolFilter<"Employee"> | boolean
-    email?: StringNullableFilter<"Employee"> | string | null
-    phone?: StringNullableFilter<"Employee"> | string | null
-    hireDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
-    createdAt?: DateTimeFilter<"Employee"> | Date | string
-    updatedAt?: DateTimeFilter<"Employee"> | Date | string
-    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
-    payslips?: PayslipListRelationFilter
-    payments?: PaymentListRelationFilter
-    workSchedules?: WorkScheduleListRelationFilter
-  }, "id">
-
-  export type EmployeeOrderByWithAggregationInput = {
-    id?: SortOrder
-    companyId?: SortOrder
-    fullName?: SortOrder
-    position?: SortOrderInput | SortOrder
-    contractType?: SortOrder
-    salaryOrRate?: SortOrder
-    bankDetails?: SortOrderInput | SortOrder
-    active?: SortOrder
-    email?: SortOrderInput | SortOrder
-    phone?: SortOrderInput | SortOrder
-    hireDate?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: EmployeeCountOrderByAggregateInput
-    _avg?: EmployeeAvgOrderByAggregateInput
-    _max?: EmployeeMaxOrderByAggregateInput
-    _min?: EmployeeMinOrderByAggregateInput
-    _sum?: EmployeeSumOrderByAggregateInput
-  }
-
-  export type EmployeeScalarWhereWithAggregatesInput = {
-    AND?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
-    OR?: EmployeeScalarWhereWithAggregatesInput[]
-    NOT?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Employee"> | string
-    companyId?: StringWithAggregatesFilter<"Employee"> | string
-    fullName?: StringWithAggregatesFilter<"Employee"> | string
-    position?: StringNullableWithAggregatesFilter<"Employee"> | string | null
-    contractType?: EnumContractTypeWithAggregatesFilter<"Employee"> | $Enums.ContractType
-    salaryOrRate?: DecimalWithAggregatesFilter<"Employee"> | Decimal | DecimalJsLike | number | string
-    bankDetails?: StringNullableWithAggregatesFilter<"Employee"> | string | null
-    active?: BoolWithAggregatesFilter<"Employee"> | boolean
-    email?: StringNullableWithAggregatesFilter<"Employee"> | string | null
-    phone?: StringNullableWithAggregatesFilter<"Employee"> | string | null
-    hireDate?: DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
   }
 
   export type PayRunWhereInput = {
@@ -11703,7 +13050,7 @@ export namespace Prisma {
     lockedAt?: DateTimeNullableFilter<"Payslip"> | Date | string | null
     createdAt?: DateTimeFilter<"Payslip"> | Date | string
     updatedAt?: DateTimeFilter<"Payslip"> | Date | string
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
     payRun?: XOR<PayRunScalarRelationFilter, PayRunWhereInput>
     payments?: PaymentListRelationFilter
   }
@@ -11720,7 +13067,7 @@ export namespace Prisma {
     lockedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    employee?: EmployeeOrderByWithRelationInput
+    employee?: UserOrderByWithRelationInput
     payRun?: PayRunOrderByWithRelationInput
     payments?: PaymentOrderByRelationAggregateInput
     _relevance?: PayslipOrderByRelevanceInput
@@ -11742,7 +13089,7 @@ export namespace Prisma {
     lockedAt?: DateTimeNullableFilter<"Payslip"> | Date | string | null
     createdAt?: DateTimeFilter<"Payslip"> | Date | string
     updatedAt?: DateTimeFilter<"Payslip"> | Date | string
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
     payRun?: XOR<PayRunScalarRelationFilter, PayRunWhereInput>
     payments?: PaymentListRelationFilter
   }, "id" | "employeeId_payRunId">
@@ -11796,7 +13143,7 @@ export namespace Prisma {
     receiptUrl?: StringNullableFilter<"Payment"> | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     payslip?: XOR<PayslipScalarRelationFilter, PayslipWhereInput>
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type PaymentOrderByWithRelationInput = {
@@ -11809,7 +13156,7 @@ export namespace Prisma {
     receiptUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     payslip?: PayslipOrderByWithRelationInput
-    employee?: EmployeeOrderByWithRelationInput
+    employee?: UserOrderByWithRelationInput
     _relevance?: PaymentOrderByRelevanceInput
   }
 
@@ -11826,7 +13173,7 @@ export namespace Prisma {
     receiptUrl?: StringNullableFilter<"Payment"> | string | null
     createdAt?: DateTimeFilter<"Payment"> | Date | string
     payslip?: XOR<PayslipScalarRelationFilter, PayslipWhereInput>
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type PaymentOrderByWithAggregationInput = {
@@ -11869,7 +13216,7 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"WorkSchedule"> | Date | string
     type?: EnumContractTypeFilter<"WorkSchedule"> | $Enums.ContractType
     hoursPerDay?: IntNullableFilter<"WorkSchedule"> | number | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
     attendances?: AttendanceListRelationFilter
   }
 
@@ -11880,7 +13227,7 @@ export namespace Prisma {
     endDate?: SortOrder
     type?: SortOrder
     hoursPerDay?: SortOrderInput | SortOrder
-    employee?: EmployeeOrderByWithRelationInput
+    employee?: UserOrderByWithRelationInput
     attendances?: AttendanceOrderByRelationAggregateInput
     _relevance?: WorkScheduleOrderByRelevanceInput
   }
@@ -11895,7 +13242,7 @@ export namespace Prisma {
     endDate?: DateTimeFilter<"WorkSchedule"> | Date | string
     type?: EnumContractTypeFilter<"WorkSchedule"> | $Enums.ContractType
     hoursPerDay?: IntNullableFilter<"WorkSchedule"> | number | null
-    employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
     attendances?: AttendanceListRelationFilter
   }, "id">
 
@@ -11934,6 +13281,8 @@ export namespace Prisma {
     date?: DateTimeFilter<"Attendance"> | Date | string
     workedHours?: IntNullableFilter<"Attendance"> | number | null
     validated?: BoolFilter<"Attendance"> | boolean
+    validatedBy?: StringNullableFilter<"Attendance"> | string | null
+    validatedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workSchedule?: XOR<WorkScheduleScalarRelationFilter, WorkScheduleWhereInput>
   }
 
@@ -11943,6 +13292,8 @@ export namespace Prisma {
     date?: SortOrder
     workedHours?: SortOrderInput | SortOrder
     validated?: SortOrder
+    validatedBy?: SortOrderInput | SortOrder
+    validatedAt?: SortOrderInput | SortOrder
     workSchedule?: WorkScheduleOrderByWithRelationInput
     _relevance?: AttendanceOrderByRelevanceInput
   }
@@ -11956,6 +13307,8 @@ export namespace Prisma {
     date?: DateTimeFilter<"Attendance"> | Date | string
     workedHours?: IntNullableFilter<"Attendance"> | number | null
     validated?: BoolFilter<"Attendance"> | boolean
+    validatedBy?: StringNullableFilter<"Attendance"> | string | null
+    validatedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
     workSchedule?: XOR<WorkScheduleScalarRelationFilter, WorkScheduleWhereInput>
   }, "id">
 
@@ -11965,6 +13318,8 @@ export namespace Prisma {
     date?: SortOrder
     workedHours?: SortOrderInput | SortOrder
     validated?: SortOrder
+    validatedBy?: SortOrderInput | SortOrder
+    validatedAt?: SortOrderInput | SortOrder
     _count?: AttendanceCountOrderByAggregateInput
     _avg?: AttendanceAvgOrderByAggregateInput
     _max?: AttendanceMaxOrderByAggregateInput
@@ -11981,6 +13336,176 @@ export namespace Prisma {
     date?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
     workedHours?: IntNullableWithAggregatesFilter<"Attendance"> | number | null
     validated?: BoolWithAggregatesFilter<"Attendance"> | boolean
+    validatedBy?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
+    validatedAt?: DateTimeNullableWithAggregatesFilter<"Attendance"> | Date | string | null
+  }
+
+  export type LoanWhereInput = {
+    AND?: LoanWhereInput | LoanWhereInput[]
+    OR?: LoanWhereInput[]
+    NOT?: LoanWhereInput | LoanWhereInput[]
+    id?: StringFilter<"Loan"> | string
+    employeeId?: StringFilter<"Loan"> | string
+    amount?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableFilter<"Loan"> | string | null
+    startDate?: DateTimeFilter<"Loan"> | Date | string
+    endDate?: DateTimeNullableFilter<"Loan"> | Date | string | null
+    status?: EnumLoanStatusFilter<"Loan"> | $Enums.LoanStatus
+    createdBy?: StringFilter<"Loan"> | string
+    createdAt?: DateTimeFilter<"Loan"> | Date | string
+    updatedAt?: DateTimeFilter<"Loan"> | Date | string
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type LoanOrderByWithRelationInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    amount?: SortOrder
+    remainingAmount?: SortOrder
+    monthlyDeduction?: SortOrder
+    progress?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    employee?: UserOrderByWithRelationInput
+    _relevance?: LoanOrderByRelevanceInput
+  }
+
+  export type LoanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LoanWhereInput | LoanWhereInput[]
+    OR?: LoanWhereInput[]
+    NOT?: LoanWhereInput | LoanWhereInput[]
+    employeeId?: StringFilter<"Loan"> | string
+    amount?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableFilter<"Loan"> | string | null
+    startDate?: DateTimeFilter<"Loan"> | Date | string
+    endDate?: DateTimeNullableFilter<"Loan"> | Date | string | null
+    status?: EnumLoanStatusFilter<"Loan"> | $Enums.LoanStatus
+    createdBy?: StringFilter<"Loan"> | string
+    createdAt?: DateTimeFilter<"Loan"> | Date | string
+    updatedAt?: DateTimeFilter<"Loan"> | Date | string
+    employee?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type LoanOrderByWithAggregationInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    amount?: SortOrder
+    remainingAmount?: SortOrder
+    monthlyDeduction?: SortOrder
+    progress?: SortOrder
+    description?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LoanCountOrderByAggregateInput
+    _avg?: LoanAvgOrderByAggregateInput
+    _max?: LoanMaxOrderByAggregateInput
+    _min?: LoanMinOrderByAggregateInput
+    _sum?: LoanSumOrderByAggregateInput
+  }
+
+  export type LoanScalarWhereWithAggregatesInput = {
+    AND?: LoanScalarWhereWithAggregatesInput | LoanScalarWhereWithAggregatesInput[]
+    OR?: LoanScalarWhereWithAggregatesInput[]
+    NOT?: LoanScalarWhereWithAggregatesInput | LoanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Loan"> | string
+    employeeId?: StringWithAggregatesFilter<"Loan"> | string
+    amount?: DecimalWithAggregatesFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalWithAggregatesFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalWithAggregatesFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    progress?: DecimalWithAggregatesFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableWithAggregatesFilter<"Loan"> | string | null
+    startDate?: DateTimeWithAggregatesFilter<"Loan"> | Date | string
+    endDate?: DateTimeNullableWithAggregatesFilter<"Loan"> | Date | string | null
+    status?: EnumLoanStatusWithAggregatesFilter<"Loan"> | $Enums.LoanStatus
+    createdBy?: StringWithAggregatesFilter<"Loan"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Loan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Loan"> | Date | string
+  }
+
+  export type SuperAdminPermissionWhereInput = {
+    AND?: SuperAdminPermissionWhereInput | SuperAdminPermissionWhereInput[]
+    OR?: SuperAdminPermissionWhereInput[]
+    NOT?: SuperAdminPermissionWhereInput | SuperAdminPermissionWhereInput[]
+    id?: StringFilter<"SuperAdminPermission"> | string
+    superAdminId?: StringFilter<"SuperAdminPermission"> | string
+    companyId?: StringFilter<"SuperAdminPermission"> | string
+    grantedBy?: StringFilter<"SuperAdminPermission"> | string
+    grantedAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    createdAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    updatedAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    superAdmin?: XOR<UserScalarRelationFilter, UserWhereInput>
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+  }
+
+  export type SuperAdminPermissionOrderByWithRelationInput = {
+    id?: SortOrder
+    superAdminId?: SortOrder
+    companyId?: SortOrder
+    grantedBy?: SortOrder
+    grantedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    superAdmin?: UserOrderByWithRelationInput
+    company?: CompanyOrderByWithRelationInput
+    _relevance?: SuperAdminPermissionOrderByRelevanceInput
+  }
+
+  export type SuperAdminPermissionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    superAdminId_companyId?: SuperAdminPermissionSuperAdminIdCompanyIdCompoundUniqueInput
+    AND?: SuperAdminPermissionWhereInput | SuperAdminPermissionWhereInput[]
+    OR?: SuperAdminPermissionWhereInput[]
+    NOT?: SuperAdminPermissionWhereInput | SuperAdminPermissionWhereInput[]
+    superAdminId?: StringFilter<"SuperAdminPermission"> | string
+    companyId?: StringFilter<"SuperAdminPermission"> | string
+    grantedBy?: StringFilter<"SuperAdminPermission"> | string
+    grantedAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    createdAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    updatedAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    superAdmin?: XOR<UserScalarRelationFilter, UserWhereInput>
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+  }, "id" | "superAdminId_companyId">
+
+  export type SuperAdminPermissionOrderByWithAggregationInput = {
+    id?: SortOrder
+    superAdminId?: SortOrder
+    companyId?: SortOrder
+    grantedBy?: SortOrder
+    grantedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SuperAdminPermissionCountOrderByAggregateInput
+    _max?: SuperAdminPermissionMaxOrderByAggregateInput
+    _min?: SuperAdminPermissionMinOrderByAggregateInput
+  }
+
+  export type SuperAdminPermissionScalarWhereWithAggregatesInput = {
+    AND?: SuperAdminPermissionScalarWhereWithAggregatesInput | SuperAdminPermissionScalarWhereWithAggregatesInput[]
+    OR?: SuperAdminPermissionScalarWhereWithAggregatesInput[]
+    NOT?: SuperAdminPermissionScalarWhereWithAggregatesInput | SuperAdminPermissionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SuperAdminPermission"> | string
+    superAdminId?: StringWithAggregatesFilter<"SuperAdminPermission"> | string
+    companyId?: StringWithAggregatesFilter<"SuperAdminPermission"> | string
+    grantedBy?: StringWithAggregatesFilter<"SuperAdminPermission"> | string
+    grantedAt?: DateTimeWithAggregatesFilter<"SuperAdminPermission"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"SuperAdminPermission"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SuperAdminPermission"> | Date | string
   }
 
   export type CompanyCreateInput = {
@@ -11991,11 +13516,13 @@ export namespace Prisma {
     currency?: string
     primaryColor?: string
     secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
-    employees?: EmployeeCreateNestedManyWithoutCompanyInput
     payRuns?: PayRunCreateNestedManyWithoutCompanyInput
+    superAdminPermissions?: SuperAdminPermissionCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateInput = {
@@ -12006,11 +13533,13 @@ export namespace Prisma {
     currency?: string
     primaryColor?: string
     secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
-    employees?: EmployeeUncheckedCreateNestedManyWithoutCompanyInput
     payRuns?: PayRunUncheckedCreateNestedManyWithoutCompanyInput
+    superAdminPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUpdateInput = {
@@ -12021,11 +13550,13 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
-    employees?: EmployeeUpdateManyWithoutCompanyNestedInput
     payRuns?: PayRunUpdateManyWithoutCompanyNestedInput
+    superAdminPermissions?: SuperAdminPermissionUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateInput = {
@@ -12036,11 +13567,13 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
-    employees?: EmployeeUncheckedUpdateManyWithoutCompanyNestedInput
     payRuns?: PayRunUncheckedUpdateManyWithoutCompanyNestedInput
+    superAdminPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyCreateManyInput = {
@@ -12051,6 +13584,8 @@ export namespace Prisma {
     currency?: string
     primaryColor?: string
     secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12063,6 +13598,8 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12075,6 +13612,8 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12124,10 +13663,23 @@ export namespace Prisma {
     email: string
     passwordHash: string
     isActive?: boolean
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     company?: CompanyCreateNestedOneWithoutUsersInput
     role: RoleCreateNestedOneWithoutUsersInput
+    payslips?: PayslipCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
+    loans?: LoanCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12138,8 +13690,21 @@ export namespace Prisma {
     passwordHash: string
     isActive?: boolean
     roleId: string
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
+    loans?: LoanUncheckedCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput
   }
 
   export type UserUpdateInput = {
@@ -12148,10 +13713,23 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12162,8 +13740,21 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     roleId?: StringFieldUpdateOperationsInput | string
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUncheckedUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12174,6 +13765,14 @@ export namespace Prisma {
     passwordHash: string
     isActive?: boolean
     roleId: string
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12184,6 +13783,14 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12196,129 +13803,14 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     roleId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EmployeeCreateInput = {
-    id?: string
-    fullName: string
-    position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
-    bankDetails?: string | null
-    active?: boolean
-    email?: string | null
-    phone?: string | null
-    hireDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    company: CompanyCreateNestedOneWithoutEmployeesInput
-    payslips?: PayslipCreateNestedManyWithoutEmployeeInput
-    payments?: PaymentCreateNestedManyWithoutEmployeeInput
-    workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeUncheckedCreateInput = {
-    id?: string
-    companyId: string
-    fullName: string
-    position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
-    bankDetails?: string | null
-    active?: boolean
-    email?: string | null
-    phone?: string | null
-    hireDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
-    payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
-    workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    company?: CompanyUpdateOneRequiredWithoutEmployeesNestedInput
-    payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
-    payments?: PaymentUpdateManyWithoutEmployeeNestedInput
-    workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    companyId?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
-    payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
-    workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeCreateManyInput = {
-    id?: string
-    companyId: string
-    fullName: string
-    position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
-    bankDetails?: string | null
-    active?: boolean
-    email?: string | null
-    phone?: string | null
-    hireDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type EmployeeUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EmployeeUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    companyId?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12413,7 +13905,7 @@ export namespace Prisma {
     lockedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    employee: EmployeeCreateNestedOneWithoutPayslipsInput
+    employee: UserCreateNestedOneWithoutPayslipsInput
     payRun: PayRunCreateNestedOneWithoutPayslipsInput
     payments?: PaymentCreateNestedManyWithoutPayslipInput
   }
@@ -12443,7 +13935,7 @@ export namespace Prisma {
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    employee?: EmployeeUpdateOneRequiredWithoutPayslipsNestedInput
+    employee?: UserUpdateOneRequiredWithoutPayslipsNestedInput
     payRun?: PayRunUpdateOneRequiredWithoutPayslipsNestedInput
     payments?: PaymentUpdateManyWithoutPayslipNestedInput
   }
@@ -12511,7 +14003,7 @@ export namespace Prisma {
     receiptUrl?: string | null
     createdAt?: Date | string
     payslip: PayslipCreateNestedOneWithoutPaymentsInput
-    employee: EmployeeCreateNestedOneWithoutPaymentsInput
+    employee: UserCreateNestedOneWithoutPaymentsInput
   }
 
   export type PaymentUncheckedCreateInput = {
@@ -12533,7 +14025,7 @@ export namespace Prisma {
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payslip?: PayslipUpdateOneRequiredWithoutPaymentsNestedInput
-    employee?: EmployeeUpdateOneRequiredWithoutPaymentsNestedInput
+    employee?: UserUpdateOneRequiredWithoutPaymentsNestedInput
   }
 
   export type PaymentUncheckedUpdateInput = {
@@ -12584,7 +14076,7 @@ export namespace Prisma {
     endDate: Date | string
     type: $Enums.ContractType
     hoursPerDay?: number | null
-    employee: EmployeeCreateNestedOneWithoutWorkSchedulesInput
+    employee: UserCreateNestedOneWithoutWorkSchedulesInput
     attendances?: AttendanceCreateNestedManyWithoutWorkScheduleInput
   }
 
@@ -12604,7 +14096,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
     hoursPerDay?: NullableIntFieldUpdateOperationsInput | number | null
-    employee?: EmployeeUpdateOneRequiredWithoutWorkSchedulesNestedInput
+    employee?: UserUpdateOneRequiredWithoutWorkSchedulesNestedInput
     attendances?: AttendanceUpdateManyWithoutWorkScheduleNestedInput
   }
 
@@ -12649,6 +14141,8 @@ export namespace Prisma {
     date: Date | string
     workedHours?: number | null
     validated?: boolean
+    validatedBy?: string | null
+    validatedAt?: Date | string | null
     workSchedule: WorkScheduleCreateNestedOneWithoutAttendancesInput
   }
 
@@ -12658,6 +14152,8 @@ export namespace Prisma {
     date: Date | string
     workedHours?: number | null
     validated?: boolean
+    validatedBy?: string | null
+    validatedAt?: Date | string | null
   }
 
   export type AttendanceUpdateInput = {
@@ -12665,6 +14161,8 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     workedHours?: NullableIntFieldUpdateOperationsInput | number | null
     validated?: BoolFieldUpdateOperationsInput | boolean
+    validatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     workSchedule?: WorkScheduleUpdateOneRequiredWithoutAttendancesNestedInput
   }
 
@@ -12674,6 +14172,8 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     workedHours?: NullableIntFieldUpdateOperationsInput | number | null
     validated?: BoolFieldUpdateOperationsInput | boolean
+    validatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AttendanceCreateManyInput = {
@@ -12682,6 +14182,8 @@ export namespace Prisma {
     date: Date | string
     workedHours?: number | null
     validated?: boolean
+    validatedBy?: string | null
+    validatedAt?: Date | string | null
   }
 
   export type AttendanceUpdateManyMutationInput = {
@@ -12689,6 +14191,8 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     workedHours?: NullableIntFieldUpdateOperationsInput | number | null
     validated?: BoolFieldUpdateOperationsInput | boolean
+    validatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AttendanceUncheckedUpdateManyInput = {
@@ -12697,6 +14201,187 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     workedHours?: NullableIntFieldUpdateOperationsInput | number | null
     validated?: BoolFieldUpdateOperationsInput | boolean
+    validatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LoanCreateInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    remainingAmount: Decimal | DecimalJsLike | number | string
+    monthlyDeduction: Decimal | DecimalJsLike | number | string
+    progress?: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.LoanStatus
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    employee: UserCreateNestedOneWithoutLoansInput
+  }
+
+  export type LoanUncheckedCreateInput = {
+    id?: string
+    employeeId: string
+    amount: Decimal | DecimalJsLike | number | string
+    remainingAmount: Decimal | DecimalJsLike | number | string
+    monthlyDeduction: Decimal | DecimalJsLike | number | string
+    progress?: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.LoanStatus
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumLoanStatusFieldUpdateOperationsInput | $Enums.LoanStatus
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: UserUpdateOneRequiredWithoutLoansNestedInput
+  }
+
+  export type LoanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumLoanStatusFieldUpdateOperationsInput | $Enums.LoanStatus
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoanCreateManyInput = {
+    id?: string
+    employeeId: string
+    amount: Decimal | DecimalJsLike | number | string
+    remainingAmount: Decimal | DecimalJsLike | number | string
+    monthlyDeduction: Decimal | DecimalJsLike | number | string
+    progress?: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.LoanStatus
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumLoanStatusFieldUpdateOperationsInput | $Enums.LoanStatus
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumLoanStatusFieldUpdateOperationsInput | $Enums.LoanStatus
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuperAdminPermissionCreateInput = {
+    id?: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    superAdmin: UserCreateNestedOneWithoutGrantedPermissionsInput
+    company: CompanyCreateNestedOneWithoutSuperAdminPermissionsInput
+  }
+
+  export type SuperAdminPermissionUncheckedCreateInput = {
+    id?: string
+    superAdminId: string
+    companyId: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SuperAdminPermissionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    superAdmin?: UserUpdateOneRequiredWithoutGrantedPermissionsNestedInput
+    company?: CompanyUpdateOneRequiredWithoutSuperAdminPermissionsNestedInput
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    superAdminId?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuperAdminPermissionCreateManyInput = {
+    id?: string
+    superAdminId: string
+    companyId: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SuperAdminPermissionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    superAdminId?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -12729,6 +14414,28 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -12746,16 +14453,16 @@ export namespace Prisma {
     none?: UserWhereInput
   }
 
-  export type EmployeeListRelationFilter = {
-    every?: EmployeeWhereInput
-    some?: EmployeeWhereInput
-    none?: EmployeeWhereInput
-  }
-
   export type PayRunListRelationFilter = {
     every?: PayRunWhereInput
     some?: PayRunWhereInput
     none?: PayRunWhereInput
+  }
+
+  export type SuperAdminPermissionListRelationFilter = {
+    every?: SuperAdminPermissionWhereInput
+    some?: SuperAdminPermissionWhereInput
+    none?: SuperAdminPermissionWhereInput
   }
 
   export type SortOrderInput = {
@@ -12767,11 +14474,11 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type EmployeeOrderByRelationAggregateInput = {
+  export type PayRunOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type PayRunOrderByRelationAggregateInput = {
+  export type SuperAdminPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -12789,8 +14496,15 @@ export namespace Prisma {
     currency?: SortOrder
     primaryColor?: SortOrder
     secondaryColor?: SortOrder
+    fixedSalaryDeductionRate?: SortOrder
+    workDaysPerMonth?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type CompanyAvgOrderByAggregateInput = {
+    fixedSalaryDeductionRate?: SortOrder
+    workDaysPerMonth?: SortOrder
   }
 
   export type CompanyMaxOrderByAggregateInput = {
@@ -12801,6 +14515,8 @@ export namespace Prisma {
     currency?: SortOrder
     primaryColor?: SortOrder
     secondaryColor?: SortOrder
+    fixedSalaryDeductionRate?: SortOrder
+    workDaysPerMonth?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12813,8 +14529,15 @@ export namespace Prisma {
     currency?: SortOrder
     primaryColor?: SortOrder
     secondaryColor?: SortOrder
+    fixedSalaryDeductionRate?: SortOrder
+    workDaysPerMonth?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type CompanySumOrderByAggregateInput = {
+    fixedSalaryDeductionRate?: SortOrder
+    workDaysPerMonth?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -12851,6 +14574,38 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -12910,82 +14665,16 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type CompanyNullableScalarRelationFilter = {
-    is?: CompanyWhereInput | null
-    isNot?: CompanyWhereInput | null
+  export type EnumContractTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContractType[] | null
+    notIn?: $Enums.ContractType[] | null
+    not?: NestedEnumContractTypeNullableFilter<$PrismaModel> | $Enums.ContractType | null
   }
 
-  export type RoleScalarRelationFilter = {
-    is?: RoleWhereInput
-    isNot?: RoleWhereInput
-  }
-
-  export type UserOrderByRelevanceInput = {
-    fields: UserOrderByRelevanceFieldEnum | UserOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type UserCountOrderByAggregateInput = {
-    id?: SortOrder
-    companyId?: SortOrder
-    fullName?: SortOrder
-    email?: SortOrder
-    passwordHash?: SortOrder
-    isActive?: SortOrder
-    roleId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type UserMaxOrderByAggregateInput = {
-    id?: SortOrder
-    companyId?: SortOrder
-    fullName?: SortOrder
-    email?: SortOrder
-    passwordHash?: SortOrder
-    isActive?: SortOrder
-    roleId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type UserMinOrderByAggregateInput = {
-    id?: SortOrder
-    companyId?: SortOrder
-    fullName?: SortOrder
-    email?: SortOrder
-    passwordHash?: SortOrder
-    isActive?: SortOrder
-    roleId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type EnumContractTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ContractType[]
-    notIn?: $Enums.ContractType[]
-    not?: NestedEnumContractTypeFilter<$PrismaModel> | $Enums.ContractType
-  }
-
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -12999,9 +14688,14 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type CompanyScalarRelationFilter = {
-    is?: CompanyWhereInput
-    isNot?: CompanyWhereInput
+  export type CompanyNullableScalarRelationFilter = {
+    is?: CompanyWhereInput | null
+    isNot?: CompanyWhereInput | null
+  }
+
+  export type RoleScalarRelationFilter = {
+    is?: RoleWhereInput
+    isNot?: RoleWhereInput
   }
 
   export type PayslipListRelationFilter = {
@@ -13022,6 +14716,12 @@ export namespace Prisma {
     none?: WorkScheduleWhereInput
   }
 
+  export type LoanListRelationFilter = {
+    every?: LoanWhereInput
+    some?: LoanWhereInput
+    none?: LoanWhereInput
+  }
+
   export type PayslipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -13034,92 +14734,108 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type EmployeeOrderByRelevanceInput = {
-    fields: EmployeeOrderByRelevanceFieldEnum | EmployeeOrderByRelevanceFieldEnum[]
+  export type LoanOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelevanceInput = {
+    fields: UserOrderByRelevanceFieldEnum | UserOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type EmployeeCountOrderByAggregateInput = {
+  export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     companyId?: SortOrder
     fullName?: SortOrder
+    email?: SortOrder
+    passwordHash?: SortOrder
+    isActive?: SortOrder
+    roleId?: SortOrder
     position?: SortOrder
     contractType?: SortOrder
     salaryOrRate?: SortOrder
     bankDetails?: SortOrder
     active?: SortOrder
-    email?: SortOrder
     phone?: SortOrder
     hireDate?: SortOrder
+    canValidateFully?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type EmployeeAvgOrderByAggregateInput = {
+  export type UserAvgOrderByAggregateInput = {
     salaryOrRate?: SortOrder
   }
 
-  export type EmployeeMaxOrderByAggregateInput = {
+  export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
     companyId?: SortOrder
     fullName?: SortOrder
+    email?: SortOrder
+    passwordHash?: SortOrder
+    isActive?: SortOrder
+    roleId?: SortOrder
     position?: SortOrder
     contractType?: SortOrder
     salaryOrRate?: SortOrder
     bankDetails?: SortOrder
     active?: SortOrder
-    email?: SortOrder
     phone?: SortOrder
     hireDate?: SortOrder
+    canValidateFully?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type EmployeeMinOrderByAggregateInput = {
+  export type UserMinOrderByAggregateInput = {
     id?: SortOrder
     companyId?: SortOrder
     fullName?: SortOrder
+    email?: SortOrder
+    passwordHash?: SortOrder
+    isActive?: SortOrder
+    roleId?: SortOrder
     position?: SortOrder
     contractType?: SortOrder
     salaryOrRate?: SortOrder
     bankDetails?: SortOrder
     active?: SortOrder
-    email?: SortOrder
     phone?: SortOrder
     hireDate?: SortOrder
+    canValidateFully?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type EmployeeSumOrderByAggregateInput = {
+  export type UserSumOrderByAggregateInput = {
     salaryOrRate?: SortOrder
   }
 
-  export type EnumContractTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ContractType[]
-    notIn?: $Enums.ContractType[]
-    not?: NestedEnumContractTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContractType
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumContractTypeFilter<$PrismaModel>
-    _max?: NestedEnumContractTypeFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+  export type EnumContractTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContractType[] | null
+    notIn?: $Enums.ContractType[] | null
+    not?: NestedEnumContractTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ContractType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumContractTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumContractTypeNullableFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13148,6 +14864,11 @@ export namespace Prisma {
     in?: $Enums.PayRunStatus[]
     notIn?: $Enums.PayRunStatus[]
     not?: NestedEnumPayRunStatusFilter<$PrismaModel> | $Enums.PayRunStatus
+  }
+
+  export type CompanyScalarRelationFilter = {
+    is?: CompanyWhereInput
+    isNot?: CompanyWhereInput
   }
 
   export type PayRunOrderByRelevanceInput = {
@@ -13209,15 +14930,15 @@ export namespace Prisma {
     _max?: NestedEnumPayRunStatusFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
   export type EnumPayslipStatusFilter<$PrismaModel = never> = {
@@ -13227,9 +14948,9 @@ export namespace Prisma {
     not?: NestedEnumPayslipStatusFilter<$PrismaModel> | $Enums.PayslipStatus
   }
 
-  export type EmployeeScalarRelationFilter = {
-    is?: EmployeeWhereInput
-    isNot?: EmployeeWhereInput
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
   export type PayRunScalarRelationFilter = {
@@ -13304,20 +15025,20 @@ export namespace Prisma {
     daysWorked?: SortOrder
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type EnumPayslipStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -13399,6 +15120,13 @@ export namespace Prisma {
     _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
+  export type EnumContractTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractType[]
+    notIn?: $Enums.ContractType[]
+    not?: NestedEnumContractTypeFilter<$PrismaModel> | $Enums.ContractType
+  }
+
   export type AttendanceListRelationFilter = {
     every?: AttendanceWhereInput
     some?: AttendanceWhereInput
@@ -13450,6 +15178,16 @@ export namespace Prisma {
     hoursPerDay?: SortOrder
   }
 
+  export type EnumContractTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractType[]
+    notIn?: $Enums.ContractType[]
+    not?: NestedEnumContractTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContractType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContractTypeFilter<$PrismaModel>
+    _max?: NestedEnumContractTypeFilter<$PrismaModel>
+  }
+
   export type WorkScheduleScalarRelationFilter = {
     is?: WorkScheduleWhereInput
     isNot?: WorkScheduleWhereInput
@@ -13467,6 +15205,8 @@ export namespace Prisma {
     date?: SortOrder
     workedHours?: SortOrder
     validated?: SortOrder
+    validatedBy?: SortOrder
+    validatedAt?: SortOrder
   }
 
   export type AttendanceAvgOrderByAggregateInput = {
@@ -13479,6 +15219,8 @@ export namespace Prisma {
     date?: SortOrder
     workedHours?: SortOrder
     validated?: SortOrder
+    validatedBy?: SortOrder
+    validatedAt?: SortOrder
   }
 
   export type AttendanceMinOrderByAggregateInput = {
@@ -13487,10 +15229,138 @@ export namespace Prisma {
     date?: SortOrder
     workedHours?: SortOrder
     validated?: SortOrder
+    validatedBy?: SortOrder
+    validatedAt?: SortOrder
   }
 
   export type AttendanceSumOrderByAggregateInput = {
     workedHours?: SortOrder
+  }
+
+  export type EnumLoanStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoanStatus | EnumLoanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoanStatus[]
+    notIn?: $Enums.LoanStatus[]
+    not?: NestedEnumLoanStatusFilter<$PrismaModel> | $Enums.LoanStatus
+  }
+
+  export type LoanOrderByRelevanceInput = {
+    fields: LoanOrderByRelevanceFieldEnum | LoanOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type LoanCountOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    amount?: SortOrder
+    remainingAmount?: SortOrder
+    monthlyDeduction?: SortOrder
+    progress?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoanAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    remainingAmount?: SortOrder
+    monthlyDeduction?: SortOrder
+    progress?: SortOrder
+  }
+
+  export type LoanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    amount?: SortOrder
+    remainingAmount?: SortOrder
+    monthlyDeduction?: SortOrder
+    progress?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoanMinOrderByAggregateInput = {
+    id?: SortOrder
+    employeeId?: SortOrder
+    amount?: SortOrder
+    remainingAmount?: SortOrder
+    monthlyDeduction?: SortOrder
+    progress?: SortOrder
+    description?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    status?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoanSumOrderByAggregateInput = {
+    amount?: SortOrder
+    remainingAmount?: SortOrder
+    monthlyDeduction?: SortOrder
+    progress?: SortOrder
+  }
+
+  export type EnumLoanStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoanStatus | EnumLoanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoanStatus[]
+    notIn?: $Enums.LoanStatus[]
+    not?: NestedEnumLoanStatusWithAggregatesFilter<$PrismaModel> | $Enums.LoanStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLoanStatusFilter<$PrismaModel>
+    _max?: NestedEnumLoanStatusFilter<$PrismaModel>
+  }
+
+  export type SuperAdminPermissionOrderByRelevanceInput = {
+    fields: SuperAdminPermissionOrderByRelevanceFieldEnum | SuperAdminPermissionOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type SuperAdminPermissionSuperAdminIdCompanyIdCompoundUniqueInput = {
+    superAdminId: string
+    companyId: string
+  }
+
+  export type SuperAdminPermissionCountOrderByAggregateInput = {
+    id?: SortOrder
+    superAdminId?: SortOrder
+    companyId?: SortOrder
+    grantedBy?: SortOrder
+    grantedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SuperAdminPermissionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    superAdminId?: SortOrder
+    companyId?: SortOrder
+    grantedBy?: SortOrder
+    grantedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SuperAdminPermissionMinOrderByAggregateInput = {
+    id?: SortOrder
+    superAdminId?: SortOrder
+    companyId?: SortOrder
+    grantedBy?: SortOrder
+    grantedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserCreateNestedManyWithoutCompanyInput = {
@@ -13500,18 +15370,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
-  export type EmployeeCreateNestedManyWithoutCompanyInput = {
-    create?: XOR<EmployeeCreateWithoutCompanyInput, EmployeeUncheckedCreateWithoutCompanyInput> | EmployeeCreateWithoutCompanyInput[] | EmployeeUncheckedCreateWithoutCompanyInput[]
-    connectOrCreate?: EmployeeCreateOrConnectWithoutCompanyInput | EmployeeCreateOrConnectWithoutCompanyInput[]
-    createMany?: EmployeeCreateManyCompanyInputEnvelope
-    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-  }
-
   export type PayRunCreateNestedManyWithoutCompanyInput = {
     create?: XOR<PayRunCreateWithoutCompanyInput, PayRunUncheckedCreateWithoutCompanyInput> | PayRunCreateWithoutCompanyInput[] | PayRunUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: PayRunCreateOrConnectWithoutCompanyInput | PayRunCreateOrConnectWithoutCompanyInput[]
     createMany?: PayRunCreateManyCompanyInputEnvelope
     connect?: PayRunWhereUniqueInput | PayRunWhereUniqueInput[]
+  }
+
+  export type SuperAdminPermissionCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutCompanyInput, SuperAdminPermissionUncheckedCreateWithoutCompanyInput> | SuperAdminPermissionCreateWithoutCompanyInput[] | SuperAdminPermissionUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutCompanyInput | SuperAdminPermissionCreateOrConnectWithoutCompanyInput[]
+    createMany?: SuperAdminPermissionCreateManyCompanyInputEnvelope
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
   }
 
   export type UserUncheckedCreateNestedManyWithoutCompanyInput = {
@@ -13521,18 +15391,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
-  export type EmployeeUncheckedCreateNestedManyWithoutCompanyInput = {
-    create?: XOR<EmployeeCreateWithoutCompanyInput, EmployeeUncheckedCreateWithoutCompanyInput> | EmployeeCreateWithoutCompanyInput[] | EmployeeUncheckedCreateWithoutCompanyInput[]
-    connectOrCreate?: EmployeeCreateOrConnectWithoutCompanyInput | EmployeeCreateOrConnectWithoutCompanyInput[]
-    createMany?: EmployeeCreateManyCompanyInputEnvelope
-    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-  }
-
   export type PayRunUncheckedCreateNestedManyWithoutCompanyInput = {
     create?: XOR<PayRunCreateWithoutCompanyInput, PayRunUncheckedCreateWithoutCompanyInput> | PayRunCreateWithoutCompanyInput[] | PayRunUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: PayRunCreateOrConnectWithoutCompanyInput | PayRunCreateOrConnectWithoutCompanyInput[]
     createMany?: PayRunCreateManyCompanyInputEnvelope
     connect?: PayRunWhereUniqueInput | PayRunWhereUniqueInput[]
+  }
+
+  export type SuperAdminPermissionUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutCompanyInput, SuperAdminPermissionUncheckedCreateWithoutCompanyInput> | SuperAdminPermissionCreateWithoutCompanyInput[] | SuperAdminPermissionUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutCompanyInput | SuperAdminPermissionCreateOrConnectWithoutCompanyInput[]
+    createMany?: SuperAdminPermissionCreateManyCompanyInputEnvelope
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13541,6 +15411,22 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -13561,20 +15447,6 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type EmployeeUpdateManyWithoutCompanyNestedInput = {
-    create?: XOR<EmployeeCreateWithoutCompanyInput, EmployeeUncheckedCreateWithoutCompanyInput> | EmployeeCreateWithoutCompanyInput[] | EmployeeUncheckedCreateWithoutCompanyInput[]
-    connectOrCreate?: EmployeeCreateOrConnectWithoutCompanyInput | EmployeeCreateOrConnectWithoutCompanyInput[]
-    upsert?: EmployeeUpsertWithWhereUniqueWithoutCompanyInput | EmployeeUpsertWithWhereUniqueWithoutCompanyInput[]
-    createMany?: EmployeeCreateManyCompanyInputEnvelope
-    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    update?: EmployeeUpdateWithWhereUniqueWithoutCompanyInput | EmployeeUpdateWithWhereUniqueWithoutCompanyInput[]
-    updateMany?: EmployeeUpdateManyWithWhereWithoutCompanyInput | EmployeeUpdateManyWithWhereWithoutCompanyInput[]
-    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
-  }
-
   export type PayRunUpdateManyWithoutCompanyNestedInput = {
     create?: XOR<PayRunCreateWithoutCompanyInput, PayRunUncheckedCreateWithoutCompanyInput> | PayRunCreateWithoutCompanyInput[] | PayRunUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: PayRunCreateOrConnectWithoutCompanyInput | PayRunCreateOrConnectWithoutCompanyInput[]
@@ -13587,6 +15459,20 @@ export namespace Prisma {
     update?: PayRunUpdateWithWhereUniqueWithoutCompanyInput | PayRunUpdateWithWhereUniqueWithoutCompanyInput[]
     updateMany?: PayRunUpdateManyWithWhereWithoutCompanyInput | PayRunUpdateManyWithWhereWithoutCompanyInput[]
     deleteMany?: PayRunScalarWhereInput | PayRunScalarWhereInput[]
+  }
+
+  export type SuperAdminPermissionUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutCompanyInput, SuperAdminPermissionUncheckedCreateWithoutCompanyInput> | SuperAdminPermissionCreateWithoutCompanyInput[] | SuperAdminPermissionUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutCompanyInput | SuperAdminPermissionCreateOrConnectWithoutCompanyInput[]
+    upsert?: SuperAdminPermissionUpsertWithWhereUniqueWithoutCompanyInput | SuperAdminPermissionUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: SuperAdminPermissionCreateManyCompanyInputEnvelope
+    set?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    disconnect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    delete?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    update?: SuperAdminPermissionUpdateWithWhereUniqueWithoutCompanyInput | SuperAdminPermissionUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: SuperAdminPermissionUpdateManyWithWhereWithoutCompanyInput | SuperAdminPermissionUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: SuperAdminPermissionScalarWhereInput | SuperAdminPermissionScalarWhereInput[]
   }
 
   export type UserUncheckedUpdateManyWithoutCompanyNestedInput = {
@@ -13603,20 +15489,6 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type EmployeeUncheckedUpdateManyWithoutCompanyNestedInput = {
-    create?: XOR<EmployeeCreateWithoutCompanyInput, EmployeeUncheckedCreateWithoutCompanyInput> | EmployeeCreateWithoutCompanyInput[] | EmployeeUncheckedCreateWithoutCompanyInput[]
-    connectOrCreate?: EmployeeCreateOrConnectWithoutCompanyInput | EmployeeCreateOrConnectWithoutCompanyInput[]
-    upsert?: EmployeeUpsertWithWhereUniqueWithoutCompanyInput | EmployeeUpsertWithWhereUniqueWithoutCompanyInput[]
-    createMany?: EmployeeCreateManyCompanyInputEnvelope
-    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
-    update?: EmployeeUpdateWithWhereUniqueWithoutCompanyInput | EmployeeUpdateWithWhereUniqueWithoutCompanyInput[]
-    updateMany?: EmployeeUpdateManyWithWhereWithoutCompanyInput | EmployeeUpdateManyWithWhereWithoutCompanyInput[]
-    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
-  }
-
   export type PayRunUncheckedUpdateManyWithoutCompanyNestedInput = {
     create?: XOR<PayRunCreateWithoutCompanyInput, PayRunUncheckedCreateWithoutCompanyInput> | PayRunCreateWithoutCompanyInput[] | PayRunUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: PayRunCreateOrConnectWithoutCompanyInput | PayRunCreateOrConnectWithoutCompanyInput[]
@@ -13629,6 +15501,20 @@ export namespace Prisma {
     update?: PayRunUpdateWithWhereUniqueWithoutCompanyInput | PayRunUpdateWithWhereUniqueWithoutCompanyInput[]
     updateMany?: PayRunUpdateManyWithWhereWithoutCompanyInput | PayRunUpdateManyWithWhereWithoutCompanyInput[]
     deleteMany?: PayRunScalarWhereInput | PayRunScalarWhereInput[]
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutCompanyInput, SuperAdminPermissionUncheckedCreateWithoutCompanyInput> | SuperAdminPermissionCreateWithoutCompanyInput[] | SuperAdminPermissionUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutCompanyInput | SuperAdminPermissionCreateOrConnectWithoutCompanyInput[]
+    upsert?: SuperAdminPermissionUpsertWithWhereUniqueWithoutCompanyInput | SuperAdminPermissionUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: SuperAdminPermissionCreateManyCompanyInputEnvelope
+    set?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    disconnect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    delete?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    update?: SuperAdminPermissionUpdateWithWhereUniqueWithoutCompanyInput | SuperAdminPermissionUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: SuperAdminPermissionUpdateManyWithWhereWithoutCompanyInput | SuperAdminPermissionUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: SuperAdminPermissionScalarWhereInput | SuperAdminPermissionScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutRoleInput = {
@@ -13689,34 +15575,6 @@ export namespace Prisma {
     connect?: RoleWhereUniqueInput
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type CompanyUpdateOneWithoutUsersNestedInput = {
-    create?: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: CompanyCreateOrConnectWithoutUsersInput
-    upsert?: CompanyUpsertWithoutUsersInput
-    disconnect?: CompanyWhereInput | boolean
-    delete?: CompanyWhereInput | boolean
-    connect?: CompanyWhereUniqueInput
-    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutUsersInput, CompanyUpdateWithoutUsersInput>, CompanyUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type RoleUpdateOneRequiredWithoutUsersNestedInput = {
-    create?: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: RoleCreateOrConnectWithoutUsersInput
-    upsert?: RoleUpsertWithoutUsersInput
-    connect?: RoleWhereUniqueInput
-    update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutUsersInput, RoleUpdateWithoutUsersInput>, RoleUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type CompanyCreateNestedOneWithoutEmployeesInput = {
-    create?: XOR<CompanyCreateWithoutEmployeesInput, CompanyUncheckedCreateWithoutEmployeesInput>
-    connectOrCreate?: CompanyCreateOrConnectWithoutEmployeesInput
-    connect?: CompanyWhereUniqueInput
-  }
-
   export type PayslipCreateNestedManyWithoutEmployeeInput = {
     create?: XOR<PayslipCreateWithoutEmployeeInput, PayslipUncheckedCreateWithoutEmployeeInput> | PayslipCreateWithoutEmployeeInput[] | PayslipUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: PayslipCreateOrConnectWithoutEmployeeInput | PayslipCreateOrConnectWithoutEmployeeInput[]
@@ -13736,6 +15594,20 @@ export namespace Prisma {
     connectOrCreate?: WorkScheduleCreateOrConnectWithoutEmployeeInput | WorkScheduleCreateOrConnectWithoutEmployeeInput[]
     createMany?: WorkScheduleCreateManyEmployeeInputEnvelope
     connect?: WorkScheduleWhereUniqueInput | WorkScheduleWhereUniqueInput[]
+  }
+
+  export type LoanCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<LoanCreateWithoutEmployeeInput, LoanUncheckedCreateWithoutEmployeeInput> | LoanCreateWithoutEmployeeInput[] | LoanUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LoanCreateOrConnectWithoutEmployeeInput | LoanCreateOrConnectWithoutEmployeeInput[]
+    createMany?: LoanCreateManyEmployeeInputEnvelope
+    connect?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+  }
+
+  export type SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutSuperAdminInput, SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput> | SuperAdminPermissionCreateWithoutSuperAdminInput[] | SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput | SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput[]
+    createMany?: SuperAdminPermissionCreateManySuperAdminInputEnvelope
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
   }
 
   export type PayslipUncheckedCreateNestedManyWithoutEmployeeInput = {
@@ -13759,28 +15631,52 @@ export namespace Prisma {
     connect?: WorkScheduleWhereUniqueInput | WorkScheduleWhereUniqueInput[]
   }
 
-  export type EnumContractTypeFieldUpdateOperationsInput = {
-    set?: $Enums.ContractType
+  export type LoanUncheckedCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<LoanCreateWithoutEmployeeInput, LoanUncheckedCreateWithoutEmployeeInput> | LoanCreateWithoutEmployeeInput[] | LoanUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LoanCreateOrConnectWithoutEmployeeInput | LoanCreateOrConnectWithoutEmployeeInput[]
+    createMany?: LoanCreateManyEmployeeInputEnvelope
+    connect?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
   }
 
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
+  export type SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutSuperAdminInput, SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput> | SuperAdminPermissionCreateWithoutSuperAdminInput[] | SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput | SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput[]
+    createMany?: SuperAdminPermissionCreateManySuperAdminInputEnvelope
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type NullableEnumContractTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ContractType | null
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
 
-  export type CompanyUpdateOneRequiredWithoutEmployeesNestedInput = {
-    create?: XOR<CompanyCreateWithoutEmployeesInput, CompanyUncheckedCreateWithoutEmployeesInput>
-    connectOrCreate?: CompanyCreateOrConnectWithoutEmployeesInput
-    upsert?: CompanyUpsertWithoutEmployeesInput
+  export type CompanyUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutUsersInput
+    upsert?: CompanyUpsertWithoutUsersInput
+    disconnect?: CompanyWhereInput | boolean
+    delete?: CompanyWhereInput | boolean
     connect?: CompanyWhereUniqueInput
-    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutEmployeesInput, CompanyUpdateWithoutEmployeesInput>, CompanyUncheckedUpdateWithoutEmployeesInput>
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutUsersInput, CompanyUpdateWithoutUsersInput>, CompanyUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type RoleUpdateOneRequiredWithoutUsersNestedInput = {
+    create?: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutUsersInput
+    upsert?: RoleUpsertWithoutUsersInput
+    connect?: RoleWhereUniqueInput
+    update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutUsersInput, RoleUpdateWithoutUsersInput>, RoleUncheckedUpdateWithoutUsersInput>
   }
 
   export type PayslipUpdateManyWithoutEmployeeNestedInput = {
@@ -13825,6 +15721,34 @@ export namespace Prisma {
     deleteMany?: WorkScheduleScalarWhereInput | WorkScheduleScalarWhereInput[]
   }
 
+  export type LoanUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<LoanCreateWithoutEmployeeInput, LoanUncheckedCreateWithoutEmployeeInput> | LoanCreateWithoutEmployeeInput[] | LoanUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LoanCreateOrConnectWithoutEmployeeInput | LoanCreateOrConnectWithoutEmployeeInput[]
+    upsert?: LoanUpsertWithWhereUniqueWithoutEmployeeInput | LoanUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: LoanCreateManyEmployeeInputEnvelope
+    set?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    disconnect?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    delete?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    connect?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    update?: LoanUpdateWithWhereUniqueWithoutEmployeeInput | LoanUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: LoanUpdateManyWithWhereWithoutEmployeeInput | LoanUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: LoanScalarWhereInput | LoanScalarWhereInput[]
+  }
+
+  export type SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutSuperAdminInput, SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput> | SuperAdminPermissionCreateWithoutSuperAdminInput[] | SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput | SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput[]
+    upsert?: SuperAdminPermissionUpsertWithWhereUniqueWithoutSuperAdminInput | SuperAdminPermissionUpsertWithWhereUniqueWithoutSuperAdminInput[]
+    createMany?: SuperAdminPermissionCreateManySuperAdminInputEnvelope
+    set?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    disconnect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    delete?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    update?: SuperAdminPermissionUpdateWithWhereUniqueWithoutSuperAdminInput | SuperAdminPermissionUpdateWithWhereUniqueWithoutSuperAdminInput[]
+    updateMany?: SuperAdminPermissionUpdateManyWithWhereWithoutSuperAdminInput | SuperAdminPermissionUpdateManyWithWhereWithoutSuperAdminInput[]
+    deleteMany?: SuperAdminPermissionScalarWhereInput | SuperAdminPermissionScalarWhereInput[]
+  }
+
   export type PayslipUncheckedUpdateManyWithoutEmployeeNestedInput = {
     create?: XOR<PayslipCreateWithoutEmployeeInput, PayslipUncheckedCreateWithoutEmployeeInput> | PayslipCreateWithoutEmployeeInput[] | PayslipUncheckedCreateWithoutEmployeeInput[]
     connectOrCreate?: PayslipCreateOrConnectWithoutEmployeeInput | PayslipCreateOrConnectWithoutEmployeeInput[]
@@ -13865,6 +15789,34 @@ export namespace Prisma {
     update?: WorkScheduleUpdateWithWhereUniqueWithoutEmployeeInput | WorkScheduleUpdateWithWhereUniqueWithoutEmployeeInput[]
     updateMany?: WorkScheduleUpdateManyWithWhereWithoutEmployeeInput | WorkScheduleUpdateManyWithWhereWithoutEmployeeInput[]
     deleteMany?: WorkScheduleScalarWhereInput | WorkScheduleScalarWhereInput[]
+  }
+
+  export type LoanUncheckedUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<LoanCreateWithoutEmployeeInput, LoanUncheckedCreateWithoutEmployeeInput> | LoanCreateWithoutEmployeeInput[] | LoanUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: LoanCreateOrConnectWithoutEmployeeInput | LoanCreateOrConnectWithoutEmployeeInput[]
+    upsert?: LoanUpsertWithWhereUniqueWithoutEmployeeInput | LoanUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: LoanCreateManyEmployeeInputEnvelope
+    set?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    disconnect?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    delete?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    connect?: LoanWhereUniqueInput | LoanWhereUniqueInput[]
+    update?: LoanUpdateWithWhereUniqueWithoutEmployeeInput | LoanUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: LoanUpdateManyWithWhereWithoutEmployeeInput | LoanUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: LoanScalarWhereInput | LoanScalarWhereInput[]
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput = {
+    create?: XOR<SuperAdminPermissionCreateWithoutSuperAdminInput, SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput> | SuperAdminPermissionCreateWithoutSuperAdminInput[] | SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput[]
+    connectOrCreate?: SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput | SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput[]
+    upsert?: SuperAdminPermissionUpsertWithWhereUniqueWithoutSuperAdminInput | SuperAdminPermissionUpsertWithWhereUniqueWithoutSuperAdminInput[]
+    createMany?: SuperAdminPermissionCreateManySuperAdminInputEnvelope
+    set?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    disconnect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    delete?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    connect?: SuperAdminPermissionWhereUniqueInput | SuperAdminPermissionWhereUniqueInput[]
+    update?: SuperAdminPermissionUpdateWithWhereUniqueWithoutSuperAdminInput | SuperAdminPermissionUpdateWithWhereUniqueWithoutSuperAdminInput[]
+    updateMany?: SuperAdminPermissionUpdateManyWithWhereWithoutSuperAdminInput | SuperAdminPermissionUpdateManyWithWhereWithoutSuperAdminInput[]
+    deleteMany?: SuperAdminPermissionScalarWhereInput | SuperAdminPermissionScalarWhereInput[]
   }
 
   export type CompanyCreateNestedOneWithoutPayRunsInput = {
@@ -13931,10 +15883,10 @@ export namespace Prisma {
     deleteMany?: PayslipScalarWhereInput | PayslipScalarWhereInput[]
   }
 
-  export type EmployeeCreateNestedOneWithoutPayslipsInput = {
-    create?: XOR<EmployeeCreateWithoutPayslipsInput, EmployeeUncheckedCreateWithoutPayslipsInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutPayslipsInput
-    connect?: EmployeeWhereUniqueInput
+  export type UserCreateNestedOneWithoutPayslipsInput = {
+    create?: XOR<UserCreateWithoutPayslipsInput, UserUncheckedCreateWithoutPayslipsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPayslipsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type PayRunCreateNestedOneWithoutPayslipsInput = {
@@ -13957,24 +15909,24 @@ export namespace Prisma {
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type EnumPayslipStatusFieldUpdateOperationsInput = {
     set?: $Enums.PayslipStatus
   }
 
-  export type EmployeeUpdateOneRequiredWithoutPayslipsNestedInput = {
-    create?: XOR<EmployeeCreateWithoutPayslipsInput, EmployeeUncheckedCreateWithoutPayslipsInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutPayslipsInput
-    upsert?: EmployeeUpsertWithoutPayslipsInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutPayslipsInput, EmployeeUpdateWithoutPayslipsInput>, EmployeeUncheckedUpdateWithoutPayslipsInput>
+  export type UserUpdateOneRequiredWithoutPayslipsNestedInput = {
+    create?: XOR<UserCreateWithoutPayslipsInput, UserUncheckedCreateWithoutPayslipsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPayslipsInput
+    upsert?: UserUpsertWithoutPayslipsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPayslipsInput, UserUpdateWithoutPayslipsInput>, UserUncheckedUpdateWithoutPayslipsInput>
   }
 
   export type PayRunUpdateOneRequiredWithoutPayslipsNestedInput = {
@@ -14019,10 +15971,10 @@ export namespace Prisma {
     connect?: PayslipWhereUniqueInput
   }
 
-  export type EmployeeCreateNestedOneWithoutPaymentsInput = {
-    create?: XOR<EmployeeCreateWithoutPaymentsInput, EmployeeUncheckedCreateWithoutPaymentsInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutPaymentsInput
-    connect?: EmployeeWhereUniqueInput
+  export type UserCreateNestedOneWithoutPaymentsInput = {
+    create?: XOR<UserCreateWithoutPaymentsInput, UserUncheckedCreateWithoutPaymentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaymentsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type EnumPaymentModeFieldUpdateOperationsInput = {
@@ -14037,18 +15989,18 @@ export namespace Prisma {
     update?: XOR<XOR<PayslipUpdateToOneWithWhereWithoutPaymentsInput, PayslipUpdateWithoutPaymentsInput>, PayslipUncheckedUpdateWithoutPaymentsInput>
   }
 
-  export type EmployeeUpdateOneRequiredWithoutPaymentsNestedInput = {
-    create?: XOR<EmployeeCreateWithoutPaymentsInput, EmployeeUncheckedCreateWithoutPaymentsInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutPaymentsInput
-    upsert?: EmployeeUpsertWithoutPaymentsInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutPaymentsInput, EmployeeUpdateWithoutPaymentsInput>, EmployeeUncheckedUpdateWithoutPaymentsInput>
+  export type UserUpdateOneRequiredWithoutPaymentsNestedInput = {
+    create?: XOR<UserCreateWithoutPaymentsInput, UserUncheckedCreateWithoutPaymentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPaymentsInput
+    upsert?: UserUpsertWithoutPaymentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPaymentsInput, UserUpdateWithoutPaymentsInput>, UserUncheckedUpdateWithoutPaymentsInput>
   }
 
-  export type EmployeeCreateNestedOneWithoutWorkSchedulesInput = {
-    create?: XOR<EmployeeCreateWithoutWorkSchedulesInput, EmployeeUncheckedCreateWithoutWorkSchedulesInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutWorkSchedulesInput
-    connect?: EmployeeWhereUniqueInput
+  export type UserCreateNestedOneWithoutWorkSchedulesInput = {
+    create?: XOR<UserCreateWithoutWorkSchedulesInput, UserUncheckedCreateWithoutWorkSchedulesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkSchedulesInput
+    connect?: UserWhereUniqueInput
   }
 
   export type AttendanceCreateNestedManyWithoutWorkScheduleInput = {
@@ -14065,12 +16017,16 @@ export namespace Prisma {
     connect?: AttendanceWhereUniqueInput | AttendanceWhereUniqueInput[]
   }
 
-  export type EmployeeUpdateOneRequiredWithoutWorkSchedulesNestedInput = {
-    create?: XOR<EmployeeCreateWithoutWorkSchedulesInput, EmployeeUncheckedCreateWithoutWorkSchedulesInput>
-    connectOrCreate?: EmployeeCreateOrConnectWithoutWorkSchedulesInput
-    upsert?: EmployeeUpsertWithoutWorkSchedulesInput
-    connect?: EmployeeWhereUniqueInput
-    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutWorkSchedulesInput, EmployeeUpdateWithoutWorkSchedulesInput>, EmployeeUncheckedUpdateWithoutWorkSchedulesInput>
+  export type EnumContractTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ContractType
+  }
+
+  export type UserUpdateOneRequiredWithoutWorkSchedulesNestedInput = {
+    create?: XOR<UserCreateWithoutWorkSchedulesInput, UserUncheckedCreateWithoutWorkSchedulesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkSchedulesInput
+    upsert?: UserUpsertWithoutWorkSchedulesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWorkSchedulesInput, UserUpdateWithoutWorkSchedulesInput>, UserUncheckedUpdateWithoutWorkSchedulesInput>
   }
 
   export type AttendanceUpdateManyWithoutWorkScheduleNestedInput = {
@@ -14115,6 +16071,52 @@ export namespace Prisma {
     update?: XOR<XOR<WorkScheduleUpdateToOneWithWhereWithoutAttendancesInput, WorkScheduleUpdateWithoutAttendancesInput>, WorkScheduleUncheckedUpdateWithoutAttendancesInput>
   }
 
+  export type UserCreateNestedOneWithoutLoansInput = {
+    create?: XOR<UserCreateWithoutLoansInput, UserUncheckedCreateWithoutLoansInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLoansInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumLoanStatusFieldUpdateOperationsInput = {
+    set?: $Enums.LoanStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutLoansNestedInput = {
+    create?: XOR<UserCreateWithoutLoansInput, UserUncheckedCreateWithoutLoansInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLoansInput
+    upsert?: UserUpsertWithoutLoansInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLoansInput, UserUpdateWithoutLoansInput>, UserUncheckedUpdateWithoutLoansInput>
+  }
+
+  export type UserCreateNestedOneWithoutGrantedPermissionsInput = {
+    create?: XOR<UserCreateWithoutGrantedPermissionsInput, UserUncheckedCreateWithoutGrantedPermissionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGrantedPermissionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CompanyCreateNestedOneWithoutSuperAdminPermissionsInput = {
+    create?: XOR<CompanyCreateWithoutSuperAdminPermissionsInput, CompanyUncheckedCreateWithoutSuperAdminPermissionsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutSuperAdminPermissionsInput
+    connect?: CompanyWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutGrantedPermissionsNestedInput = {
+    create?: XOR<UserCreateWithoutGrantedPermissionsInput, UserUncheckedCreateWithoutGrantedPermissionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGrantedPermissionsInput
+    upsert?: UserUpsertWithoutGrantedPermissionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutGrantedPermissionsInput, UserUpdateWithoutGrantedPermissionsInput>, UserUncheckedUpdateWithoutGrantedPermissionsInput>
+  }
+
+  export type CompanyUpdateOneRequiredWithoutSuperAdminPermissionsNestedInput = {
+    create?: XOR<CompanyCreateWithoutSuperAdminPermissionsInput, CompanyUncheckedCreateWithoutSuperAdminPermissionsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutSuperAdminPermissionsInput
+    upsert?: CompanyUpsertWithoutSuperAdminPermissionsInput
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutSuperAdminPermissionsInput, CompanyUpdateWithoutSuperAdminPermissionsInput>, CompanyUncheckedUpdateWithoutSuperAdminPermissionsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -14143,6 +16145,28 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     search?: string
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -14203,7 +16227,23 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
     notIn?: number[] | null
@@ -14211,7 +16251,23 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14250,30 +16306,16 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type NestedEnumContractTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContractType[] | null
+    notIn?: $Enums.ContractType[] | null
+    not?: NestedEnumContractTypeNullableFilter<$PrismaModel> | $Enums.ContractType | null
   }
 
-  export type NestedEnumContractTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ContractType[]
-    notIn?: $Enums.ContractType[]
-    not?: NestedEnumContractTypeFilter<$PrismaModel> | $Enums.ContractType
-  }
-
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -14287,30 +16329,30 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedEnumContractTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.ContractType[]
-    notIn?: $Enums.ContractType[]
-    not?: NestedEnumContractTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContractType
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumContractTypeFilter<$PrismaModel>
-    _max?: NestedEnumContractTypeFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+  export type NestedEnumContractTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ContractType[] | null
+    notIn?: $Enums.ContractType[] | null
+    not?: NestedEnumContractTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ContractType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumContractTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumContractTypeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -14361,6 +16403,17 @@ export namespace Prisma {
     _max?: NestedEnumPayRunStatusFilter<$PrismaModel>
   }
 
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
   export type NestedEnumPayslipStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PayslipStatus | EnumPayslipStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PayslipStatus[]
@@ -14368,31 +16421,20 @@ export namespace Prisma {
     not?: NestedEnumPayslipStatusFilter<$PrismaModel> | $Enums.PayslipStatus
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[]
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type NestedEnumPayslipStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -14422,15 +16464,62 @@ export namespace Prisma {
     _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
+  export type NestedEnumContractTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractType[]
+    notIn?: $Enums.ContractType[]
+    not?: NestedEnumContractTypeFilter<$PrismaModel> | $Enums.ContractType
+  }
+
+  export type NestedEnumContractTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContractType | EnumContractTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ContractType[]
+    notIn?: $Enums.ContractType[]
+    not?: NestedEnumContractTypeWithAggregatesFilter<$PrismaModel> | $Enums.ContractType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContractTypeFilter<$PrismaModel>
+    _max?: NestedEnumContractTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLoanStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoanStatus | EnumLoanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoanStatus[]
+    notIn?: $Enums.LoanStatus[]
+    not?: NestedEnumLoanStatusFilter<$PrismaModel> | $Enums.LoanStatus
+  }
+
+  export type NestedEnumLoanStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LoanStatus | EnumLoanStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LoanStatus[]
+    notIn?: $Enums.LoanStatus[]
+    not?: NestedEnumLoanStatusWithAggregatesFilter<$PrismaModel> | $Enums.LoanStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLoanStatusFilter<$PrismaModel>
+    _max?: NestedEnumLoanStatusFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutCompanyInput = {
     id?: string
     fullName: string
     email: string
     passwordHash: string
     isActive?: boolean
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
+    payslips?: PayslipCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
+    loans?: LoanCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput
   }
 
   export type UserUncheckedCreateWithoutCompanyInput = {
@@ -14440,8 +16529,21 @@ export namespace Prisma {
     passwordHash: string
     isActive?: boolean
     roleId: string
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
+    loans?: LoanUncheckedCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput
   }
 
   export type UserCreateOrConnectWithoutCompanyInput = {
@@ -14451,52 +16553,6 @@ export namespace Prisma {
 
   export type UserCreateManyCompanyInputEnvelope = {
     data: UserCreateManyCompanyInput | UserCreateManyCompanyInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type EmployeeCreateWithoutCompanyInput = {
-    id?: string
-    fullName: string
-    position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
-    bankDetails?: string | null
-    active?: boolean
-    email?: string | null
-    phone?: string | null
-    hireDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    payslips?: PayslipCreateNestedManyWithoutEmployeeInput
-    payments?: PaymentCreateNestedManyWithoutEmployeeInput
-    workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeUncheckedCreateWithoutCompanyInput = {
-    id?: string
-    fullName: string
-    position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
-    bankDetails?: string | null
-    active?: boolean
-    email?: string | null
-    phone?: string | null
-    hireDate?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
-    payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
-    workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
-  }
-
-  export type EmployeeCreateOrConnectWithoutCompanyInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutCompanyInput, EmployeeUncheckedCreateWithoutCompanyInput>
-  }
-
-  export type EmployeeCreateManyCompanyInputEnvelope = {
-    data: EmployeeCreateManyCompanyInput | EmployeeCreateManyCompanyInput[]
     skipDuplicates?: boolean
   }
 
@@ -14532,6 +16588,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SuperAdminPermissionCreateWithoutCompanyInput = {
+    id?: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    superAdmin: UserCreateNestedOneWithoutGrantedPermissionsInput
+  }
+
+  export type SuperAdminPermissionUncheckedCreateWithoutCompanyInput = {
+    id?: string
+    superAdminId: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SuperAdminPermissionCreateOrConnectWithoutCompanyInput = {
+    where: SuperAdminPermissionWhereUniqueInput
+    create: XOR<SuperAdminPermissionCreateWithoutCompanyInput, SuperAdminPermissionUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type SuperAdminPermissionCreateManyCompanyInputEnvelope = {
+    data: SuperAdminPermissionCreateManyCompanyInput | SuperAdminPermissionCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutCompanyInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutCompanyInput, UserUncheckedUpdateWithoutCompanyInput>
@@ -14559,43 +16643,16 @@ export namespace Prisma {
     passwordHash?: StringFilter<"User"> | string
     isActive?: BoolFilter<"User"> | boolean
     roleId?: StringFilter<"User"> | string
+    position?: StringNullableFilter<"User"> | string | null
+    contractType?: EnumContractTypeNullableFilter<"User"> | $Enums.ContractType | null
+    salaryOrRate?: DecimalNullableFilter<"User"> | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: StringNullableFilter<"User"> | string | null
+    active?: BoolNullableFilter<"User"> | boolean | null
+    phone?: StringNullableFilter<"User"> | string | null
+    hireDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    canValidateFully?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-  }
-
-  export type EmployeeUpsertWithWhereUniqueWithoutCompanyInput = {
-    where: EmployeeWhereUniqueInput
-    update: XOR<EmployeeUpdateWithoutCompanyInput, EmployeeUncheckedUpdateWithoutCompanyInput>
-    create: XOR<EmployeeCreateWithoutCompanyInput, EmployeeUncheckedCreateWithoutCompanyInput>
-  }
-
-  export type EmployeeUpdateWithWhereUniqueWithoutCompanyInput = {
-    where: EmployeeWhereUniqueInput
-    data: XOR<EmployeeUpdateWithoutCompanyInput, EmployeeUncheckedUpdateWithoutCompanyInput>
-  }
-
-  export type EmployeeUpdateManyWithWhereWithoutCompanyInput = {
-    where: EmployeeScalarWhereInput
-    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyWithoutCompanyInput>
-  }
-
-  export type EmployeeScalarWhereInput = {
-    AND?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
-    OR?: EmployeeScalarWhereInput[]
-    NOT?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
-    id?: StringFilter<"Employee"> | string
-    companyId?: StringFilter<"Employee"> | string
-    fullName?: StringFilter<"Employee"> | string
-    position?: StringNullableFilter<"Employee"> | string | null
-    contractType?: EnumContractTypeFilter<"Employee"> | $Enums.ContractType
-    salaryOrRate?: DecimalFilter<"Employee"> | Decimal | DecimalJsLike | number | string
-    bankDetails?: StringNullableFilter<"Employee"> | string | null
-    active?: BoolFilter<"Employee"> | boolean
-    email?: StringNullableFilter<"Employee"> | string | null
-    phone?: StringNullableFilter<"Employee"> | string | null
-    hireDate?: DateTimeNullableFilter<"Employee"> | Date | string | null
-    createdAt?: DateTimeFilter<"Employee"> | Date | string
-    updatedAt?: DateTimeFilter<"Employee"> | Date | string
   }
 
   export type PayRunUpsertWithWhereUniqueWithoutCompanyInput = {
@@ -14628,15 +16685,57 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PayRun"> | Date | string
   }
 
+  export type SuperAdminPermissionUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: SuperAdminPermissionWhereUniqueInput
+    update: XOR<SuperAdminPermissionUpdateWithoutCompanyInput, SuperAdminPermissionUncheckedUpdateWithoutCompanyInput>
+    create: XOR<SuperAdminPermissionCreateWithoutCompanyInput, SuperAdminPermissionUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type SuperAdminPermissionUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: SuperAdminPermissionWhereUniqueInput
+    data: XOR<SuperAdminPermissionUpdateWithoutCompanyInput, SuperAdminPermissionUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type SuperAdminPermissionUpdateManyWithWhereWithoutCompanyInput = {
+    where: SuperAdminPermissionScalarWhereInput
+    data: XOR<SuperAdminPermissionUpdateManyMutationInput, SuperAdminPermissionUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type SuperAdminPermissionScalarWhereInput = {
+    AND?: SuperAdminPermissionScalarWhereInput | SuperAdminPermissionScalarWhereInput[]
+    OR?: SuperAdminPermissionScalarWhereInput[]
+    NOT?: SuperAdminPermissionScalarWhereInput | SuperAdminPermissionScalarWhereInput[]
+    id?: StringFilter<"SuperAdminPermission"> | string
+    superAdminId?: StringFilter<"SuperAdminPermission"> | string
+    companyId?: StringFilter<"SuperAdminPermission"> | string
+    grantedBy?: StringFilter<"SuperAdminPermission"> | string
+    grantedAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    createdAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+    updatedAt?: DateTimeFilter<"SuperAdminPermission"> | Date | string
+  }
+
   export type UserCreateWithoutRoleInput = {
     id?: string
     fullName: string
     email: string
     passwordHash: string
     isActive?: boolean
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     company?: CompanyCreateNestedOneWithoutUsersInput
+    payslips?: PayslipCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
+    loans?: LoanCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -14646,8 +16745,21 @@ export namespace Prisma {
     email: string
     passwordHash: string
     isActive?: boolean
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
+    loans?: LoanUncheckedCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -14684,10 +16796,12 @@ export namespace Prisma {
     currency?: string
     primaryColor?: string
     secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    employees?: EmployeeCreateNestedManyWithoutCompanyInput
     payRuns?: PayRunCreateNestedManyWithoutCompanyInput
+    superAdminPermissions?: SuperAdminPermissionCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutUsersInput = {
@@ -14698,10 +16812,12 @@ export namespace Prisma {
     currency?: string
     primaryColor?: string
     secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    employees?: EmployeeUncheckedCreateNestedManyWithoutCompanyInput
     payRuns?: PayRunUncheckedCreateNestedManyWithoutCompanyInput
+    superAdminPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutUsersInput = {
@@ -14722,99 +16838,6 @@ export namespace Prisma {
   export type RoleCreateOrConnectWithoutUsersInput = {
     where: RoleWhereUniqueInput
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
-  }
-
-  export type CompanyUpsertWithoutUsersInput = {
-    update: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
-    create: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
-    where?: CompanyWhereInput
-  }
-
-  export type CompanyUpdateToOneWithWhereWithoutUsersInput = {
-    where?: CompanyWhereInput
-    data: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type CompanyUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    currency?: StringFieldUpdateOperationsInput | string
-    primaryColor?: StringFieldUpdateOperationsInput | string
-    secondaryColor?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    employees?: EmployeeUpdateManyWithoutCompanyNestedInput
-    payRuns?: PayRunUpdateManyWithoutCompanyNestedInput
-  }
-
-  export type CompanyUncheckedUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    currency?: StringFieldUpdateOperationsInput | string
-    primaryColor?: StringFieldUpdateOperationsInput | string
-    secondaryColor?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    employees?: EmployeeUncheckedUpdateManyWithoutCompanyNestedInput
-    payRuns?: PayRunUncheckedUpdateManyWithoutCompanyNestedInput
-  }
-
-  export type RoleUpsertWithoutUsersInput = {
-    update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
-    create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
-    where?: RoleWhereInput
-  }
-
-  export type RoleUpdateToOneWithWhereWithoutUsersInput = {
-    where?: RoleWhereInput
-    data: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type RoleUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
-  }
-
-  export type RoleUncheckedUpdateWithoutUsersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
-  }
-
-  export type CompanyCreateWithoutEmployeesInput = {
-    id?: string
-    name: string
-    logoUrl?: string | null
-    address?: string | null
-    currency?: string
-    primaryColor?: string
-    secondaryColor?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutCompanyInput
-    payRuns?: PayRunCreateNestedManyWithoutCompanyInput
-  }
-
-  export type CompanyUncheckedCreateWithoutEmployeesInput = {
-    id?: string
-    name: string
-    logoUrl?: string | null
-    address?: string | null
-    currency?: string
-    primaryColor?: string
-    secondaryColor?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
-    payRuns?: PayRunUncheckedCreateNestedManyWithoutCompanyInput
-  }
-
-  export type CompanyCreateOrConnectWithoutEmployeesInput = {
-    where: CompanyWhereUniqueInput
-    create: XOR<CompanyCreateWithoutEmployeesInput, CompanyUncheckedCreateWithoutEmployeesInput>
   }
 
   export type PayslipCreateWithoutEmployeeInput = {
@@ -14913,18 +16936,86 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type CompanyUpsertWithoutEmployeesInput = {
-    update: XOR<CompanyUpdateWithoutEmployeesInput, CompanyUncheckedUpdateWithoutEmployeesInput>
-    create: XOR<CompanyCreateWithoutEmployeesInput, CompanyUncheckedCreateWithoutEmployeesInput>
+  export type LoanCreateWithoutEmployeeInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    remainingAmount: Decimal | DecimalJsLike | number | string
+    monthlyDeduction: Decimal | DecimalJsLike | number | string
+    progress?: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.LoanStatus
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoanUncheckedCreateWithoutEmployeeInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    remainingAmount: Decimal | DecimalJsLike | number | string
+    monthlyDeduction: Decimal | DecimalJsLike | number | string
+    progress?: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.LoanStatus
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoanCreateOrConnectWithoutEmployeeInput = {
+    where: LoanWhereUniqueInput
+    create: XOR<LoanCreateWithoutEmployeeInput, LoanUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type LoanCreateManyEmployeeInputEnvelope = {
+    data: LoanCreateManyEmployeeInput | LoanCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SuperAdminPermissionCreateWithoutSuperAdminInput = {
+    id?: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company: CompanyCreateNestedOneWithoutSuperAdminPermissionsInput
+  }
+
+  export type SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput = {
+    id?: string
+    companyId: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SuperAdminPermissionCreateOrConnectWithoutSuperAdminInput = {
+    where: SuperAdminPermissionWhereUniqueInput
+    create: XOR<SuperAdminPermissionCreateWithoutSuperAdminInput, SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput>
+  }
+
+  export type SuperAdminPermissionCreateManySuperAdminInputEnvelope = {
+    data: SuperAdminPermissionCreateManySuperAdminInput | SuperAdminPermissionCreateManySuperAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CompanyUpsertWithoutUsersInput = {
+    update: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
+    create: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
     where?: CompanyWhereInput
   }
 
-  export type CompanyUpdateToOneWithWhereWithoutEmployeesInput = {
+  export type CompanyUpdateToOneWithWhereWithoutUsersInput = {
     where?: CompanyWhereInput
-    data: XOR<CompanyUpdateWithoutEmployeesInput, CompanyUncheckedUpdateWithoutEmployeesInput>
+    data: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
   }
 
-  export type CompanyUpdateWithoutEmployeesInput = {
+  export type CompanyUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14932,13 +17023,15 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUpdateManyWithoutCompanyNestedInput
     payRuns?: PayRunUpdateManyWithoutCompanyNestedInput
+    superAdminPermissions?: SuperAdminPermissionUpdateManyWithoutCompanyNestedInput
   }
 
-  export type CompanyUncheckedUpdateWithoutEmployeesInput = {
+  export type CompanyUncheckedUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14946,10 +17039,33 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
     payRuns?: PayRunUncheckedUpdateManyWithoutCompanyNestedInput
+    superAdminPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type RoleUpsertWithoutUsersInput = {
+    update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
+    create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
+    where?: RoleWhereInput
+  }
+
+  export type RoleUpdateToOneWithWhereWithoutUsersInput = {
+    where?: RoleWhereInput
+    data: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type RoleUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
+  }
+
+  export type RoleUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: EnumRoleTypeFieldUpdateOperationsInput | $Enums.RoleType
   }
 
   export type PayslipUpsertWithWhereUniqueWithoutEmployeeInput = {
@@ -15043,6 +17159,57 @@ export namespace Prisma {
     hoursPerDay?: IntNullableFilter<"WorkSchedule"> | number | null
   }
 
+  export type LoanUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: LoanWhereUniqueInput
+    update: XOR<LoanUpdateWithoutEmployeeInput, LoanUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<LoanCreateWithoutEmployeeInput, LoanUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type LoanUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: LoanWhereUniqueInput
+    data: XOR<LoanUpdateWithoutEmployeeInput, LoanUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type LoanUpdateManyWithWhereWithoutEmployeeInput = {
+    where: LoanScalarWhereInput
+    data: XOR<LoanUpdateManyMutationInput, LoanUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type LoanScalarWhereInput = {
+    AND?: LoanScalarWhereInput | LoanScalarWhereInput[]
+    OR?: LoanScalarWhereInput[]
+    NOT?: LoanScalarWhereInput | LoanScalarWhereInput[]
+    id?: StringFilter<"Loan"> | string
+    employeeId?: StringFilter<"Loan"> | string
+    amount?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFilter<"Loan"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableFilter<"Loan"> | string | null
+    startDate?: DateTimeFilter<"Loan"> | Date | string
+    endDate?: DateTimeNullableFilter<"Loan"> | Date | string | null
+    status?: EnumLoanStatusFilter<"Loan"> | $Enums.LoanStatus
+    createdBy?: StringFilter<"Loan"> | string
+    createdAt?: DateTimeFilter<"Loan"> | Date | string
+    updatedAt?: DateTimeFilter<"Loan"> | Date | string
+  }
+
+  export type SuperAdminPermissionUpsertWithWhereUniqueWithoutSuperAdminInput = {
+    where: SuperAdminPermissionWhereUniqueInput
+    update: XOR<SuperAdminPermissionUpdateWithoutSuperAdminInput, SuperAdminPermissionUncheckedUpdateWithoutSuperAdminInput>
+    create: XOR<SuperAdminPermissionCreateWithoutSuperAdminInput, SuperAdminPermissionUncheckedCreateWithoutSuperAdminInput>
+  }
+
+  export type SuperAdminPermissionUpdateWithWhereUniqueWithoutSuperAdminInput = {
+    where: SuperAdminPermissionWhereUniqueInput
+    data: XOR<SuperAdminPermissionUpdateWithoutSuperAdminInput, SuperAdminPermissionUncheckedUpdateWithoutSuperAdminInput>
+  }
+
+  export type SuperAdminPermissionUpdateManyWithWhereWithoutSuperAdminInput = {
+    where: SuperAdminPermissionScalarWhereInput
+    data: XOR<SuperAdminPermissionUpdateManyMutationInput, SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminInput>
+  }
+
   export type CompanyCreateWithoutPayRunsInput = {
     id?: string
     name: string
@@ -15051,10 +17218,12 @@ export namespace Prisma {
     currency?: string
     primaryColor?: string
     secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
-    employees?: EmployeeCreateNestedManyWithoutCompanyInput
+    superAdminPermissions?: SuperAdminPermissionCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyUncheckedCreateWithoutPayRunsInput = {
@@ -15065,10 +17234,12 @@ export namespace Prisma {
     currency?: string
     primaryColor?: string
     secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
-    employees?: EmployeeUncheckedCreateNestedManyWithoutCompanyInput
+    superAdminPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyCreateOrConnectWithoutPayRunsInput = {
@@ -15086,7 +17257,7 @@ export namespace Prisma {
     lockedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    employee: EmployeeCreateNestedOneWithoutPayslipsInput
+    employee: UserCreateNestedOneWithoutPayslipsInput
     payments?: PaymentCreateNestedManyWithoutPayslipInput
   }
 
@@ -15133,10 +17304,12 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
-    employees?: EmployeeUpdateManyWithoutCompanyNestedInput
+    superAdminPermissions?: SuperAdminPermissionUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyUncheckedUpdateWithoutPayRunsInput = {
@@ -15147,10 +17320,12 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     primaryColor?: StringFieldUpdateOperationsInput | string
     secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
-    employees?: EmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+    superAdminPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type PayslipUpsertWithWhereUniqueWithoutPayRunInput = {
@@ -15169,45 +17344,57 @@ export namespace Prisma {
     data: XOR<PayslipUpdateManyMutationInput, PayslipUncheckedUpdateManyWithoutPayRunInput>
   }
 
-  export type EmployeeCreateWithoutPayslipsInput = {
+  export type UserCreateWithoutPayslipsInput = {
     id?: string
     fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
     position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
     bankDetails?: string | null
-    active?: boolean
-    email?: string | null
+    active?: boolean | null
     phone?: string | null
     hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    company: CompanyCreateNestedOneWithoutEmployeesInput
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    role: RoleCreateNestedOneWithoutUsersInput
     payments?: PaymentCreateNestedManyWithoutEmployeeInput
     workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
+    loans?: LoanCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput
   }
 
-  export type EmployeeUncheckedCreateWithoutPayslipsInput = {
+  export type UserUncheckedCreateWithoutPayslipsInput = {
     id?: string
-    companyId: string
+    companyId?: string | null
     fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
+    roleId: string
     position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
     bankDetails?: string | null
-    active?: boolean
-    email?: string | null
+    active?: boolean | null
     phone?: string | null
     hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
     workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
+    loans?: LoanUncheckedCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput
   }
 
-  export type EmployeeCreateOrConnectWithoutPayslipsInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutPayslipsInput, EmployeeUncheckedCreateWithoutPayslipsInput>
+  export type UserCreateOrConnectWithoutPayslipsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPayslipsInput, UserUncheckedCreateWithoutPayslipsInput>
   }
 
   export type PayRunCreateWithoutPayslipsInput = {
@@ -15244,7 +17431,7 @@ export namespace Prisma {
     note?: string | null
     receiptUrl?: string | null
     createdAt?: Date | string
-    employee: EmployeeCreateNestedOneWithoutPaymentsInput
+    employee: UserCreateNestedOneWithoutPaymentsInput
   }
 
   export type PaymentUncheckedCreateWithoutPayslipInput = {
@@ -15267,51 +17454,63 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type EmployeeUpsertWithoutPayslipsInput = {
-    update: XOR<EmployeeUpdateWithoutPayslipsInput, EmployeeUncheckedUpdateWithoutPayslipsInput>
-    create: XOR<EmployeeCreateWithoutPayslipsInput, EmployeeUncheckedCreateWithoutPayslipsInput>
-    where?: EmployeeWhereInput
+  export type UserUpsertWithoutPayslipsInput = {
+    update: XOR<UserUpdateWithoutPayslipsInput, UserUncheckedUpdateWithoutPayslipsInput>
+    create: XOR<UserCreateWithoutPayslipsInput, UserUncheckedCreateWithoutPayslipsInput>
+    where?: UserWhereInput
   }
 
-  export type EmployeeUpdateToOneWithWhereWithoutPayslipsInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutPayslipsInput, EmployeeUncheckedUpdateWithoutPayslipsInput>
+  export type UserUpdateToOneWithWhereWithoutPayslipsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPayslipsInput, UserUncheckedUpdateWithoutPayslipsInput>
   }
 
-  export type EmployeeUpdateWithoutPayslipsInput = {
+  export type UserUpdateWithoutPayslipsInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    company?: CompanyUpdateOneRequiredWithoutEmployeesNestedInput
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     payments?: PaymentUpdateManyWithoutEmployeeNestedInput
     workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput
   }
 
-  export type EmployeeUncheckedUpdateWithoutPayslipsInput = {
+  export type UserUncheckedUpdateWithoutPayslipsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roleId?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
     workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUncheckedUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type PayRunUpsertWithoutPayslipsInput = {
@@ -15373,7 +17572,7 @@ export namespace Prisma {
     lockedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    employee: EmployeeCreateNestedOneWithoutPayslipsInput
+    employee: UserCreateNestedOneWithoutPayslipsInput
     payRun: PayRunCreateNestedOneWithoutPayslipsInput
   }
 
@@ -15396,45 +17595,57 @@ export namespace Prisma {
     create: XOR<PayslipCreateWithoutPaymentsInput, PayslipUncheckedCreateWithoutPaymentsInput>
   }
 
-  export type EmployeeCreateWithoutPaymentsInput = {
+  export type UserCreateWithoutPaymentsInput = {
     id?: string
     fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
     position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
     bankDetails?: string | null
-    active?: boolean
-    email?: string | null
+    active?: boolean | null
     phone?: string | null
     hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    company: CompanyCreateNestedOneWithoutEmployeesInput
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    role: RoleCreateNestedOneWithoutUsersInput
     payslips?: PayslipCreateNestedManyWithoutEmployeeInput
     workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
+    loans?: LoanCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput
   }
 
-  export type EmployeeUncheckedCreateWithoutPaymentsInput = {
+  export type UserUncheckedCreateWithoutPaymentsInput = {
     id?: string
-    companyId: string
+    companyId?: string | null
     fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
+    roleId: string
     position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
     bankDetails?: string | null
-    active?: boolean
-    email?: string | null
+    active?: boolean | null
     phone?: string | null
     hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
     workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
+    loans?: LoanUncheckedCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput
   }
 
-  export type EmployeeCreateOrConnectWithoutPaymentsInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutPaymentsInput, EmployeeUncheckedCreateWithoutPaymentsInput>
+  export type UserCreateOrConnectWithoutPaymentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPaymentsInput, UserUncheckedCreateWithoutPaymentsInput>
   }
 
   export type PayslipUpsertWithoutPaymentsInput = {
@@ -15458,7 +17669,7 @@ export namespace Prisma {
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    employee?: EmployeeUpdateOneRequiredWithoutPayslipsNestedInput
+    employee?: UserUpdateOneRequiredWithoutPayslipsNestedInput
     payRun?: PayRunUpdateOneRequiredWithoutPayslipsNestedInput
   }
 
@@ -15476,92 +17687,116 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EmployeeUpsertWithoutPaymentsInput = {
-    update: XOR<EmployeeUpdateWithoutPaymentsInput, EmployeeUncheckedUpdateWithoutPaymentsInput>
-    create: XOR<EmployeeCreateWithoutPaymentsInput, EmployeeUncheckedCreateWithoutPaymentsInput>
-    where?: EmployeeWhereInput
+  export type UserUpsertWithoutPaymentsInput = {
+    update: XOR<UserUpdateWithoutPaymentsInput, UserUncheckedUpdateWithoutPaymentsInput>
+    create: XOR<UserCreateWithoutPaymentsInput, UserUncheckedCreateWithoutPaymentsInput>
+    where?: UserWhereInput
   }
 
-  export type EmployeeUpdateToOneWithWhereWithoutPaymentsInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutPaymentsInput, EmployeeUncheckedUpdateWithoutPaymentsInput>
+  export type UserUpdateToOneWithWhereWithoutPaymentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPaymentsInput, UserUncheckedUpdateWithoutPaymentsInput>
   }
 
-  export type EmployeeUpdateWithoutPaymentsInput = {
+  export type UserUpdateWithoutPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    company?: CompanyUpdateOneRequiredWithoutEmployeesNestedInput
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
     workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput
   }
 
-  export type EmployeeUncheckedUpdateWithoutPaymentsInput = {
+  export type UserUncheckedUpdateWithoutPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roleId?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
     workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUncheckedUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput
   }
 
-  export type EmployeeCreateWithoutWorkSchedulesInput = {
+  export type UserCreateWithoutWorkSchedulesInput = {
     id?: string
     fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
     position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
     bankDetails?: string | null
-    active?: boolean
-    email?: string | null
+    active?: boolean | null
     phone?: string | null
     hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    company: CompanyCreateNestedOneWithoutEmployeesInput
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    role: RoleCreateNestedOneWithoutUsersInput
     payslips?: PayslipCreateNestedManyWithoutEmployeeInput
     payments?: PaymentCreateNestedManyWithoutEmployeeInput
+    loans?: LoanCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput
   }
 
-  export type EmployeeUncheckedCreateWithoutWorkSchedulesInput = {
+  export type UserUncheckedCreateWithoutWorkSchedulesInput = {
     id?: string
-    companyId: string
+    companyId?: string | null
     fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
+    roleId: string
     position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
     bankDetails?: string | null
-    active?: boolean
-    email?: string | null
+    active?: boolean | null
     phone?: string | null
     hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
     payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
+    loans?: LoanUncheckedCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput
   }
 
-  export type EmployeeCreateOrConnectWithoutWorkSchedulesInput = {
-    where: EmployeeWhereUniqueInput
-    create: XOR<EmployeeCreateWithoutWorkSchedulesInput, EmployeeUncheckedCreateWithoutWorkSchedulesInput>
+  export type UserCreateOrConnectWithoutWorkSchedulesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWorkSchedulesInput, UserUncheckedCreateWithoutWorkSchedulesInput>
   }
 
   export type AttendanceCreateWithoutWorkScheduleInput = {
@@ -15569,6 +17804,8 @@ export namespace Prisma {
     date: Date | string
     workedHours?: number | null
     validated?: boolean
+    validatedBy?: string | null
+    validatedAt?: Date | string | null
   }
 
   export type AttendanceUncheckedCreateWithoutWorkScheduleInput = {
@@ -15576,6 +17813,8 @@ export namespace Prisma {
     date: Date | string
     workedHours?: number | null
     validated?: boolean
+    validatedBy?: string | null
+    validatedAt?: Date | string | null
   }
 
   export type AttendanceCreateOrConnectWithoutWorkScheduleInput = {
@@ -15588,51 +17827,63 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type EmployeeUpsertWithoutWorkSchedulesInput = {
-    update: XOR<EmployeeUpdateWithoutWorkSchedulesInput, EmployeeUncheckedUpdateWithoutWorkSchedulesInput>
-    create: XOR<EmployeeCreateWithoutWorkSchedulesInput, EmployeeUncheckedCreateWithoutWorkSchedulesInput>
-    where?: EmployeeWhereInput
+  export type UserUpsertWithoutWorkSchedulesInput = {
+    update: XOR<UserUpdateWithoutWorkSchedulesInput, UserUncheckedUpdateWithoutWorkSchedulesInput>
+    create: XOR<UserCreateWithoutWorkSchedulesInput, UserUncheckedCreateWithoutWorkSchedulesInput>
+    where?: UserWhereInput
   }
 
-  export type EmployeeUpdateToOneWithWhereWithoutWorkSchedulesInput = {
-    where?: EmployeeWhereInput
-    data: XOR<EmployeeUpdateWithoutWorkSchedulesInput, EmployeeUncheckedUpdateWithoutWorkSchedulesInput>
+  export type UserUpdateToOneWithWhereWithoutWorkSchedulesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWorkSchedulesInput, UserUncheckedUpdateWithoutWorkSchedulesInput>
   }
 
-  export type EmployeeUpdateWithoutWorkSchedulesInput = {
+  export type UserUpdateWithoutWorkSchedulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    company?: CompanyUpdateOneRequiredWithoutEmployeesNestedInput
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
     payments?: PaymentUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput
   }
 
-  export type EmployeeUncheckedUpdateWithoutWorkSchedulesInput = {
+  export type UserUncheckedUpdateWithoutWorkSchedulesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roleId?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUncheckedUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type AttendanceUpsertWithWhereUniqueWithoutWorkScheduleInput = {
@@ -15660,6 +17911,8 @@ export namespace Prisma {
     date?: DateTimeFilter<"Attendance"> | Date | string
     workedHours?: IntNullableFilter<"Attendance"> | number | null
     validated?: BoolFilter<"Attendance"> | boolean
+    validatedBy?: StringNullableFilter<"Attendance"> | string | null
+    validatedAt?: DateTimeNullableFilter<"Attendance"> | Date | string | null
   }
 
   export type WorkScheduleCreateWithoutAttendancesInput = {
@@ -15668,7 +17921,7 @@ export namespace Prisma {
     endDate: Date | string
     type: $Enums.ContractType
     hoursPerDay?: number | null
-    employee: EmployeeCreateNestedOneWithoutWorkSchedulesInput
+    employee: UserCreateNestedOneWithoutWorkSchedulesInput
   }
 
   export type WorkScheduleUncheckedCreateWithoutAttendancesInput = {
@@ -15702,7 +17955,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
     hoursPerDay?: NullableIntFieldUpdateOperationsInput | number | null
-    employee?: EmployeeUpdateOneRequiredWithoutWorkSchedulesNestedInput
+    employee?: UserUpdateOneRequiredWithoutWorkSchedulesNestedInput
   }
 
   export type WorkScheduleUncheckedUpdateWithoutAttendancesInput = {
@@ -15714,6 +17967,310 @@ export namespace Prisma {
     hoursPerDay?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type UserCreateWithoutLoansInput = {
+    id?: string
+    fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    role: RoleCreateNestedOneWithoutUsersInput
+    payslips?: PayslipCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionCreateNestedManyWithoutSuperAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutLoansInput = {
+    id?: string
+    companyId?: string | null
+    fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
+    roleId: string
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
+    grantedPermissions?: SuperAdminPermissionUncheckedCreateNestedManyWithoutSuperAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutLoansInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLoansInput, UserUncheckedCreateWithoutLoansInput>
+  }
+
+  export type UserUpsertWithoutLoansInput = {
+    update: XOR<UserUpdateWithoutLoansInput, UserUncheckedUpdateWithoutLoansInput>
+    create: XOR<UserCreateWithoutLoansInput, UserUncheckedCreateWithoutLoansInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLoansInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLoansInput, UserUncheckedUpdateWithoutLoansInput>
+  }
+
+  export type UserUpdateWithoutLoansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLoansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roleId?: StringFieldUpdateOperationsInput | string
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput
+  }
+
+  export type UserCreateWithoutGrantedPermissionsInput = {
+    id?: string
+    fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    role: RoleCreateNestedOneWithoutUsersInput
+    payslips?: PayslipCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleCreateNestedManyWithoutEmployeeInput
+    loans?: LoanCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type UserUncheckedCreateWithoutGrantedPermissionsInput = {
+    id?: string
+    companyId?: string | null
+    fullName: string
+    email: string
+    passwordHash: string
+    isActive?: boolean
+    roleId: string
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payslips?: PayslipUncheckedCreateNestedManyWithoutEmployeeInput
+    payments?: PaymentUncheckedCreateNestedManyWithoutEmployeeInput
+    workSchedules?: WorkScheduleUncheckedCreateNestedManyWithoutEmployeeInput
+    loans?: LoanUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type UserCreateOrConnectWithoutGrantedPermissionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutGrantedPermissionsInput, UserUncheckedCreateWithoutGrantedPermissionsInput>
+  }
+
+  export type CompanyCreateWithoutSuperAdminPermissionsInput = {
+    id?: string
+    name: string
+    logoUrl?: string | null
+    address?: string | null
+    currency?: string
+    primaryColor?: string
+    secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutCompanyInput
+    payRuns?: PayRunCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyUncheckedCreateWithoutSuperAdminPermissionsInput = {
+    id?: string
+    name: string
+    logoUrl?: string | null
+    address?: string | null
+    currency?: string
+    primaryColor?: string
+    secondaryColor?: string
+    fixedSalaryDeductionRate?: Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutCompanyInput
+    payRuns?: PayRunUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyCreateOrConnectWithoutSuperAdminPermissionsInput = {
+    where: CompanyWhereUniqueInput
+    create: XOR<CompanyCreateWithoutSuperAdminPermissionsInput, CompanyUncheckedCreateWithoutSuperAdminPermissionsInput>
+  }
+
+  export type UserUpsertWithoutGrantedPermissionsInput = {
+    update: XOR<UserUpdateWithoutGrantedPermissionsInput, UserUncheckedUpdateWithoutGrantedPermissionsInput>
+    create: XOR<UserCreateWithoutGrantedPermissionsInput, UserUncheckedCreateWithoutGrantedPermissionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutGrantedPermissionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutGrantedPermissionsInput, UserUncheckedUpdateWithoutGrantedPermissionsInput>
+  }
+
+  export type UserUpdateWithoutGrantedPermissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutGrantedPermissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roleId?: StringFieldUpdateOperationsInput | string
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type CompanyUpsertWithoutSuperAdminPermissionsInput = {
+    update: XOR<CompanyUpdateWithoutSuperAdminPermissionsInput, CompanyUncheckedUpdateWithoutSuperAdminPermissionsInput>
+    create: XOR<CompanyCreateWithoutSuperAdminPermissionsInput, CompanyUncheckedCreateWithoutSuperAdminPermissionsInput>
+    where?: CompanyWhereInput
+  }
+
+  export type CompanyUpdateToOneWithWhereWithoutSuperAdminPermissionsInput = {
+    where?: CompanyWhereInput
+    data: XOR<CompanyUpdateWithoutSuperAdminPermissionsInput, CompanyUncheckedUpdateWithoutSuperAdminPermissionsInput>
+  }
+
+  export type CompanyUpdateWithoutSuperAdminPermissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    primaryColor?: StringFieldUpdateOperationsInput | string
+    secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutCompanyNestedInput
+    payRuns?: PayRunUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyUncheckedUpdateWithoutSuperAdminPermissionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    currency?: StringFieldUpdateOperationsInput | string
+    primaryColor?: StringFieldUpdateOperationsInput | string
+    secondaryColor?: StringFieldUpdateOperationsInput | string
+    fixedSalaryDeductionRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    workDaysPerMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
+    payRuns?: PayRunUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
   export type UserCreateManyCompanyInput = {
     id?: string
     fullName: string
@@ -15721,21 +18278,14 @@ export namespace Prisma {
     passwordHash: string
     isActive?: boolean
     roleId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type EmployeeCreateManyCompanyInput = {
-    id?: string
-    fullName: string
     position?: string | null
-    contractType: $Enums.ContractType
-    salaryOrRate: Decimal | DecimalJsLike | number | string
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
     bankDetails?: string | null
-    active?: boolean
-    email?: string | null
+    active?: boolean | null
     phone?: string | null
     hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15750,15 +18300,37 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type SuperAdminPermissionCreateManyCompanyInput = {
+    id?: string
+    superAdminId: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type UserUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -15768,8 +18340,21 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     roleId?: StringFieldUpdateOperationsInput | string
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUncheckedUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCompanyInput = {
@@ -15779,57 +18364,14 @@ export namespace Prisma {
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     roleId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EmployeeUpdateWithoutCompanyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
-    payments?: PaymentUpdateManyWithoutEmployeeNestedInput
-    workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateWithoutCompanyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
-    payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
-    workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
-  }
-
-  export type EmployeeUncheckedUpdateManyWithoutCompanyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    fullName?: StringFieldUpdateOperationsInput | string
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    contractType?: EnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType
-    salaryOrRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15866,6 +18408,33 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SuperAdminPermissionUpdateWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    superAdmin?: UserUpdateOneRequiredWithoutGrantedPermissionsNestedInput
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    superAdminId?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateManyWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    superAdminId?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateManyRoleInput = {
     id?: string
     companyId?: string | null
@@ -15873,6 +18442,14 @@ export namespace Prisma {
     email: string
     passwordHash: string
     isActive?: boolean
+    position?: string | null
+    contractType?: $Enums.ContractType | null
+    salaryOrRate?: Decimal | DecimalJsLike | number | string | null
+    bankDetails?: string | null
+    active?: boolean | null
+    phone?: string | null
+    hireDate?: Date | string | null
+    canValidateFully?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15883,9 +18460,22 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
+    payslips?: PayslipUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -15895,8 +18485,21 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payslips?: PayslipUncheckedUpdateManyWithoutEmployeeNestedInput
+    payments?: PaymentUncheckedUpdateManyWithoutEmployeeNestedInput
+    workSchedules?: WorkScheduleUncheckedUpdateManyWithoutEmployeeNestedInput
+    loans?: LoanUncheckedUpdateManyWithoutEmployeeNestedInput
+    grantedPermissions?: SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -15906,6 +18509,14 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    contractType?: NullableEnumContractTypeFieldUpdateOperationsInput | $Enums.ContractType | null
+    salaryOrRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bankDetails?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hireDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    canValidateFully?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15939,6 +18550,30 @@ export namespace Prisma {
     endDate: Date | string
     type: $Enums.ContractType
     hoursPerDay?: number | null
+  }
+
+  export type LoanCreateManyEmployeeInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    remainingAmount: Decimal | DecimalJsLike | number | string
+    monthlyDeduction: Decimal | DecimalJsLike | number | string
+    progress?: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    startDate?: Date | string
+    endDate?: Date | string | null
+    status?: $Enums.LoanStatus
+    createdBy: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SuperAdminPermissionCreateManySuperAdminInput = {
+    id?: string
+    companyId: string
+    grantedBy: string
+    grantedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PayslipUpdateWithoutEmployeeInput = {
@@ -16038,6 +18673,78 @@ export namespace Prisma {
     hoursPerDay?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
+  export type LoanUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumLoanStatusFieldUpdateOperationsInput | $Enums.LoanStatus
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoanUncheckedUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumLoanStatusFieldUpdateOperationsInput | $Enums.LoanStatus
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoanUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    remainingAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    monthlyDeduction?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    progress?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumLoanStatusFieldUpdateOperationsInput | $Enums.LoanStatus
+    createdBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuperAdminPermissionUpdateWithoutSuperAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    company?: CompanyUpdateOneRequiredWithoutSuperAdminPermissionsNestedInput
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateWithoutSuperAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuperAdminPermissionUncheckedUpdateManyWithoutSuperAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    grantedBy?: StringFieldUpdateOperationsInput | string
+    grantedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PayslipCreateManyPayRunInput = {
     id?: string
     employeeId: string
@@ -16061,7 +18768,7 @@ export namespace Prisma {
     lockedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    employee?: EmployeeUpdateOneRequiredWithoutPayslipsNestedInput
+    employee?: UserUpdateOneRequiredWithoutPayslipsNestedInput
     payments?: PaymentUpdateManyWithoutPayslipNestedInput
   }
 
@@ -16109,7 +18816,7 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    employee?: EmployeeUpdateOneRequiredWithoutPaymentsNestedInput
+    employee?: UserUpdateOneRequiredWithoutPaymentsNestedInput
   }
 
   export type PaymentUncheckedUpdateWithoutPayslipInput = {
@@ -16137,6 +18844,8 @@ export namespace Prisma {
     date: Date | string
     workedHours?: number | null
     validated?: boolean
+    validatedBy?: string | null
+    validatedAt?: Date | string | null
   }
 
   export type AttendanceUpdateWithoutWorkScheduleInput = {
@@ -16144,6 +18853,8 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     workedHours?: NullableIntFieldUpdateOperationsInput | number | null
     validated?: BoolFieldUpdateOperationsInput | boolean
+    validatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AttendanceUncheckedUpdateWithoutWorkScheduleInput = {
@@ -16151,6 +18862,8 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     workedHours?: NullableIntFieldUpdateOperationsInput | number | null
     validated?: BoolFieldUpdateOperationsInput | boolean
+    validatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AttendanceUncheckedUpdateManyWithoutWorkScheduleInput = {
@@ -16158,6 +18871,8 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     workedHours?: NullableIntFieldUpdateOperationsInput | number | null
     validated?: BoolFieldUpdateOperationsInput | boolean
+    validatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    validatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

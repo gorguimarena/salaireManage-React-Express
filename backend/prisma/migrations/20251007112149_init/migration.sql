@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Loan` ADD COLUMN `progress` DECIMAL(5, 2) NOT NULL DEFAULT 0;

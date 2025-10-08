@@ -6,6 +6,8 @@ export declare class WorkScheduleService {
         workedHours: number | null;
         workScheduleId: string;
         date: Date;
+        validatedBy: string | null;
+        validatedAt: Date | null;
     }[]>;
     static updateAttendance(companyId: string, attendanceId: string, data: UpdateAttendanceInput): Promise<{
         id: string;
@@ -13,6 +15,8 @@ export declare class WorkScheduleService {
         workedHours: number | null;
         workScheduleId: string;
         date: Date;
+        validatedBy: string | null;
+        validatedAt: Date | null;
     }>;
 }
 //# sourceMappingURL=workSchedule.service.d.ts.map

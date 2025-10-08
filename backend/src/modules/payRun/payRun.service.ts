@@ -1,5 +1,6 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import prisma from "../../config/database.js";
+import { LoanService } from "../loan/loan.service.js";
 import type { CreatePayRunInput } from "./payRun.schema.js";
 
 export class PayRunService {
@@ -17,14 +18,22 @@ export class PayRunService {
       });
 
       // 2️⃣ Récupérer tous les employés actifs
-      const employees = await tx.employee.findMany({ where: { companyId, active: true } });
+      const employees = await tx.user.findMany({
+        where: {
+          companyId,
+          isActive: true,
+          contractType: { not: null } // Only users with employee data
+        }
+      });
 
       // 3️⃣ Générer automatiquement les payslips
-      const payslipsData = employees.map((emp) => ({
-        employeeId: emp.id,
-        payRunId: payRun.id,
-        gross: emp.salaryOrRate, 
-      }));
+      const payslipsData = employees
+        .filter((emp: any) => emp.salaryOrRate) // Only employees with salary data
+        .map((emp: any) => ({
+          employeeId: emp.id,
+          payRunId: payRun.id,
+          gross: emp.salaryOrRate,
+        }));
 
       await tx.payslip.createMany({ data: payslipsData });
 
@@ -45,14 +54,19 @@ export class PayRunService {
       where: { id: payRunId, companyId },
       include: {
         payslips: true,
+        company: true,
       },
     });
 
     if (!payRun) throw new Error("PayRun not found");
 
     // Récupérer tous les employés actifs
-    const employees = await prisma.employee.findMany({
-      where: { companyId, active: true },
+    const employees = await prisma.user.findMany({
+      where: {
+        companyId,
+        isActive: true,
+        contractType: { not: null } // Only users with employee data
+      },
       include: {
         workSchedules: {
           where: {
@@ -65,8 +79,11 @@ export class PayRunService {
     });
 
     for (const emp of employees) {
+      if (!emp.salaryOrRate) continue; // Skip if no salary data
+
       let gross = new Decimal(0);
       let daysWorked: number | null = null;
+      let deductions = new Decimal(0);
 
       if (emp.contractType === "DAILY" || emp.contractType === "HOURLY") {
         daysWorked = 0;
@@ -86,21 +103,61 @@ export class PayRunService {
             }
           }
         }
+      } else if (emp.contractType === "FIXED") {
+        // Calculate based on attendance for fixed salary
+        daysWorked = 0;
+        for (const ws of emp.workSchedules) {
+          for (const att of ws.attendances) {
+            if (
+              att.date >= payRun.periodStart &&
+              att.date <= payRun.periodEnd &&
+              att.validated
+            ) {
+              daysWorked++;
+            }
+          }
+        }
+        const expectedDays = (payRun.company as any).workDaysPerMonth || 22;
+        const absentDays = Math.max(0, expectedDays - (daysWorked || 0));
+        const deductionRate = new Decimal((payRun.company as any).fixedSalaryDeductionRate || 0);
+        deductions = deductionRate.mul(absentDays);
+        gross = emp.salaryOrRate.minus(deductions);
+        gross = gross.greaterThan(0) ? gross : new Decimal(0);
       } else {
+        // FEE
         gross = emp.salaryOrRate;
+      }
+
+      // Calculate loan deductions and apply them to update loan balances
+      const loanDeductions = await LoanService.calculateLoanDeductions(emp.id);
+      deductions = deductions.plus(loanDeductions);
+
+      const netPay = gross.minus(deductions);
+
+      // Only update payslips that are DRAFT or PENDING. Do not overwrite APPROVED or PAID payslips.
+      const existingPayslip = payRun.payslips.find(p => p.employeeId === emp.id);
+
+      if (existingPayslip && (existingPayslip.status === "APPROVED" || existingPayslip.status === "PAID")) {
+        // Skip updating this payslip if it's already approved or paid
+        continue;
       }
 
       await prisma.payslip.upsert({
         where: { employeeId_payRunId: { employeeId: emp.id, payRunId } },
-        update: { gross, netPay: gross, daysWorked },
+        update: { gross, deductions, netPay, daysWorked, status: "PENDING" },
         create: {
           employeeId: emp.id,
           payRunId,
           gross,
-          netPay: gross,
+          deductions,
+          netPay,
           daysWorked,
+          status: "PENDING",
         },
       });
+
+      // Apply loan deductions to update loan balances and progress
+      await LoanService.applyLoanDeductions(emp.id, loanDeductions);
     }
 
     // Mettre le PayRun en APPROVED si tous les payslips créés
@@ -128,12 +185,6 @@ export class PayRunService {
   }
 
   static async approve(companyId: string, payRunId: string) {
-    // First, change status to APPROVED
-    await prisma.payRun.update({
-      where: { id: payRunId, companyId },
-      data: { status: "APPROVED" },
-    });
-
     // Then generate payslips
     return await PayRunService.generatePayslips(companyId, payRunId);
   }

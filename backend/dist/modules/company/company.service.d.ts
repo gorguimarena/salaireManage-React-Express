@@ -8,6 +8,8 @@ export declare class CompanyService {
         currency: string;
         primaryColor: string;
         secondaryColor: string;
+        fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+        workDaysPerMonth: number | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -19,6 +21,8 @@ export declare class CompanyService {
         currency: string;
         primaryColor: string;
         secondaryColor: string;
+        fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+        workDaysPerMonth: number | null;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
@@ -30,6 +34,8 @@ export declare class CompanyService {
         currency: string;
         primaryColor: string;
         secondaryColor: string;
+        fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+        workDaysPerMonth: number | null;
         createdAt: Date;
         updatedAt: Date;
     } | null>;
@@ -41,6 +47,8 @@ export declare class CompanyService {
         currency: string;
         primaryColor: string;
         secondaryColor: string;
+        fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+        workDaysPerMonth: number | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
@@ -52,6 +60,8 @@ export declare class CompanyService {
         currency: string;
         primaryColor: string;
         secondaryColor: string;
+        fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+        workDaysPerMonth: number | null;
         createdAt: Date;
         updatedAt: Date;
     }>;

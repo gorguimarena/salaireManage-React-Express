@@ -15,6 +15,7 @@ enum RoleType {
   SUPER_ADMIN
   ADMIN
   CASHIER
+  VIGILE
 }
 
 enum ContractType {
@@ -52,21 +53,29 @@ enum PaymentMode {
   OTHER
 }
 
+enum LoanStatus {
+  ACTIVE
+  PAID
+  CANCELLED
+}
+
 model Company {
-  id             String     @id @default(uuid())
-  name           String
-  logoUrl        String?
-  address        String?
-  currency       String     @default("Fcfa")
-  primaryColor   String     @default("#1E40AF")
-  secondaryColor String     @default("#2563EB")
+  id                       String     @id @default(uuid())
+  name                     String
+  logoUrl                  String?
+  address                  String?
+  currency                 String     @default("Fcfa")
+  primaryColor             String     @default("#1E40AF")
+  secondaryColor           String     @default("#2563EB")
+  fixedSalaryDeductionRate Decimal?  @db.Decimal(10, 2) // Deduction amount per absent day for fixed salary employees
+  workDaysPerMonth         Int?      @default(22)       // Expected work days per month for fixed salary employees
 
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  createdAt                DateTime   @default(now())
+  updatedAt                DateTime   @updatedAt
 
-  users          User[]
-  employees      Employee[]
-  payRuns        PayRun[]
+  users                    User[]
+  payRuns                  PayRun[]
+  superAdminPermissions    SuperAdminPermission[]
 }
 
 model Role {
@@ -89,32 +98,31 @@ model User {
   roleId       String
   role         Role     @relation(fields: [roleId], references: [id])
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-}
-
-model Employee {
-  id           String   @id @default(uuid())
-  companyId    String
-  company      Company  @relation(fields: [companyId], references: [id])
-
-  fullName     String
+  // Employee-specific fields (optional for non-employee users like super admins)
   position     String?
-  contractType ContractType
-  salaryOrRate Decimal  @db.Decimal(14, 2)
+  contractType ContractType?
+  salaryOrRate Decimal?  @db.Decimal(14, 2)
   bankDetails  String?
-  active       Boolean  @default(true)
-  email        String?
+  active       Boolean? @default(true)
   phone        String?
   hireDate     DateTime?
 
+  // Delegation for vigiles - can validate attendances fully
+  canValidateFully Boolean @default(false)
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  // Relations that were on Employee
   payslips      Payslip[]
   payments      Payment[]
   workSchedules WorkSchedule[]
+  loans         Loan[]
+
+  // Super admin permissions (when user is a super admin)
+  grantedPermissions SuperAdminPermission[] @relation("SuperAdminPermissions")
 }
+
 
 model PayRun {
   id          String       @id @default(uuid())
@@ -135,7 +143,7 @@ model PayRun {
 model Payslip {
   id         String   @id @default(uuid())
   employeeId String
-  employee   Employee @relation(fields: [employeeId], references: [id])
+  employee   User     @relation(fields: [employeeId], references: [id])
 
   payRunId   String
   payRun     PayRun   @relation(fields: [payRunId], references: [id])
@@ -161,7 +169,7 @@ model Payment {
   payslip    Payslip  @relation(fields: [payslipId], references: [id])
 
   employeeId String
-  employee   Employee @relation(fields: [employeeId], references: [id])
+  employee   User     @relation(fields: [employeeId], references: [id])
 
   amount     Decimal     @db.Decimal(14, 2)
   mode       PaymentMode
@@ -174,7 +182,7 @@ model Payment {
 model WorkSchedule {
   id         String   @id @default(uuid())
   employeeId String
-  employee   Employee @relation(fields: [employeeId], references: [id])
+  employee   User     @relation(fields: [employeeId], references: [id])
 
   startDate   DateTime
   endDate     DateTime
@@ -192,4 +200,41 @@ model Attendance {
   date        DateTime
   workedHours Int?
   validated   Boolean  @default(false)
+  validatedBy String?  // User ID of who validated the attendance
+  validatedAt DateTime?
+}
+
+model Loan {
+  id               String     @id @default(uuid())
+  employeeId       String
+  employee         User       @relation(fields: [employeeId], references: [id])
+
+  amount           Decimal    @db.Decimal(14, 2) // Montant total du prêt
+  remainingAmount  Decimal    @db.Decimal(14, 2) // Montant restant à payer
+  monthlyDeduction Decimal    @db.Decimal(14, 2) // Montant déduit par mois
+  progress         Decimal    @db.Decimal(5, 2) @default(0) // Pourcentage d'avancement du remboursement
+  description      String?
+  startDate        DateTime   @default(now())
+  endDate          DateTime?  // Date de fin calculée automatiquement
+  status           LoanStatus @default(ACTIVE)
+
+  createdBy        String     // User ID of who created the loan
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+model SuperAdminPermission {
+  id         String   @id @default(uuid())
+  superAdminId String
+  superAdmin  User    @relation("SuperAdminPermissions", fields: [superAdminId], references: [id])
+  companyId   String
+  company     Company @relation(fields: [companyId], references: [id])
+
+  grantedBy   String  // User ID of the company admin who granted permission
+  grantedAt   DateTime @default(now())
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([superAdminId, companyId])
 }

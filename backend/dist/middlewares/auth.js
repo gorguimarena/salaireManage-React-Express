@@ -4,7 +4,15 @@ import prisma from "../config/database.js";
 import { AppError } from "../utils/AppError.js";
 export const authenticate = async (req, res, next) => {
     try {
-        const token = req.cookies[env.COOKIE_NAME];
+        // Check for token in cookies first (traditional method)
+        let token = req.cookies[env.COOKIE_NAME];
+        // If no cookie token, check Authorization header (Bearer token)
+        if (!token) {
+            const authHeader = req.headers.authorization;
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                token = authHeader.substring(7); // Remove 'Bearer ' prefix
+            }
+        }
         if (!token) {
             throw new AppError("Authentication required", 401);
         }

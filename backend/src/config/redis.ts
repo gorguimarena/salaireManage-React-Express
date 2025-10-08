@@ -21,6 +21,10 @@ export async function getRedisVal(key: string) {
   return redis.get(key);
 }
 
+export async function deleteRedisVal(key: string) {
+  return redis.del(key);
+}
+
 
 
 //export const redis = new Redis(process.env.REDIS_URL as string); // redis://localhost:6379

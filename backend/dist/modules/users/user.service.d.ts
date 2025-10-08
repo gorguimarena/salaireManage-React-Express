@@ -2,12 +2,19 @@ import type { RegisterInput, LoginInput, UpdateUserInput } from "./user.schema.j
 export declare class UserService {
     static register(data: RegisterInput): Promise<{
         user: {
+            contractType: import("../../generated/index.js").$Enums.ContractType | null;
             fullName: string;
+            position: string | null;
+            salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+            bankDetails: string | null;
             email: string;
+            phone: string | null;
+            hireDate: Date | null;
             id: string;
             createdAt: Date;
             updatedAt: Date;
             companyId: string | null;
+            isActive: boolean;
             roleId: string;
             role: {
                 name: import("../../generated/index.js").$Enums.RoleType;
@@ -18,8 +25,14 @@ export declare class UserService {
     static login(data: LoginInput): Promise<{
         user: {
             role: import("../../generated/index.js").$Enums.RoleType;
+            contractType: import("../../generated/index.js").$Enums.ContractType | null;
             fullName: string;
+            position: string | null;
+            salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+            bankDetails: string | null;
             email: string;
+            phone: string | null;
+            hireDate: Date | null;
             id: string;
             createdAt: Date;
             updatedAt: Date;
@@ -38,6 +51,8 @@ export declare class UserService {
             currency: string;
             primaryColor: string;
             secondaryColor: string;
+            fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+            workDaysPerMonth: number | null;
             createdAt: Date;
             updatedAt: Date;
         } | null;
@@ -45,14 +60,22 @@ export declare class UserService {
             name: import("../../generated/index.js").$Enums.RoleType;
             id: string;
         };
+        contractType: import("../../generated/index.js").$Enums.ContractType | null;
         fullName: string;
+        position: string | null;
+        salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+        bankDetails: string | null;
         email: string;
+        phone: string | null;
+        hireDate: Date | null;
+        active: boolean | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
         companyId: string | null;
         isActive: boolean;
         roleId: string;
+        canValidateFully: boolean;
     }>;
     static getAllUsers(): Promise<({
         company: {
@@ -63,6 +86,8 @@ export declare class UserService {
             currency: string;
             primaryColor: string;
             secondaryColor: string;
+            fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+            workDaysPerMonth: number | null;
             createdAt: Date;
             updatedAt: Date;
         } | null;
@@ -71,8 +96,15 @@ export declare class UserService {
             id: string;
         };
     } & {
+        contractType: import("../../generated/index.js").$Enums.ContractType | null;
         fullName: string;
+        position: string | null;
+        salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+        bankDetails: string | null;
         email: string;
+        phone: string | null;
+        hireDate: Date | null;
+        active: boolean | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -80,6 +112,7 @@ export declare class UserService {
         passwordHash: string;
         isActive: boolean;
         roleId: string;
+        canValidateFully: boolean;
     })[]>;
     static getUserById(id: string): Promise<{
         company: {
@@ -90,6 +123,8 @@ export declare class UserService {
             currency: string;
             primaryColor: string;
             secondaryColor: string;
+            fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+            workDaysPerMonth: number | null;
             createdAt: Date;
             updatedAt: Date;
         } | null;
@@ -98,8 +133,15 @@ export declare class UserService {
             id: string;
         };
     } & {
+        contractType: import("../../generated/index.js").$Enums.ContractType | null;
         fullName: string;
+        position: string | null;
+        salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+        bankDetails: string | null;
         email: string;
+        phone: string | null;
+        hireDate: Date | null;
+        active: boolean | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -107,6 +149,7 @@ export declare class UserService {
         passwordHash: string;
         isActive: boolean;
         roleId: string;
+        canValidateFully: boolean;
     }>;
     static deleteUser(id: string): Promise<void>;
     static getUsersByCompany(companyId: string): Promise<({
@@ -118,6 +161,8 @@ export declare class UserService {
             currency: string;
             primaryColor: string;
             secondaryColor: string;
+            fixedSalaryDeductionRate: import("../../generated/runtime/library.js").Decimal | null;
+            workDaysPerMonth: number | null;
             createdAt: Date;
             updatedAt: Date;
         } | null;
@@ -126,8 +171,15 @@ export declare class UserService {
             id: string;
         };
     } & {
+        contractType: import("../../generated/index.js").$Enums.ContractType | null;
         fullName: string;
+        position: string | null;
+        salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+        bankDetails: string | null;
         email: string;
+        phone: string | null;
+        hireDate: Date | null;
+        active: boolean | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -135,6 +187,7 @@ export declare class UserService {
         passwordHash: string;
         isActive: boolean;
         roleId: string;
+        canValidateFully: boolean;
     })[]>;
     static getRoles(): Promise<{
         name: import("../../generated/index.js").$Enums.RoleType;

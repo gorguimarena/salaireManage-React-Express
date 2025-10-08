@@ -128,6 +128,8 @@ exports.Prisma.CompanyScalarFieldEnum = {
   currency: 'currency',
   primaryColor: 'primaryColor',
   secondaryColor: 'secondaryColor',
+  fixedSalaryDeductionRate: 'fixedSalaryDeductionRate',
+  workDaysPerMonth: 'workDaysPerMonth',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -145,22 +147,14 @@ exports.Prisma.UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   isActive: 'isActive',
   roleId: 'roleId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.EmployeeScalarFieldEnum = {
-  id: 'id',
-  companyId: 'companyId',
-  fullName: 'fullName',
   position: 'position',
   contractType: 'contractType',
   salaryOrRate: 'salaryOrRate',
   bankDetails: 'bankDetails',
   active: 'active',
-  email: 'email',
   phone: 'phone',
   hireDate: 'hireDate',
+  canValidateFully: 'canValidateFully',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -215,7 +209,35 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   workScheduleId: 'workScheduleId',
   date: 'date',
   workedHours: 'workedHours',
-  validated: 'validated'
+  validated: 'validated',
+  validatedBy: 'validatedBy',
+  validatedAt: 'validatedAt'
+};
+
+exports.Prisma.LoanScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  amount: 'amount',
+  remainingAmount: 'remainingAmount',
+  monthlyDeduction: 'monthlyDeduction',
+  progress: 'progress',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SuperAdminPermissionScalarFieldEnum = {
+  id: 'id',
+  superAdminId: 'superAdminId',
+  companyId: 'companyId',
+  grantedBy: 'grantedBy',
+  grantedAt: 'grantedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -248,16 +270,9 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   fullName: 'fullName',
   email: 'email',
   passwordHash: 'passwordHash',
-  roleId: 'roleId'
-};
-
-exports.Prisma.EmployeeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  companyId: 'companyId',
-  fullName: 'fullName',
+  roleId: 'roleId',
   position: 'position',
   bankDetails: 'bankDetails',
-  email: 'email',
   phone: 'phone'
 };
 
@@ -287,12 +302,28 @@ exports.Prisma.WorkScheduleOrderByRelevanceFieldEnum = {
 
 exports.Prisma.AttendanceOrderByRelevanceFieldEnum = {
   id: 'id',
-  workScheduleId: 'workScheduleId'
+  workScheduleId: 'workScheduleId',
+  validatedBy: 'validatedBy'
+};
+
+exports.Prisma.LoanOrderByRelevanceFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  description: 'description',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.SuperAdminPermissionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  superAdminId: 'superAdminId',
+  companyId: 'companyId',
+  grantedBy: 'grantedBy'
 };
 exports.RoleType = exports.$Enums.RoleType = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',
-  CASHIER: 'CASHIER'
+  CASHIER: 'CASHIER',
+  VIGILE: 'VIGILE'
 };
 
 exports.ContractType = exports.$Enums.ContractType = {
@@ -330,16 +361,23 @@ exports.PaymentMode = exports.$Enums.PaymentMode = {
   OTHER: 'OTHER'
 };
 
+exports.LoanStatus = exports.$Enums.LoanStatus = {
+  ACTIVE: 'ACTIVE',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Prisma.ModelName = {
   Company: 'Company',
   Role: 'Role',
   User: 'User',
-  Employee: 'Employee',
   PayRun: 'PayRun',
   Payslip: 'Payslip',
   Payment: 'Payment',
   WorkSchedule: 'WorkSchedule',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  Loan: 'Loan',
+  SuperAdminPermission: 'SuperAdminPermission'
 };
 
 /**

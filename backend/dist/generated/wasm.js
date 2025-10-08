@@ -100,6 +100,8 @@ exports.Prisma.CompanyScalarFieldEnum = {
   currency: 'currency',
   primaryColor: 'primaryColor',
   secondaryColor: 'secondaryColor',
+  fixedSalaryDeductionRate: 'fixedSalaryDeductionRate',
+  workDaysPerMonth: 'workDaysPerMonth',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -117,22 +119,14 @@ exports.Prisma.UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   isActive: 'isActive',
   roleId: 'roleId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.EmployeeScalarFieldEnum = {
-  id: 'id',
-  companyId: 'companyId',
-  fullName: 'fullName',
   position: 'position',
   contractType: 'contractType',
   salaryOrRate: 'salaryOrRate',
   bankDetails: 'bankDetails',
   active: 'active',
-  email: 'email',
   phone: 'phone',
   hireDate: 'hireDate',
+  canValidateFully: 'canValidateFully',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -187,7 +181,35 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   workScheduleId: 'workScheduleId',
   date: 'date',
   workedHours: 'workedHours',
-  validated: 'validated'
+  validated: 'validated',
+  validatedBy: 'validatedBy',
+  validatedAt: 'validatedAt'
+};
+
+exports.Prisma.LoanScalarFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  amount: 'amount',
+  remainingAmount: 'remainingAmount',
+  monthlyDeduction: 'monthlyDeduction',
+  progress: 'progress',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SuperAdminPermissionScalarFieldEnum = {
+  id: 'id',
+  superAdminId: 'superAdminId',
+  companyId: 'companyId',
+  grantedBy: 'grantedBy',
+  grantedAt: 'grantedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -220,16 +242,9 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   fullName: 'fullName',
   email: 'email',
   passwordHash: 'passwordHash',
-  roleId: 'roleId'
-};
-
-exports.Prisma.EmployeeOrderByRelevanceFieldEnum = {
-  id: 'id',
-  companyId: 'companyId',
-  fullName: 'fullName',
+  roleId: 'roleId',
   position: 'position',
   bankDetails: 'bankDetails',
-  email: 'email',
   phone: 'phone'
 };
 
@@ -259,12 +274,28 @@ exports.Prisma.WorkScheduleOrderByRelevanceFieldEnum = {
 
 exports.Prisma.AttendanceOrderByRelevanceFieldEnum = {
   id: 'id',
-  workScheduleId: 'workScheduleId'
+  workScheduleId: 'workScheduleId',
+  validatedBy: 'validatedBy'
+};
+
+exports.Prisma.LoanOrderByRelevanceFieldEnum = {
+  id: 'id',
+  employeeId: 'employeeId',
+  description: 'description',
+  createdBy: 'createdBy'
+};
+
+exports.Prisma.SuperAdminPermissionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  superAdminId: 'superAdminId',
+  companyId: 'companyId',
+  grantedBy: 'grantedBy'
 };
 exports.RoleType = exports.$Enums.RoleType = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   ADMIN: 'ADMIN',
-  CASHIER: 'CASHIER'
+  CASHIER: 'CASHIER',
+  VIGILE: 'VIGILE'
 };
 
 exports.ContractType = exports.$Enums.ContractType = {
@@ -302,16 +333,23 @@ exports.PaymentMode = exports.$Enums.PaymentMode = {
   OTHER: 'OTHER'
 };
 
+exports.LoanStatus = exports.$Enums.LoanStatus = {
+  ACTIVE: 'ACTIVE',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Prisma.ModelName = {
   Company: 'Company',
   Role: 'Role',
   User: 'User',
-  Employee: 'Employee',
   PayRun: 'PayRun',
   Payslip: 'Payslip',
   Payment: 'Payment',
   WorkSchedule: 'WorkSchedule',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  Loan: 'Loan',
+  SuperAdminPermission: 'SuperAdminPermission'
 };
 /**
  * Create the Client
@@ -333,7 +371,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-1.1.x",
+        "value": "linux-musl-openssl-3.0.x",
         "native": true
       },
       {
@@ -360,6 +398,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -368,13 +407,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// Single database schema for multi-tenant application\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum RoleType {\n  SUPER_ADMIN\n  ADMIN\n  CASHIER\n}\n\nenum ContractType {\n  DAILY\n  HOURLY\n  FIXED\n  FEE\n}\n\nenum PayRunType {\n  MONTHLY\n  WEEKLY\n  DAILY\n}\n\nenum PayRunStatus {\n  DRAFT\n  APPROVED\n  CLOSED\n}\n\nenum PayslipStatus {\n  DRAFT\n  APPROVED\n  PAID\n  PARTIAL\n  PENDING\n}\n\nenum PaymentMode {\n  CASH\n  BANK_TRANSFER\n  ORANGE_MONEY\n  WAVE\n  OTHER\n}\n\nmodel Company {\n  id             String  @id @default(uuid())\n  name           String\n  logoUrl        String?\n  address        String?\n  currency       String  @default(\"Fcfa\")\n  primaryColor   String  @default(\"#1E40AF\")\n  secondaryColor String  @default(\"#2563EB\")\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  users     User[]\n  employees Employee[]\n  payRuns   PayRun[]\n}\n\nmodel Role {\n  id   String   @id @default(uuid())\n  name RoleType @unique @default(ADMIN)\n\n  users User[]\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  companyId String?\n  company   Company? @relation(fields: [companyId], references: [id])\n\n  fullName     String\n  email        String  @unique\n  passwordHash String\n  isActive     Boolean @default(true)\n\n  roleId String\n  role   Role   @relation(fields: [roleId], references: [id])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Employee {\n  id        String  @id @default(uuid())\n  companyId String\n  company   Company @relation(fields: [companyId], references: [id])\n\n  fullName     String\n  position     String?\n  contractType ContractType\n  salaryOrRate Decimal      @db.Decimal(14, 2)\n  bankDetails  String?\n  active       Boolean      @default(true)\n  email        String?\n  phone        String?\n  hireDate     DateTime?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  payslips      Payslip[]\n  payments      Payment[]\n  workSchedules WorkSchedule[]\n}\n\nmodel PayRun {\n  id        String  @id @default(uuid())\n  companyId String\n  company   Company @relation(fields: [companyId], references: [id])\n\n  periodStart DateTime\n  periodEnd   DateTime\n  type        PayRunType\n  status      PayRunStatus @default(DRAFT)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  payslips Payslip[]\n}\n\nmodel Payslip {\n  id         String   @id @default(uuid())\n  employeeId String\n  employee   Employee @relation(fields: [employeeId], references: [id])\n\n  payRunId String\n  payRun   PayRun @relation(fields: [payRunId], references: [id])\n\n  gross      Decimal       @default(0) @db.Decimal(14, 2)\n  deductions Decimal       @default(0) @db.Decimal(14, 2)\n  netPay     Decimal       @default(0) @db.Decimal(14, 2)\n  daysWorked Int?\n  status     PayslipStatus @default(DRAFT)\n  lockedAt   DateTime?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  payments Payment[]\n\n  @@unique([employeeId, payRunId])\n}\n\nmodel Payment {\n  id        String  @id @default(uuid())\n  payslipId String\n  payslip   Payslip @relation(fields: [payslipId], references: [id])\n\n  employeeId String\n  employee   Employee @relation(fields: [employeeId], references: [id])\n\n  amount     Decimal     @db.Decimal(14, 2)\n  mode       PaymentMode\n  note       String?\n  receiptUrl String?\n\n  createdAt DateTime @default(now())\n}\n\nmodel WorkSchedule {\n  id         String   @id @default(uuid())\n  employeeId String\n  employee   Employee @relation(fields: [employeeId], references: [id])\n\n  startDate   DateTime\n  endDate     DateTime\n  type        ContractType\n  hoursPerDay Int?\n\n  attendances Attendance[]\n}\n\nmodel Attendance {\n  id             String       @id @default(uuid())\n  workScheduleId String\n  workSchedule   WorkSchedule @relation(fields: [workScheduleId], references: [id])\n\n  date        DateTime\n  workedHours Int?\n  validated   Boolean  @default(false)\n}\n",
-  "inlineSchemaHash": "7dcc290619070dfa02130544d52f285b3958c8acd2f1a9dbf6938247b4defea2",
+  "inlineSchema": "// Single database schema for multi-tenant application\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum RoleType {\n  SUPER_ADMIN\n  ADMIN\n  CASHIER\n  VIGILE\n}\n\nenum ContractType {\n  DAILY\n  HOURLY\n  FIXED\n  FEE\n}\n\nenum PayRunType {\n  MONTHLY\n  WEEKLY\n  DAILY\n}\n\nenum PayRunStatus {\n  DRAFT\n  APPROVED\n  CLOSED\n}\n\nenum PayslipStatus {\n  DRAFT\n  APPROVED\n  PAID\n  PARTIAL\n  PENDING\n}\n\nenum PaymentMode {\n  CASH\n  BANK_TRANSFER\n  ORANGE_MONEY\n  WAVE\n  OTHER\n}\n\nenum LoanStatus {\n  ACTIVE\n  PAID\n  CANCELLED\n}\n\nmodel Company {\n  id                       String   @id @default(uuid())\n  name                     String\n  logoUrl                  String?\n  address                  String?\n  currency                 String   @default(\"Fcfa\")\n  primaryColor             String   @default(\"#1E40AF\")\n  secondaryColor           String   @default(\"#2563EB\")\n  fixedSalaryDeductionRate Decimal? @db.Decimal(10, 2) // Deduction amount per absent day for fixed salary employees\n  workDaysPerMonth         Int?     @default(22) // Expected work days per month for fixed salary employees\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  users                 User[]\n  payRuns               PayRun[]\n  superAdminPermissions SuperAdminPermission[]\n}\n\nmodel Role {\n  id   String   @id @default(uuid())\n  name RoleType @unique @default(ADMIN)\n\n  users User[]\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  companyId String?\n  company   Company? @relation(fields: [companyId], references: [id])\n\n  fullName     String\n  email        String  @unique\n  passwordHash String\n  isActive     Boolean @default(true)\n\n  roleId String\n  role   Role   @relation(fields: [roleId], references: [id])\n\n  // Employee-specific fields (optional for non-employee users like super admins)\n  position     String?\n  contractType ContractType?\n  salaryOrRate Decimal?      @db.Decimal(14, 2)\n  bankDetails  String?\n  active       Boolean?      @default(true)\n  phone        String?\n  hireDate     DateTime?\n\n  // Delegation for vigiles - can validate attendances fully\n  canValidateFully Boolean @default(false)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations that were on Employee\n  payslips      Payslip[]\n  payments      Payment[]\n  workSchedules WorkSchedule[]\n  loans         Loan[]\n\n  // Super admin permissions (when user is a super admin)\n  grantedPermissions SuperAdminPermission[] @relation(\"SuperAdminPermissions\")\n}\n\nmodel PayRun {\n  id        String  @id @default(uuid())\n  companyId String\n  company   Company @relation(fields: [companyId], references: [id])\n\n  periodStart DateTime\n  periodEnd   DateTime\n  type        PayRunType\n  status      PayRunStatus @default(DRAFT)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  payslips Payslip[]\n}\n\nmodel Payslip {\n  id         String @id @default(uuid())\n  employeeId String\n  employee   User   @relation(fields: [employeeId], references: [id])\n\n  payRunId String\n  payRun   PayRun @relation(fields: [payRunId], references: [id])\n\n  gross      Decimal       @default(0) @db.Decimal(14, 2)\n  deductions Decimal       @default(0) @db.Decimal(14, 2)\n  netPay     Decimal       @default(0) @db.Decimal(14, 2)\n  daysWorked Int?\n  status     PayslipStatus @default(DRAFT)\n  lockedAt   DateTime?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  payments Payment[]\n\n  @@unique([employeeId, payRunId])\n}\n\nmodel Payment {\n  id        String  @id @default(uuid())\n  payslipId String\n  payslip   Payslip @relation(fields: [payslipId], references: [id])\n\n  employeeId String\n  employee   User   @relation(fields: [employeeId], references: [id])\n\n  amount     Decimal     @db.Decimal(14, 2)\n  mode       PaymentMode\n  note       String?\n  receiptUrl String?\n\n  createdAt DateTime @default(now())\n}\n\nmodel WorkSchedule {\n  id         String @id @default(uuid())\n  employeeId String\n  employee   User   @relation(fields: [employeeId], references: [id])\n\n  startDate   DateTime\n  endDate     DateTime\n  type        ContractType\n  hoursPerDay Int?\n\n  attendances Attendance[]\n}\n\nmodel Attendance {\n  id             String       @id @default(uuid())\n  workScheduleId String\n  workSchedule   WorkSchedule @relation(fields: [workScheduleId], references: [id])\n\n  date        DateTime\n  workedHours Int?\n  validated   Boolean   @default(false)\n  validatedBy String? // User ID of who validated the attendance\n  validatedAt DateTime?\n}\n\nmodel Loan {\n  id         String @id @default(uuid())\n  employeeId String\n  employee   User   @relation(fields: [employeeId], references: [id])\n\n  amount           Decimal    @db.Decimal(14, 2) // Montant total du prêt\n  remainingAmount  Decimal    @db.Decimal(14, 2) // Montant restant à payer\n  monthlyDeduction Decimal    @db.Decimal(14, 2) // Montant déduit par mois\n  progress         Decimal    @default(0) @db.Decimal(5, 2) // Pourcentage d'avancement du remboursement\n  description      String?\n  startDate        DateTime   @default(now())\n  endDate          DateTime? // Date de fin calculée automatiquement\n  status           LoanStatus @default(ACTIVE)\n\n  createdBy String // User ID of who created the loan\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel SuperAdminPermission {\n  id           String  @id @default(uuid())\n  superAdminId String\n  superAdmin   User    @relation(\"SuperAdminPermissions\", fields: [superAdminId], references: [id])\n  companyId    String\n  company      Company @relation(fields: [companyId], references: [id])\n\n  grantedBy String // User ID of the company admin who granted permission\n  grantedAt DateTime @default(now())\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@unique([superAdminId, companyId])\n}\n",
+  "inlineSchemaHash": "a78e25eab58171fcf9f7d33485a4ee4fd19d9fe3e0e68d912d896226da378dbb",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Company\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logoUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"currency\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"primaryColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"secondaryColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CompanyToUser\"},{\"name\":\"employees\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"CompanyToEmployee\"},{\"name\":\"payRuns\",\"kind\":\"object\",\"type\":\"PayRun\",\"relationName\":\"CompanyToPayRun\"}],\"dbName\":null},\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"enum\",\"type\":\"RoleType\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"RoleToUser\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToUser\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Employee\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToEmployee\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractType\",\"kind\":\"enum\",\"type\":\"ContractType\"},{\"name\":\"salaryOrRate\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"bankDetails\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"active\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hireDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payslips\",\"kind\":\"object\",\"type\":\"Payslip\",\"relationName\":\"EmployeeToPayslip\"},{\"name\":\"payments\",\"kind\":\"object\",\"type\":\"Payment\",\"relationName\":\"EmployeeToPayment\"},{\"name\":\"workSchedules\",\"kind\":\"object\",\"type\":\"WorkSchedule\",\"relationName\":\"EmployeeToWorkSchedule\"}],\"dbName\":null},\"PayRun\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToPayRun\"},{\"name\":\"periodStart\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"periodEnd\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"PayRunType\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"PayRunStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payslips\",\"kind\":\"object\",\"type\":\"Payslip\",\"relationName\":\"PayRunToPayslip\"}],\"dbName\":null},\"Payslip\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToPayslip\"},{\"name\":\"payRunId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"payRun\",\"kind\":\"object\",\"type\":\"PayRun\",\"relationName\":\"PayRunToPayslip\"},{\"name\":\"gross\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"deductions\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"netPay\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"daysWorked\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"PayslipStatus\"},{\"name\":\"lockedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payments\",\"kind\":\"object\",\"type\":\"Payment\",\"relationName\":\"PaymentToPayslip\"}],\"dbName\":null},\"Payment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"payslipId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"payslip\",\"kind\":\"object\",\"type\":\"Payslip\",\"relationName\":\"PaymentToPayslip\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToPayment\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"mode\",\"kind\":\"enum\",\"type\":\"PaymentMode\"},{\"name\":\"note\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"receiptUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"WorkSchedule\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToWorkSchedule\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"ContractType\"},{\"name\":\"hoursPerDay\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"attendances\",\"kind\":\"object\",\"type\":\"Attendance\",\"relationName\":\"AttendanceToWorkSchedule\"}],\"dbName\":null},\"Attendance\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workScheduleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workSchedule\",\"kind\":\"object\",\"type\":\"WorkSchedule\",\"relationName\":\"AttendanceToWorkSchedule\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"workedHours\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"validated\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Company\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logoUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"currency\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"primaryColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"secondaryColor\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fixedSalaryDeductionRate\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"workDaysPerMonth\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CompanyToUser\"},{\"name\":\"payRuns\",\"kind\":\"object\",\"type\":\"PayRun\",\"relationName\":\"CompanyToPayRun\"},{\"name\":\"superAdminPermissions\",\"kind\":\"object\",\"type\":\"SuperAdminPermission\",\"relationName\":\"CompanyToSuperAdminPermission\"}],\"dbName\":null},\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"enum\",\"type\":\"RoleType\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"RoleToUser\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToUser\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUser\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"contractType\",\"kind\":\"enum\",\"type\":\"ContractType\"},{\"name\":\"salaryOrRate\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"bankDetails\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"active\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hireDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"canValidateFully\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payslips\",\"kind\":\"object\",\"type\":\"Payslip\",\"relationName\":\"PayslipToUser\"},{\"name\":\"payments\",\"kind\":\"object\",\"type\":\"Payment\",\"relationName\":\"PaymentToUser\"},{\"name\":\"workSchedules\",\"kind\":\"object\",\"type\":\"WorkSchedule\",\"relationName\":\"UserToWorkSchedule\"},{\"name\":\"loans\",\"kind\":\"object\",\"type\":\"Loan\",\"relationName\":\"LoanToUser\"},{\"name\":\"grantedPermissions\",\"kind\":\"object\",\"type\":\"SuperAdminPermission\",\"relationName\":\"SuperAdminPermissions\"}],\"dbName\":null},\"PayRun\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToPayRun\"},{\"name\":\"periodStart\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"periodEnd\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"PayRunType\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"PayRunStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payslips\",\"kind\":\"object\",\"type\":\"Payslip\",\"relationName\":\"PayRunToPayslip\"}],\"dbName\":null},\"Payslip\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PayslipToUser\"},{\"name\":\"payRunId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"payRun\",\"kind\":\"object\",\"type\":\"PayRun\",\"relationName\":\"PayRunToPayslip\"},{\"name\":\"gross\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"deductions\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"netPay\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"daysWorked\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"PayslipStatus\"},{\"name\":\"lockedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"payments\",\"kind\":\"object\",\"type\":\"Payment\",\"relationName\":\"PaymentToPayslip\"}],\"dbName\":null},\"Payment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"payslipId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"payslip\",\"kind\":\"object\",\"type\":\"Payslip\",\"relationName\":\"PaymentToPayslip\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PaymentToUser\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"mode\",\"kind\":\"enum\",\"type\":\"PaymentMode\"},{\"name\":\"note\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"receiptUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"WorkSchedule\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToWorkSchedule\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"ContractType\"},{\"name\":\"hoursPerDay\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"attendances\",\"kind\":\"object\",\"type\":\"Attendance\",\"relationName\":\"AttendanceToWorkSchedule\"}],\"dbName\":null},\"Attendance\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workScheduleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workSchedule\",\"kind\":\"object\",\"type\":\"WorkSchedule\",\"relationName\":\"AttendanceToWorkSchedule\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"workedHours\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"validated\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"validatedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"validatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Loan\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"LoanToUser\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"remainingAmount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"monthlyDeduction\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"progress\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"LoanStatus\"},{\"name\":\"createdBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"SuperAdminPermission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"superAdminId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"superAdmin\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SuperAdminPermissions\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"Company\",\"relationName\":\"CompanyToSuperAdminPermission\"},{\"name\":\"grantedBy\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"grantedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

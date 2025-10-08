@@ -1,4 +1,5 @@
 import prisma from "../../config/database.js";
+import { LoanService } from "../loan/loan.service.js";
 export class PayslipService {
     static async list(companyId, userRole) {
         const whereCondition = {
@@ -41,6 +42,15 @@ export class PayslipService {
         });
     }
     static async update(companyId, id, data) {
+        const existingPayslip = await prisma.payslip.findUnique({
+            where: { id },
+            select: { status: true, employeeId: true, netPay: true }
+        });
+        if (!existingPayslip) {
+            throw new Error("Payslip not found");
+        }
+        // Loan deductions are already applied during payslip creation in generatePayslips
+        // No need to apply again when status changes to PAID
         return prisma.payslip.update({
             where: { id },
             data,

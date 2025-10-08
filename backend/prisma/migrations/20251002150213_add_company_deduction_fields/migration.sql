@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE `Company` ADD COLUMN `fixedSalaryDeductionRate` DECIMAL(10, 2) NULL,
+    ADD COLUMN `workDaysPerMonth` INTEGER NULL DEFAULT 22;
+
+-- AlterTable
+ALTER TABLE `Role` MODIFY `name` ENUM('SUPER_ADMIN', 'ADMIN', 'CASHIER', 'VIGILE') NOT NULL DEFAULT 'ADMIN';

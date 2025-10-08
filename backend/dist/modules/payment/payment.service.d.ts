@@ -1,20 +1,5 @@
 export declare class PaymentService {
     static list(companyId: string): Promise<({
-        employee: {
-            contractType: import("../../generated/index.js").$Enums.ContractType;
-            fullName: string;
-            position: string | null;
-            salaryOrRate: import("../../generated/runtime/library.js").Decimal;
-            bankDetails: string | null;
-            email: string | null;
-            phone: string | null;
-            hireDate: Date | null;
-            active: boolean;
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            companyId: string;
-        };
         payslip: {
             id: string;
             createdAt: Date;
@@ -28,32 +13,36 @@ export declare class PaymentService {
             daysWorked: number | null;
             lockedAt: Date | null;
         };
+        employee: {
+            contractType: import("../../generated/index.js").$Enums.ContractType | null;
+            fullName: string;
+            position: string | null;
+            salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+            bankDetails: string | null;
+            email: string;
+            phone: string | null;
+            hireDate: Date | null;
+            active: boolean | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
+            passwordHash: string;
+            isActive: boolean;
+            roleId: string;
+            canValidateFully: boolean;
+        };
     } & {
         id: string;
         createdAt: Date;
         employeeId: string;
-        payslipId: string;
         amount: import("../../generated/runtime/library.js").Decimal;
+        payslipId: string;
         mode: import("../../generated/index.js").$Enums.PaymentMode;
         note: string | null;
         receiptUrl: string | null;
     })[]>;
     static getById(companyId: string, id: string): Promise<({
-        employee: {
-            contractType: import("../../generated/index.js").$Enums.ContractType;
-            fullName: string;
-            position: string | null;
-            salaryOrRate: import("../../generated/runtime/library.js").Decimal;
-            bankDetails: string | null;
-            email: string | null;
-            phone: string | null;
-            hireDate: Date | null;
-            active: boolean;
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            companyId: string;
-        };
         payslip: {
             id: string;
             createdAt: Date;
@@ -67,32 +56,36 @@ export declare class PaymentService {
             daysWorked: number | null;
             lockedAt: Date | null;
         };
+        employee: {
+            contractType: import("../../generated/index.js").$Enums.ContractType | null;
+            fullName: string;
+            position: string | null;
+            salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+            bankDetails: string | null;
+            email: string;
+            phone: string | null;
+            hireDate: Date | null;
+            active: boolean | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
+            passwordHash: string;
+            isActive: boolean;
+            roleId: string;
+            canValidateFully: boolean;
+        };
     } & {
         id: string;
         createdAt: Date;
         employeeId: string;
-        payslipId: string;
         amount: import("../../generated/runtime/library.js").Decimal;
+        payslipId: string;
         mode: import("../../generated/index.js").$Enums.PaymentMode;
         note: string | null;
         receiptUrl: string | null;
     }) | null>;
     static create(companyId: string, data: any): Promise<{
-        employee: {
-            contractType: import("../../generated/index.js").$Enums.ContractType;
-            fullName: string;
-            position: string | null;
-            salaryOrRate: import("../../generated/runtime/library.js").Decimal;
-            bankDetails: string | null;
-            email: string | null;
-            phone: string | null;
-            hireDate: Date | null;
-            active: boolean;
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            companyId: string;
-        };
         payslip: {
             id: string;
             createdAt: Date;
@@ -106,32 +99,36 @@ export declare class PaymentService {
             daysWorked: number | null;
             lockedAt: Date | null;
         };
+        employee: {
+            contractType: import("../../generated/index.js").$Enums.ContractType | null;
+            fullName: string;
+            position: string | null;
+            salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+            bankDetails: string | null;
+            email: string;
+            phone: string | null;
+            hireDate: Date | null;
+            active: boolean | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
+            passwordHash: string;
+            isActive: boolean;
+            roleId: string;
+            canValidateFully: boolean;
+        };
     } & {
         id: string;
         createdAt: Date;
         employeeId: string;
-        payslipId: string;
         amount: import("../../generated/runtime/library.js").Decimal;
+        payslipId: string;
         mode: import("../../generated/index.js").$Enums.PaymentMode;
         note: string | null;
         receiptUrl: string | null;
     }>;
     static update(companyId: string, id: string, data: any): Promise<{
-        employee: {
-            contractType: import("../../generated/index.js").$Enums.ContractType;
-            fullName: string;
-            position: string | null;
-            salaryOrRate: import("../../generated/runtime/library.js").Decimal;
-            bankDetails: string | null;
-            email: string | null;
-            phone: string | null;
-            hireDate: Date | null;
-            active: boolean;
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            companyId: string;
-        };
         payslip: {
             id: string;
             createdAt: Date;
@@ -145,12 +142,31 @@ export declare class PaymentService {
             daysWorked: number | null;
             lockedAt: Date | null;
         };
+        employee: {
+            contractType: import("../../generated/index.js").$Enums.ContractType | null;
+            fullName: string;
+            position: string | null;
+            salaryOrRate: import("../../generated/runtime/library.js").Decimal | null;
+            bankDetails: string | null;
+            email: string;
+            phone: string | null;
+            hireDate: Date | null;
+            active: boolean | null;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
+            passwordHash: string;
+            isActive: boolean;
+            roleId: string;
+            canValidateFully: boolean;
+        };
     } & {
         id: string;
         createdAt: Date;
         employeeId: string;
-        payslipId: string;
         amount: import("../../generated/runtime/library.js").Decimal;
+        payslipId: string;
         mode: import("../../generated/index.js").$Enums.PaymentMode;
         note: string | null;
         receiptUrl: string | null;
@@ -159,8 +175,8 @@ export declare class PaymentService {
         id: string;
         createdAt: Date;
         employeeId: string;
-        payslipId: string;
         amount: import("../../generated/runtime/library.js").Decimal;
+        payslipId: string;
         mode: import("../../generated/index.js").$Enums.PaymentMode;
         note: string | null;
         receiptUrl: string | null;

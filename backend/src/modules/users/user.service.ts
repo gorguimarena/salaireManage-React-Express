@@ -34,6 +34,14 @@ export class UserService {
         roleId: true,
         role: { select: { id: true, name: true } },
         companyId: true,
+        // Include employee fields
+        position: true,
+        contractType: true,
+        salaryOrRate: true,
+        bankDetails: true,
+        isActive: true,
+        phone: true,
+        hireDate: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -45,9 +53,25 @@ export class UserService {
   static async login(data: LoginInput) {
     const user = await prisma.user.findUnique({
       where: { email: data.email },
-      include: {
-        company: true,
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        companyId: true,
+        roleId: true,
         role: true,
+        company: true,
+        // Include employee fields for dashboard routing
+        position: true,
+        contractType: true,
+        salaryOrRate: true,
+        bankDetails: true,
+        isActive: true,
+        phone: true,
+        hireDate: true,
+        createdAt: true,
+        updatedAt: true,
+        passwordHash: true, // Keep for password validation
       },
     });
 
@@ -89,6 +113,14 @@ export class UserService {
     if (data.email !== undefined) updateData.email = data.email;
     if (data.companyId !== undefined) updateData.companyId = data.companyId;
     if (data.roleId !== undefined) updateData.roleId = data.roleId;
+    // Employee fields
+    if (data.position !== undefined) updateData.position = data.position;
+    if (data.contractType !== undefined) updateData.contractType = data.contractType;
+    if (data.salaryOrRate !== undefined) updateData.salaryOrRate = data.salaryOrRate;
+    if (data.bankDetails !== undefined) updateData.bankDetails = data.bankDetails;
+    if (data.active !== undefined) updateData.isActive = data.active;
+    if (data.phone !== undefined) updateData.phone = data.phone;
+    if (data.hireDate !== undefined) updateData.hireDate = data.hireDate ? new Date(data.hireDate) : null;
 
     const updatedUser = await prisma.user.update({
       where: { id },
